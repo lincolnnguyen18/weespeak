@@ -18,13 +18,13 @@
 
 Coturn was installed on Ubuntu.
 
-  '''bash
+  ```bash
   sudo turnserver -a -f -r -X 107.196.10.160/192.168.1.69 lincolnnguyen18.com
-  '''
+  ```
 
 #### Generate OFFER on A
 
-  '''javascript
+  ```javascript
   const iceConfiguration = { }
   iceConfiguration.iceServers = [];
   //turn server
@@ -49,11 +49,11 @@ Coturn was installed on Ubuntu.
        sendChannel.onclose =e => console.log("closed!!!!!!");
 
   localConnection.createOffer().then(o => localConnection.setLocalDescription(o) )
-  '''
+  ```
 
 #### Generate ANSWER on B
 
-  '''javascript
+  ```javascript
   const offer = 
   const remoteConnection = new RTCPeerConnection()
 
@@ -78,23 +78,23 @@ Coturn was installed on Ubuntu.
   await remoteConnection.createAnswer().then(a => remoteConnection.setLocalDescription(a)).then(a=>
   console.log(JSON.stringify(remoteConnection.localDescription)))
   //send the anser to the client
-  '''
+  ```
 
 #### Set B's ANSWER on A
 
-  '''javascript
+  ```javascript
   const answer = 
   localConnection.setRemoteDescription (answer).then(a=>console.log("done"))
-  '''
+  ```
 
 #### Send MESSAGE from A to B
 
-  '''javascript
+  ```javascript
   sendChannel.send("hoho")
-  '''
+  ```
 
 #### Send MESSAGE from B to A
 
-  '''javascript
+  ```javascript
   remoteConnection.channel.send("haha")
-  '''
+  ```
