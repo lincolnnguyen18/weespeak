@@ -18,10 +18,13 @@
 
 Coturn was installed on Ubuntu.
 
+  '''bash
   sudo turnserver -a -f -r -X 107.196.10.160/192.168.1.69 lincolnnguyen18.com
+  '''
 
 #### Generate OFFER on A
 
+  '''javascript
   const iceConfiguration = { }
   iceConfiguration.iceServers = [];
   //turn server
@@ -40,17 +43,17 @@ Coturn was installed on Ubuntu.
    console.log(JSON.stringify(localConnection.localDescription))
   }
 
-
   const sendChannel = localConnection.createDataChannel("sendChannel");
    sendChannel.onmessage =e =>  console.log("messsage received!!!"  + e.data )
      sendChannel.onopen = e => console.log("open!!!!");
        sendChannel.onclose =e => console.log("closed!!!!!!");
 
-
   localConnection.createOffer().then(o => localConnection.setLocalDescription(o) )
+  '''
 
 #### Generate ANSWER on B
 
+  '''javascript
   const offer = 
   const remoteConnection = new RTCPeerConnection()
 
@@ -58,7 +61,6 @@ Coturn was installed on Ubuntu.
   console.log(" NEW ice candidnat!! on localconnection reprinting SDP " )
    console.log(JSON.stringify(remoteConnection.localDescription) )
   }
-
 
   remoteConnection.ondatachannel= e => {
 
@@ -70,23 +72,29 @@ Coturn was installed on Ubuntu.
 
   }
 
-
   remoteConnection.setRemoteDescription(offer).then(a=>console.log("done"))
 
   //create answer
   await remoteConnection.createAnswer().then(a => remoteConnection.setLocalDescription(a)).then(a=>
   console.log(JSON.stringify(remoteConnection.localDescription)))
   //send the anser to the client
+  '''
 
 #### Set B's ANSWER on A
 
+  '''javascript
   const answer = 
   localConnection.setRemoteDescription (answer).then(a=>console.log("done"))
+  '''
 
 #### Send MESSAGE from A to B
 
+  '''javascript
   sendChannel.send("hoho")
+  '''
 
 #### Send MESSAGE from B to A
 
+  '''javascript
   remoteConnection.channel.send("haha")
+  '''
