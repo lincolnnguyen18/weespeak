@@ -6,7 +6,7 @@
 
 #### Issues
 
-[X] Trickle ICE test fails for both STUN and TURN server on third attempt when executed from Coturn's LAN -> WebRTC seems to work fine for the tested situations so shelved for now
+- [X] Trickle ICE test fails for both STUN and TURN server on third attempt when executed from Coturn's LAN -> WebRTC seems to work fine for the tested situations so shelved for now
 
 #### Successes
 
