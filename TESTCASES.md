@@ -22,7 +22,7 @@ Coturn was installed on Ubuntu.
   sudo turnserver -a -f -r -X 107.196.10.160/192.168.1.69 lincolnnguyen18.com
   ```
 
-#### Generate OFFER on A
+#### Generate OFFER from A to B
 
   ```javascript
   const iceConfiguration = { }
@@ -51,7 +51,7 @@ Coturn was installed on Ubuntu.
   localConnection.createOffer().then(o => localConnection.setLocalDescription(o) )
   ```
 
-#### Generate ANSWER on B
+#### Generate ANSWER from B to A
 
   ```javascript
   const offer = 
@@ -78,7 +78,7 @@ Coturn was installed on Ubuntu.
   //send the anser to the client
   ```
 
-#### Set B's ANSWER on A
+#### Set B's ANSWER for A
 
   ```javascript
   const answer = 
