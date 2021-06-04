@@ -63,13 +63,11 @@ Coturn was installed on Ubuntu.
   }
 
   remoteConnection.ondatachannel= e => {
-
         const receiveChannel = e.channel;
         receiveChannel.onmessage =e =>  console.log("messsage received!!!"  + e.data )
         receiveChannel.onopen = e => console.log("open!!!!");
         receiveChannel.onclose =e => console.log("closed!!!!!!");
         remoteConnection.channel = receiveChannel;
-
   }
 
   remoteConnection.setRemoteDescription(offer).then(a=>console.log("done"))
