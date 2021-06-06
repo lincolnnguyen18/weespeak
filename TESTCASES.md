@@ -33,7 +33,7 @@ Coturn was installed on Ubuntu.
                   username: 'guest',
                   credential: 'somepassword'
               })
-  //stun  server
+  //stun server
   iceConfiguration.iceServers.push({
                   urls: 'stun:stun.lincolnnguyen18.com'
               })
