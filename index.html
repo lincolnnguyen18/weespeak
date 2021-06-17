@@ -1,196 +1,270 @@
-<script src="//unpkg.com/alpinejs" defer></script>
-<!--
-<div x-data="{tweet: 'Say something!'}">
-  <textarea x-model="tweet"></textarea>
-  <div x-text="tweet"></div>
-</div>
--->
-<script>
-  var localConnection;
-  var remoteConnection;
-  var sendChannel;
-  var userType;
-  function generateOffer() {
-    userType = 'sender';
-    const iceConfiguration = { }
-    iceConfiguration.iceServers = [];
-    iceConfiguration.iceServers.push({
-      urls: 'turn:turn.lincolnnguyen18.com',
-      username: 'guest',
-      credential: 'somepassword'
-    })
-    iceConfiguration.iceServers.push({
-      urls: 'stun:stun.lincolnnguyen18.com'
-    })
-    localConnection = new RTCPeerConnection(iceConfiguration)
-    localConnection.onicecandidate = e =>  {
-      console.log(" NEW ice candidnat!! on localconnection reprinting SDP " )
-      console.log(JSON.stringify(localConnection.localDescription))
-      document.getElementById('offer').innerHTML = JSON.stringify(localConnection.localDescription);
-    }
-    sendChannel = localConnection.createDataChannel("sendChannel");
-    sendChannel.onmessage = e =>  {
-      console.log("messsage received!!!"  + e.data );
-      data = JSON.parse(e.data);
-      if (data['type'] == 'interim') {
-        document.getElementById('interim').innerHTML = data['message'];
-      } else if (data['type'] == 'final') {
-        document.getElementById('final').innerHTML += data['message'];
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+  </head>
+  <body>
+    <style>
+      body {
+        font-family: Arial Unicode MS, Lucida Sans Unicode, Code2000, sans-serif;
       }
-    }
-    sendChannel.onopen = e => {
-      console.log("open!!!!");
-      alert('Channel opened!');
-    }
-    sendChannel.onclose =e => console.log("closed!!!!!!");
-    localConnection.createOffer().then(function(o) {
-      localConnection.setLocalDescription(o);
-    });
-  }
-  async function generateAnswer() {
-    userType = 'receiver';
-    const offer = JSON.parse(document.getElementById('offerTextarea').value);
-    remoteConnection = new RTCPeerConnection()
-
-    remoteConnection.onicecandidate = e =>  {
-    console.log(" NEW ice candidnat!! on localconnection reprinting SDP " )
-     console.log(JSON.stringify(remoteConnection.localDescription) )
-    }
-
-    remoteConnection.ondatachannel= e => {
-          const receiveChannel = e.channel;
-          receiveChannel.onmessage = e =>  {
-            console.log("messsage received!!!"  + e.data );
-            data = JSON.parse(e.data);
-            if (data['type'] == 'interim') {
-              document.getElementById('interim').innerHTML = data['message'];
-            } else if (data['type'] == 'final') {
-              document.getElementById('final').innerHTML += data['message'];
-            }
+    </style>
+    <script>
+      var localConnection;
+      var remoteConnection;
+      var sendChannel;
+      var userType;
+      function generateOffer() {
+        userType = 'sender';
+        const iceConfiguration = { }
+        iceConfiguration.iceServers = [];
+        iceConfiguration.iceServers.push({
+          urls: 'turn:turn.lincolnnguyen18.com',
+          username: 'guest',
+          credential: 'somepassword'
+        })
+        iceConfiguration.iceServers.push({
+          urls: 'stun:stun.lincolnnguyen18.com'
+        })
+        localConnection = new RTCPeerConnection(iceConfiguration)
+        localConnection.onicecandidate = e =>  {
+          console.log(" NEW ice candidnat!! on localconnection reprinting SDP " )
+          console.log(JSON.stringify(localConnection.localDescription))
+          document.getElementById('offer').innerHTML = JSON.stringify(localConnection.localDescription);
+        }
+        sendChannel = localConnection.createDataChannel("sendChannel");
+        sendChannel.onmessage = e =>  {
+          console.log("messsage received!!!"  + e.data );
+          data = JSON.parse(e.data);
+          if (data['type'] == 'interim') {
+            document.getElementById('interim').innerHTML = data['message'];
+          } else if (data['type'] == 'final') {
+            document.getElementById('final').innerHTML += data['message'];
           }
-          receiveChannel.onopen = e => {
-            console.log("open!!!!");
-            alert('Channel opened!');
-          }
-          receiveChannel.onclose =e => console.log("closed!!!!!!");
-          remoteConnection.channel = receiveChannel;
-    }
+        }
+        sendChannel.onopen = e => {
+          console.log("open!!!!");
+          alert('Channel opened!');
+        }
+        sendChannel.onclose =e => console.log("closed!!!!!!");
+        localConnection.createOffer().then(function(o) {
+          localConnection.setLocalDescription(o);
+        });
+      }
+      async function generateAnswer() {
+        userType = 'receiver';
+        const offer = JSON.parse(document.getElementById('offerTextarea').value);
+        remoteConnection = new RTCPeerConnection()
 
-    remoteConnection.setRemoteDescription(offer).then(a=>console.log("done"))
+        remoteConnection.onicecandidate = e =>  {
+        console.log(" NEW ice candidnat!! on localconnection reprinting SDP " )
+         console.log(JSON.stringify(remoteConnection.localDescription) )
+        }
 
-    //create answer
-    await remoteConnection.createAnswer().then(a => remoteConnection.setLocalDescription(a)).then(a=> {
-      console.log(JSON.stringify(remoteConnection.localDescription));
-      document.getElementById('answer').innerHTML = JSON.stringify(remoteConnection.localDescription);
-    });
-    //send the anser to the client
-  }
-  function setAnswer() {
-    const answer = JSON.parse(document.getElementById('answerTextarea').value);
-    localConnection.setRemoteDescription (answer).then(a=>console.log("done"));
-  }
-  function updateInterim(message) {
-    data = {
-      type: 'interim',
-      message: message
-    }
-    data = JSON.stringify(data);
-    if (userType == 'sender') {
-      sendChannel.send(data);
-    } else {
-      remoteConnection.channel.send(data);
-    }
-  }
-  function sendFinal(message) {
-    data = {
-      type: 'final',
-      message: message
-    }
-    data = JSON.stringify(data);
-    if (userType == 'sender') {
-      sendChannel.send(data);
-    } else {
-      remoteConnection.channel.send(data);
-    }
-  }
-</script>
-<div x-data="{ count: 0 }">
-    <button x-on:click="count = generateOffer()">Generate Offer</button>
-    <h1>COPY OFFER</h1>
-    <p id="offer">COPY OFFER HERE</p>
-    <h1>COPY ANSWER</h1>
-    <p id="answer">COPY ANSWER HERE</p>
-</div>
-<div x-data="{ }">
-  <h1>PASTE OFFER</h1>
-  <textarea id="offerTextarea">PASTE OFFER HERE</textarea>
-  <br />
-  <button x-on:click=generateAnswer()>Submit</button>
-</div>
-<div x-data="{ }">
-  <h1>PASTE ANSWER</h1>
-  <textarea id="answerTextarea">PASTE ANSWER HERE</textarea>
-  <br />
-  <button x-on:click=setAnswer()>Submit</button>
-</div>
-<div>
-  <h1>SEND MESSAGE</h1>
-  <button id="button" onclick="toggleStartStop()">BUTTON</button>
-  <div style="border:dotted;padding:10px">
-    <span id="final_span"></span>
-    <span id="interim_span" style="color:grey"></span>
-  </div>
-  <script type="text/javascript">
-    var recognizing;
-    var recognition = new webkitSpeechRecognition();
-    recognition.continuous = true;
-    recognition.interimResults = true;
-    reset();
-    recognition.onend = reset;
+        remoteConnection.ondatachannel= e => {
+              const receiveChannel = e.channel;
+              receiveChannel.onmessage = e =>  {
+                console.log("messsage received!!!"  + e.data );
+                data = JSON.parse(e.data);
+                if (data['type'] == 'interim') {
+                  document.getElementById('interim').innerHTML = data['message'];
+                } else if (data['type'] == 'final') {
+                  document.getElementById('final').innerHTML += data['message'];
+                }
+              }
+              receiveChannel.onopen = e => {
+                console.log("open!!!!");
+                alert('Channel opened!');
+              }
+              receiveChannel.onclose =e => console.log("closed!!!!!!");
+              remoteConnection.channel = receiveChannel;
+        }
 
-    recognition.onresult = function (event) {
-      var final = "";
-      var interim = "";
-      for (var i = event.resultIndex; i < event.results.length; ++i) {
-        if (event.results[i].isFinal) {
-          fragment = event.results[i][0].transcript;
-          final += fragment;
-          if (i == event.results.length - 1) {
-            sendFinal(fragment);
-          }
+        remoteConnection.setRemoteDescription(offer).then(a=>console.log("done"))
+
+        //create answer
+        await remoteConnection.createAnswer().then(a => remoteConnection.setLocalDescription(a)).then(a=> {
+          console.log(JSON.stringify(remoteConnection.localDescription));
+          document.getElementById('answer').innerHTML = JSON.stringify(remoteConnection.localDescription);
+        });
+        //send the anser to the client
+      }
+      function setAnswer() {
+        const answer = JSON.parse(document.getElementById('answerTextarea').value);
+        localConnection.setRemoteDescription (answer).then(a=>console.log("done"));
+      }
+      function updateInterim(message) {
+        data = {
+          type: 'interim',
+          message: message
+        }
+        data = JSON.stringify(data);
+        if (userType == 'sender') {
+          sendChannel.send(data);
         } else {
-          interim += event.results[i][0].transcript;
+          remoteConnection.channel.send(data);
         }
       }
-      final_span.innerHTML = final;
-      interim_span.innerHTML = interim;
-      updateInterim(interim);
-    }
-
-    function reset() {
-      recognizing = false;
-      button.innerHTML = "Click to Speak";
-    }
-
-    function toggleStartStop() {
-      if (recognizing) {
-        recognition.stop();
-        reset();
-      } else {
-        recognition.start();
-        recognizing = true;
-        button.innerHTML = "Click to Stop";
-        final_span.innerHTML = "";
-        interim_span.innerHTML = "";
+      function sendFinal(message) {
+        data = {
+          type: 'final',
+          message: message
+        }
+        data = JSON.stringify(data);
+        if (userType == 'sender') {
+          sendChannel.send(data);
+        } else {
+          remoteConnection.channel.send(data);
+        }
       }
-    }
-  </script>
-</div>
-<div>
-  <h1>INTERIM MESSAGE</h1>
-  <p id="interim"></p>
-</div>
-<div>
-  <h1>FINAL MESSAGES</h1>
-  <p id="final"></p>
-</div>
+    </script>
+    <div>
+        <button onclick="generateOffer()">Generate Offer</button>
+        <h1>COPY OFFER</h1>
+        <p id="offer">COPY OFFER HERE</p>
+        <h1>COPY ANSWER</h1>
+        <p id="answer">COPY ANSWER HERE</p>
+    </div>
+    <div>
+      <h1>PASTE OFFER</h1>
+      <textarea id="offerTextarea" placeholder="PASTE OFFER HERE"></textarea>
+      <br />
+      <button onclick="generateAnswer()">Submit</button>
+    </div>
+    <div>
+      <h1>PASTE ANSWER</h1>
+      <textarea id="answerTextarea" placeholder="PASTE ANSWER HERE"></textarea>
+      <br />
+      <button onclick="setAnswer()">Submit</button>
+    </div>
+    <div>
+      <h1>SEND MESSAGE</h1>
+      <select id="selectLang">
+        <option value="af-ZA">Afrikaans</option>
+        <option value="id-ID">Bahasa Indonesia</option>
+        <option value="ms-MY">Bahasa Melayu</option>
+        <option value="ca-ES">Català</option>
+        <option value="cs-CZ">Čeština</option>
+        <option value="de-De">Deutsch</option>
+        <option value="en-AU">English (Australia)</option>
+        <option value="en-CA">English (Canada)</option>
+        <option value="en-IN">English (India)</option>
+        <option value="en-NZ">English (New Zealand)</option>
+        <option value="en-ZA">English (South Africa)</option>
+        <option value="en-GB">English (United Kingdom)</option>
+        <option value="en-US">English (United States)</option>
+        <option value="es-AR">Español (Argentina)</option>
+        <option value="es-BO">Español (Bolivia)</option>
+        <option value="es-CL">Español (Chile)</option>
+        <option value="es-CO">Español (Colombia)</option>
+        <option value="es-CR">Español (Costa Rica)</option>
+        <option value="es-EC">Español (Ecuador)</option>
+        <option value="es-SV">Español (El Salvador)</option>
+        <option value="es-ES">Español (España)</option>
+        <option value="es-US">Español (Estados Unidos)</option>
+        <option value="es-GT">Español (Guatemala)</option>
+        <option value="es-HN">Español (Honduras)</option>
+        <option value="es-MX">Español (México)</option>
+        <option value="es-NI">Español (Nicaragua)</option>
+        <option value="es-PA">Español (Panamá)</option>
+        <option value="es-PY">Español (Paraguay)</option>
+        <option value="es-PE">Español (Perú)</option>
+        <option value="es-PR">Español (Puerto Rico)</option>
+        <option value="es-DO">Español (República Dominicana)</option>
+        <option value="es-UY">Español (Uruguay)</option>
+        <option value="es-VE">Español (Venezuela)</option>
+        <option value="eu-ES">Euskara</option>
+        <option value="fr-FR">Français</option>
+        <option value="gl-ES">Galego</option>
+        <option value="hr-HR">Hrvatski</option>
+        <option value="zu-ZA">IsiZulu</option>
+        <option value="is-IS">Íslenska</option>
+        <option value="it-IT">Italiano (Italia)</option>
+        <option value="it-CH">Italiano (Svizzera)</option>
+        <option value="hu-HU">Magyar</option>
+        <option value="nl-NL">Nederlands</option>
+        <option value="nb-NO">Norsk bokmål</option>
+        <option value="pl-PL">Polski</option>
+        <option value="pt-BR">Português (Brasil)</option>
+        <option value="pt-PT">Português (Portugal)</option>
+        <option value="ro-RO">Română</option>
+        <option value="sk-SK">Slovenčina</option>
+        <option value="fi-FI">Suomi</option>
+        <option value="sv-SE">Svenska</option>
+        <option value="tr-TR">Türkçe</option>
+        <option value="bg-BG">български</option>
+        <option value="ru-RU">Pусский</option>
+        <option value="sr-RS">Српски</option>
+        <option value="ko-KR">한국어</option>
+        <option value="cmn-Hans-CN">中文 普通话 (中国大陆)</option>
+        <option value="cmn-Hans-HK">中文 普通话 (香港)</option>
+        <option value="cmn-Hant-TW">中文 中文 (台灣)</option>
+        <option value="yue-Hant-HK">中文 粵語 (香港)</option>
+        <option value="ja-JP">日本語</option>
+        <option value="la">Lingua latīna</option>
+      </select>
+      <button id="button" onclick="toggleStartStop()">BUTTON</button>
+      <div style="border:dotted;padding:10px">
+        <span id="final_span"></span>
+        <span id="interim_span" style="color:grey"></span>
+      </div>
+      <script type="text/javascript">
+        selectLang = document.getElementById('selectLang');
+        selectLang.selectedIndex = "12";
+
+        var recognizing;
+        var recognition = new webkitSpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        reset();
+        recognition.onend = reset;
+
+        recognition.onresult = function (event) {
+          var final = "";
+          var interim = "";
+          for (var i = event.resultIndex; i < event.results.length; ++i) {
+            if (event.results[i].isFinal) {
+              fragment = event.results[i][0].transcript;
+              final += fragment;
+              if (i == event.results.length - 1) {
+                sendFinal(fragment);
+              }
+            } else {
+              interim += event.results[i][0].transcript;
+            }
+          }
+          final_span.innerHTML = final;
+          interim_span.innerHTML = interim;
+          updateInterim(interim);
+        }
+
+        function reset() {
+          recognizing = false;
+          button.innerHTML = "Click to Speak";
+        }
+
+        function toggleStartStop() {
+          if (recognizing) {
+            recognition.stop();
+            reset();
+          } else {
+            recognition.lang = selectLang.value;
+            recognition.start();
+            recognizing = true;
+            button.innerHTML = "Click to Stop";
+            final_span.innerHTML = "";
+            interim_span.innerHTML = "";
+          }
+        }
+      </script>
+    </div>
+    <div>
+      <h1>INTERIM MESSAGE</h1>
+      <p id="interim"></p>
+    </div>
+    <div>
+      <h1>FINAL MESSAGES</h1>
+      <p id="final"></p>
+    </div>
+  </body>
+</html>
