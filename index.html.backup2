@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
   </head>
-    <style>
+  <style>
     body {
       font-family: Arial Unicode MS, Lucida Sans Unicode, Code2000, sans-serif;
       font-size: 24px;
@@ -14,13 +14,13 @@
       display: grid;
       height: 100vh;
       grid-template-rows: 20fr minmax(0, 1fr);
-      grid-template-areas:
+      grid-template-areas: 
         "chat"
         "bottom"
     }
     #logo {
+      font-size: 36px;
       text-align: center;
-      font-size: 16px;
     }
     select,
     button {
@@ -31,7 +31,6 @@
     #stupidStuff select,
     #stupidStuff button {
       font-size: 14px;
-      text-align: center;
     }
     .leftDiv {
       float: left;
@@ -53,7 +52,7 @@
       display: none;
     }
     #chat {
-      overflow-y: auto;
+      overflow-y: scroll;
       grid-area: chat;
     }
     #bottom {
@@ -70,6 +69,56 @@
     }
   </style>
   <body>
+    <style>
+      body {
+        font-family: Arial Unicode MS, Lucida Sans Unicode, Code2000, sans-serif;
+        font-size: 24px;
+        max-width: 1700px;
+        margin: auto;
+        margin-left: 1%;
+        margin-right: 1%;
+      }
+      select,
+      button {
+        font-family: Arial Unicode MS, Lucida Sans Unicode, Code2000, sans-serif;
+        font-size: 14px;
+      }
+      #stupidStuff,
+      #stupidStuff select,
+      #stupidStuff button {
+        font-size: 14px;
+      }
+      .leftDiv {
+        float: left;
+        clear: both;
+        max-width: 50%;
+      }
+      .leftMes {
+        text-align: left;
+      }
+      .rightDiv {
+        float: right;
+        clear: both;
+        max-width: 50%;
+      }
+      .rightMes {
+        text-align: left;
+      }
+      .hidden {
+        display: none;
+      }
+      #bottom {
+        clear: both;
+      }
+      @media (min-width: 1200px) {
+        .leftDiv {
+          max-width: 700px;
+        }
+        .rightDiv {
+          max-width: 700px;
+        }
+      }
+    </style>
     <script>
       var localConnection;
       var remoteConnection;
@@ -102,14 +151,11 @@
           } else if (data['type'] == 'final') {
             document.getElementById('final').innerHTML += `<div class='rightDiv'><p class='rightMes'>${data['message']}</p></div>`;
           }
-          chat = document.getElementById('chat');
-          chat.scrollTop = chat.scrollHeight;
         }
         sendChannel.onopen = e => {
           console.log("open!!!!");
           document.getElementById('stupidStuff').remove();
           document.getElementById('chat').classList.remove('hidden');
-          document.getElementById('bottom').classList.remove('hidden');
         }
         sendChannel.onclose =e => console.log("closed!!!!!!");
         localConnection.createOffer().then(function(o) {
@@ -136,14 +182,11 @@
                 } else if (data['type'] == 'final') {
                   document.getElementById('final').innerHTML += `<div class='rightDiv'><p class='rightMes'>${data['message']}</p></div>`;
                 }
-                chat = document.getElementById('chat');
-                chat.scrollTop = chat.scrollHeight;
               }
               receiveChannel.onopen = e => {
                 console.log("open!!!!");
                 document.getElementById('stupidStuff').remove();
                 document.getElementById('chat').classList.remove('hidden');
-                document.getElementById('bottom').classList.remove('hidden');
               }
               receiveChannel.onclose =e => console.log("closed!!!!!!");
               remoteConnection.channel = receiveChannel;
@@ -188,34 +231,12 @@
         }
       }
     </script>
-    <div id="stupidStuff">
-      <h1>WeeSpeak</h1>
-      <div>
-        <button onclick="generateOffer()">Generate Offer</button>
-        <h1>COPY OFFER</h1>
-        <p id="offer">COPY OFFER HERE</p>
-        <h1>COPY ANSWER</h1>
-        <p id="answer">COPY ANSWER HERE</p>
+    <div id="chat" class="">
+        <div id='logo'>
+        <h1 id='logo'>WeeSpeak</h1>
       </div>
       <div>
-        <h1>PASTE OFFER</h1>
-        <textarea id="offerTextarea" placeholder="PASTE OFFER HERE"></textarea>
-        <br />
-        <button onclick="generateAnswer()">Submit</button>
-      </div>
-      <div>
-        <h1>PASTE ANSWER</h1>
-        <textarea id="answerTextarea" placeholder="PASTE ANSWER HERE"></textarea>
-        <br />
-        <button onclick="setAnswer()">Submit</button>
-      </div>
-    </div>
-    <div id="chat" class="hidden">
-      <div id="logo">
-        <h1>WeeSpeak</h1>
-      </div>
-      <div>
-        <p id="final"></p>
+        <p id="final"><div class="leftDiv"><p class="leftMes">Hello friends hello everybody this is pretty great isn't it</p></div><div class="leftDiv"><p class="leftMes">Zeta sorry. Is a test 1 2 3 4 5 8 s a b c d e f g let's read some stuff on Bloomberg shall we to fill in the stupid gas 1 2 3 4 5 fed officials battle rate hike saber as price special surprise and measures taken unawares by the dock.</p></div><div class="leftDiv"><p class="leftMes"> 2023 highest Powerball says there's</p></div><div class="leftDiv"><p class="leftMes"> 70 / inflation</p></div><div class="leftDiv"><p class="leftMes"> Federal Reserve officials have said for months that price increases are temporary on Wednesday they weren't so sure is there a risk that inflation will be harder than we think yesterday Jerome purple out a press conference</p></div><div class="leftDiv"><p class="leftMes">ha ordinato una pizza</p></div><div class="leftDiv"><p class="leftMes">test test test one two three four five</p></div><div class="leftDiv"><p class="leftMes"> are Akitas a testis latest</p></div><div class="leftDiv"><p class="leftMes"> stars are going to fall socks are going to ride to REI</p></div><div class="leftDiv"><p class="leftMes"> it has great is awesome</p></div></p>
       </div>
       <div>
         <p id="interim"></p>
@@ -226,7 +247,7 @@
         <span id="interim_span" style="color:grey"></span>
       </div>
     </div>
-    <div class="hidden" id="bottom">
+  <div id="bottom">
       <select id="selectLang">
         <option value="af-ZA">Afrikaans</option>
         <option value="id-ID">Bahasa Indonesia</option>
@@ -291,7 +312,7 @@
         <option value="ja-JP">日本語</option>
         <option value="la">Lingua latīna</option>
       </select>
-      <button id="button" onclick="toggleStartStop()">BUTTON</button>
+      <button id="button" onclick="toggleStartStop()">Click to Speak</button>
       <script type="text/javascript">
         selectLang = document.getElementById('selectLang');
         selectLang.selectedIndex = "12";
@@ -320,8 +341,6 @@
           // final_span.innerHTML = final;
           interim_span.innerHTML = interim;
           updateInterim(interim);
-          chat = document.getElementById('chat');
-          chat.scrollTop = chat.scrollHeight;
         }
 
         function reset() {
@@ -344,5 +363,5 @@
         }
       </script>
     </div>
-  </body>
+</body>
 </html>
