@@ -1,1 +1,102 @@
-Hello world!
+<script src="//unpkg.com/alpinejs" defer></script>
+<!--
+<div x-data="{tweet: 'Say something!'}">
+  <textarea x-model="tweet"></textarea>
+  <div x-text="tweet"></div>
+</div>
+-->
+<script>
+  var localConnection;
+  var sendChannel;
+  function generateOffer() {
+    const iceConfiguration = { }
+    iceConfiguration.iceServers = [];
+    iceConfiguration.iceServers.push({
+      urls: 'turn:turn.lincolnnguyen18.com',
+      username: 'guest',
+      credential: 'somepassword'
+    })
+    iceConfiguration.iceServers.push({
+      urls: 'stun:stun.lincolnnguyen18.com'
+    })
+    localConnection = new RTCPeerConnection(iceConfiguration)
+    localConnection.onicecandidate = e =>  {
+      console.log(" NEW ice candidnat!! on localconnection reprinting SDP " )
+      console.log(JSON.stringify(localConnection.localDescription))
+      document.getElementById('offer').innerHTML = JSON.stringify(localConnection.localDescription);
+    }
+    sendChannel = localConnection.createDataChannel("sendChannel");
+    sendChannel.onmessage = e =>  {
+      console.log("messsage received!!!"  + e.data );
+    }
+    sendChannel.onopen = e => console.log("open!!!!");
+    sendChannel.onclose =e => console.log("closed!!!!!!");
+    localConnection.createOffer().then(function(o) {
+      localConnection.setLocalDescription(o);
+    });
+  }
+  async function generateAnswer() {
+    const offer = JSON.parse(document.getElementById('offerTextarea').value);
+    const remoteConnection = new RTCPeerConnection()
+
+    remoteConnection.onicecandidate = e =>  {
+    console.log(" NEW ice candidnat!! on localconnection reprinting SDP " )
+     console.log(JSON.stringify(remoteConnection.localDescription) )
+    }
+
+    remoteConnection.ondatachannel= e => {
+          const receiveChannel = e.channel;
+          receiveChannel.onmessage = e =>  {
+            console.log("messsage received!!!"  + e.data );
+            document.getElementById('receive').innerHTML = e.data;
+          }
+          receiveChannel.onopen = e => console.log("open!!!!");
+          receiveChannel.onclose =e => console.log("closed!!!!!!");
+          remoteConnection.channel = receiveChannel;
+    }
+
+    remoteConnection.setRemoteDescription(offer).then(a=>console.log("done"))
+
+    //create answer
+    await remoteConnection.createAnswer().then(a => remoteConnection.setLocalDescription(a)).then(a=> {
+      console.log(JSON.stringify(remoteConnection.localDescription));
+      document.getElementById('answer').innerHTML = JSON.stringify(remoteConnection.localDescription);
+    });
+    //send the anser to the client
+  }
+  function setAnswer() {
+    const answer = JSON.parse(document.getElementById('answerTextarea').value);
+    localConnection.setRemoteDescription (answer).then(a=>console.log("done"));
+  }
+  function updateMessage(message) {
+    sendChannel.send(message);
+  }
+</script>
+<div x-data="{ count: 0 }">
+    <button x-on:click="count = generateOffer()">Generate Offer</button>
+    <h1>COPY OFFER</h1>
+    <p id="offer">COPY OFFER HERE</p>
+    <h1>COPY ANSWER</h1>
+    <p id="answer">COPY ANSWER HERE</p>
+</div>
+<div x-data="{ }">
+  <h1>PASTE OFFER</h1>
+  <textarea id="offerTextarea">PASTE OFFER HERE</textarea>
+  <br />
+  <button x-on:click=generateAnswer()>Submit</button>
+</div>
+<div x-data="{ }">
+  <h1>PASTE ANSWER</h1>
+  <textarea id="answerTextarea">PASTE ANSWER HERE</textarea>
+  <br />
+  <button x-on:click=setAnswer()>Submit</button>
+</div>
+<div x-data="{ message: 'TYPE MESSAGE HERE' }" x-init="$watch('message', value => updateMessage(value))">
+  <h1>SEND MESSAGE</h1>
+  <textarea x-model="message"></textarea>
+  <p x-text="message"></p>
+</div>
+<div>
+  <h1>RECEIVE MESSAGE</h1>
+  <p id="receive"></p>
+</div>
