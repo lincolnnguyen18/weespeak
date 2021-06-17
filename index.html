@@ -7,8 +7,11 @@
 -->
 <script>
   var localConnection;
+  var remoteConnection;
   var sendChannel;
+  var userType;
   function generateOffer() {
+    userType = 'sender';
     const iceConfiguration = { }
     iceConfiguration.iceServers = [];
     iceConfiguration.iceServers.push({
@@ -28,16 +31,26 @@
     sendChannel = localConnection.createDataChannel("sendChannel");
     sendChannel.onmessage = e =>  {
       console.log("messsage received!!!"  + e.data );
+      data = JSON.parse(e.data);
+      if (data['type'] == 'interim') {
+        document.getElementById('interim').innerHTML = data['message'];
+      } else if (data['type'] == 'final') {
+        document.getElementById('final').innerHTML += data['message'];
+      }
     }
-    sendChannel.onopen = e => console.log("open!!!!");
+    sendChannel.onopen = e => {
+      console.log("open!!!!");
+      alert('Channel opened!');
+    }
     sendChannel.onclose =e => console.log("closed!!!!!!");
     localConnection.createOffer().then(function(o) {
       localConnection.setLocalDescription(o);
     });
   }
   async function generateAnswer() {
+    userType = 'receiver';
     const offer = JSON.parse(document.getElementById('offerTextarea').value);
-    const remoteConnection = new RTCPeerConnection()
+    remoteConnection = new RTCPeerConnection()
 
     remoteConnection.onicecandidate = e =>  {
     console.log(" NEW ice candidnat!! on localconnection reprinting SDP " )
@@ -48,9 +61,17 @@
           const receiveChannel = e.channel;
           receiveChannel.onmessage = e =>  {
             console.log("messsage received!!!"  + e.data );
-            document.getElementById('receive').innerHTML = e.data;
+            data = JSON.parse(e.data);
+            if (data['type'] == 'interim') {
+              document.getElementById('interim').innerHTML = data['message'];
+            } else if (data['type'] == 'final') {
+              document.getElementById('final').innerHTML += data['message'];
+            }
           }
-          receiveChannel.onopen = e => console.log("open!!!!");
+          receiveChannel.onopen = e => {
+            console.log("open!!!!");
+            alert('Channel opened!');
+          }
           receiveChannel.onclose =e => console.log("closed!!!!!!");
           remoteConnection.channel = receiveChannel;
     }
@@ -68,8 +89,29 @@
     const answer = JSON.parse(document.getElementById('answerTextarea').value);
     localConnection.setRemoteDescription (answer).then(a=>console.log("done"));
   }
-  function updateMessage(message) {
-    sendChannel.send(message);
+  function updateInterim(message) {
+    data = {
+      type: 'interim',
+      message: message
+    }
+    data = JSON.stringify(data);
+    if (userType == 'sender') {
+      sendChannel.send(data);
+    } else {
+      remoteConnection.channel.send(data);
+    }
+  }
+  function sendFinal(message) {
+    data = {
+      type: 'final',
+      message: message
+    }
+    data = JSON.stringify(data);
+    if (userType == 'sender') {
+      sendChannel.send(data);
+    } else {
+      remoteConnection.channel.send(data);
+    }
   }
 </script>
 <div x-data="{ count: 0 }">
@@ -91,12 +133,64 @@
   <br />
   <button x-on:click=setAnswer()>Submit</button>
 </div>
-<div x-data="{ message: 'TYPE MESSAGE HERE' }" x-init="$watch('message', value => updateMessage(value))">
+<div>
   <h1>SEND MESSAGE</h1>
-  <textarea x-model="message"></textarea>
-  <p x-text="message"></p>
+  <button id="button" onclick="toggleStartStop()">BUTTON</button>
+  <div style="border:dotted;padding:10px">
+    <span id="final_span"></span>
+    <span id="interim_span" style="color:grey"></span>
+  </div>
+  <script type="text/javascript">
+    var recognizing;
+    var recognition = new webkitSpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    reset();
+    recognition.onend = reset;
+
+    recognition.onresult = function (event) {
+      var final = "";
+      var interim = "";
+      for (var i = event.resultIndex; i < event.results.length; ++i) {
+        if (event.results[i].isFinal) {
+          fragment = event.results[i][0].transcript;
+          final += fragment;
+          if (i == event.results.length - 1) {
+            sendFinal(fragment);
+          }
+        } else {
+          interim += event.results[i][0].transcript;
+        }
+      }
+      final_span.innerHTML = final;
+      interim_span.innerHTML = interim;
+      updateInterim(interim);
+    }
+
+    function reset() {
+      recognizing = false;
+      button.innerHTML = "Click to Speak";
+    }
+
+    function toggleStartStop() {
+      if (recognizing) {
+        recognition.stop();
+        reset();
+      } else {
+        recognition.start();
+        recognizing = true;
+        button.innerHTML = "Click to Stop";
+        final_span.innerHTML = "";
+        interim_span.innerHTML = "";
+      }
+    }
+  </script>
 </div>
 <div>
-  <h1>RECEIVE MESSAGE</h1>
-  <p id="receive"></p>
+  <h1>INTERIM MESSAGE</h1>
+  <p id="interim"></p>
+</div>
+<div>
+  <h1>FINAL MESSAGES</h1>
+  <p id="final"></p>
 </div>
