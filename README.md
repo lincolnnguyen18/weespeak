@@ -5,9 +5,9 @@ Live speech recognition for you and your friends!
 ## WeeSpeak Part 1
 
 ### User Stories
-- [ ] User can pick a language
-- [ ] User can see their own words be recognized live
-- [ ] User can see their friends' words be recognized live
+- [X] User can pick a language
+- [X] User can see their own words be recognized live
+- [X] User can see their friend's words be recognized live
 
 ### Plan
 <img src="umpire.jpeg">
