@@ -27,6 +27,7 @@ Live speech recognition for you and your friends!
 
 ## WeeSpeak Part 3
 
+- [ ] User can stream audio to each other
 - [ ] User can playback audio from chat bubbles
 - [ ] Words in chat bubble are highlighted as replayed
-- [ ] User can stream audio to each other
+- [ ] TURN server is secured by REST API
