@@ -20,10 +20,10 @@
       margin: auto;
       display: grid;
       height: 100%;
-      grid-template-rows: 57px 1fr;
+      grid-template-rows: 1fr 57px;
       grid-template-areas:
-        "bottom"
         "chat"
+        "bottom"
     }
     .float-right-bottom {
       display: flex;
@@ -337,6 +337,21 @@
           <button onclick="setAnswer()">Submit</button>
         </div>
       </div>
+      <div id="chat" class="hidden">
+        <div id="logo">
+          <h1>WeeSpeak</h1>
+        </div>
+        <div>
+          <p id="final"></p>
+        </div>
+        <div class="leftDiv">
+          <p id="interim_span" class="series leftMes"></p>
+        </div>
+        <div>
+          <p id="interim"></p>
+          <p id="interim2"></p>
+        </div>
+      </div>
       <div class="hidden" id="bottom">
         <div class="float-right-bottom">
           <select onchange='changeLang()' id="selectLang">
@@ -471,21 +486,6 @@
             }
           }
         </script>
-      </div>
-      <div id="chat" class="hidden">
-        <div id="logo">
-          <h1>WeeSpeak</h1>
-        </div>
-        <div>
-          <p id="final"></p>
-        </div>
-        <div class="leftDiv">
-          <p id="interim_span" class="series leftMes"></p>
-        </div>
-        <div>
-          <p id="interim"></p>
-          <p id="interim2"></p>
-        </div>
       </div>
     </div>
   </body>
