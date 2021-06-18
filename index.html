@@ -11,10 +11,21 @@
       margin: auto;
       display: grid;
       height: 100vh;
-      grid-template-rows: 20fr minmax(0, 1fr);
+      grid-template-rows: 1fr 57px;
       grid-template-areas:
         "chat"
         "bottom"
+    }
+    .float-right-bottom {
+      display: flex;
+      float: right;
+    }
+    #start_button {
+      padding: 0;
+    }
+    #start_img {
+      height: 50px;
+      width: 50px;
     }
     #interim_span {
       transition: 0.5s;
@@ -84,12 +95,13 @@
     #bottom {
       clear: both;
       grid-area: bottom;
+      height: 55px;
     }
     .leftLast:after {
         content: '';
         position: absolute;
-        bottom: 0;
-        left: 25px;
+        bottom: 7px;
+        left: 14px;
         width: 0;
         height: 0;
         border: 18px solid transparent;
@@ -110,8 +122,8 @@
     .rightLast:after {
         content: '';
         position: absolute;
-        bottom: 0;
-        right: 25px;
+        bottom: 7px;
+        right: 14px;
         width: 0;
         height: 0;
         border: 18px solid transparent;
@@ -322,71 +334,76 @@
       </div>
     </div>
     <div class="hidden" id="bottom">
-      <select onchange='changeLang()' id="selectLang">
-        <option value="af-ZA">Afrikaans</option>
-        <option value="id-ID">Bahasa Indonesia</option>
-        <option value="ms-MY">Bahasa Melayu</option>
-        <option value="ca-ES">Català</option>
-        <option value="cs-CZ">Čeština</option>
-        <option value="de-De">Deutsch</option>
-        <option value="en-AU">English (Australia)</option>
-        <option value="en-CA">English (Canada)</option>
-        <option value="en-IN">English (India)</option>
-        <option value="en-NZ">English (New Zealand)</option>
-        <option value="en-ZA">English (South Africa)</option>
-        <option value="en-GB">English (United Kingdom)</option>
-        <option value="en-US">English (United States)</option>
-        <option value="es-AR">Español (Argentina)</option>
-        <option value="es-BO">Español (Bolivia)</option>
-        <option value="es-CL">Español (Chile)</option>
-        <option value="es-CO">Español (Colombia)</option>
-        <option value="es-CR">Español (Costa Rica)</option>
-        <option value="es-EC">Español (Ecuador)</option>
-        <option value="es-SV">Español (El Salvador)</option>
-        <option value="es-ES">Español (España)</option>
-        <option value="es-US">Español (Estados Unidos)</option>
-        <option value="es-GT">Español (Guatemala)</option>
-        <option value="es-HN">Español (Honduras)</option>
-        <option value="es-MX">Español (México)</option>
-        <option value="es-NI">Español (Nicaragua)</option>
-        <option value="es-PA">Español (Panamá)</option>
-        <option value="es-PY">Español (Paraguay)</option>
-        <option value="es-PE">Español (Perú)</option>
-        <option value="es-PR">Español (Puerto Rico)</option>
-        <option value="es-DO">Español (República Dominicana)</option>
-        <option value="es-UY">Español (Uruguay)</option>
-        <option value="es-VE">Español (Venezuela)</option>
-        <option value="eu-ES">Euskara</option>
-        <option value="fr-FR">Français</option>
-        <option value="gl-ES">Galego</option>
-        <option value="hr-HR">Hrvatski</option>
-        <option value="zu-ZA">IsiZulu</option>
-        <option value="is-IS">Íslenska</option>
-        <option value="it-IT">Italiano (Italia)</option>
-        <option value="it-CH">Italiano (Svizzera)</option>
-        <option value="hu-HU">Magyar</option>
-        <option value="nl-NL">Nederlands</option>
-        <option value="nb-NO">Norsk bokmål</option>
-        <option value="pl-PL">Polski</option>
-        <option value="pt-BR">Português (Brasil)</option>
-        <option value="pt-PT">Português (Portugal)</option>
-        <option value="ro-RO">Română</option>
-        <option value="sk-SK">Slovenčina</option>
-        <option value="fi-FI">Suomi</option>
-        <option value="sv-SE">Svenska</option>
-        <option value="tr-TR">Türkçe</option>
-        <option value="bg-BG">български</option>
-        <option value="ru-RU">Pусский</option>
-        <option value="sr-RS">Српски</option>
-        <option value="ko-KR">한국어</option>
-        <option value="cmn-Hans-CN">中文 普通话 (中国大陆)</option>
-        <option value="cmn-Hans-HK">中文 普通话 (香港)</option>
-        <option value="cmn-Hant-TW">中文 中文 (台灣)</option>
-        <option value="yue-Hant-HK">中文 粵語 (香港)</option>
-        <option value="ja-JP">日本語</option>
-        <option value="la">Lingua latīna</option>
-      </select>
-      <button id="button" onclick="toggleStartStop()">BUTTON</button>
+      <div class="float-right-bottom">
+        <select onchange='changeLang()' id="selectLang">
+          <option value="af-ZA">Afrikaans</option>
+          <option value="id-ID">Bahasa Indonesia</option>
+          <option value="ms-MY">Bahasa Melayu</option>
+          <option value="ca-ES">Català</option>
+          <option value="cs-CZ">Čeština</option>
+          <option value="de-De">Deutsch</option>
+          <option value="en-AU">English (Australia)</option>
+          <option value="en-CA">English (Canada)</option>
+          <option value="en-IN">English (India)</option>
+          <option value="en-NZ">English (New Zealand)</option>
+          <option value="en-ZA">English (South Africa)</option>
+          <option value="en-GB">English (United Kingdom)</option>
+          <option value="en-US">English (United States)</option>
+          <option value="es-AR">Español (Argentina)</option>
+          <option value="es-BO">Español (Bolivia)</option>
+          <option value="es-CL">Español (Chile)</option>
+          <option value="es-CO">Español (Colombia)</option>
+          <option value="es-CR">Español (Costa Rica)</option>
+          <option value="es-EC">Español (Ecuador)</option>
+          <option value="es-SV">Español (El Salvador)</option>
+          <option value="es-ES">Español (España)</option>
+          <option value="es-US">Español (Estados Unidos)</option>
+          <option value="es-GT">Español (Guatemala)</option>
+          <option value="es-HN">Español (Honduras)</option>
+          <option value="es-MX">Español (México)</option>
+          <option value="es-NI">Español (Nicaragua)</option>
+          <option value="es-PA">Español (Panamá)</option>
+          <option value="es-PY">Español (Paraguay)</option>
+          <option value="es-PE">Español (Perú)</option>
+          <option value="es-PR">Español (Puerto Rico)</option>
+          <option value="es-DO">Español (República Dominicana)</option>
+          <option value="es-UY">Español (Uruguay)</option>
+          <option value="es-VE">Español (Venezuela)</option>
+          <option value="eu-ES">Euskara</option>
+          <option value="fr-FR">Français</option>
+          <option value="gl-ES">Galego</option>
+          <option value="hr-HR">Hrvatski</option>
+          <option value="zu-ZA">IsiZulu</option>
+          <option value="is-IS">Íslenska</option>
+          <option value="it-IT">Italiano (Italia)</option>
+          <option value="it-CH">Italiano (Svizzera)</option>
+          <option value="hu-HU">Magyar</option>
+          <option value="nl-NL">Nederlands</option>
+          <option value="nb-NO">Norsk bokmål</option>
+          <option value="pl-PL">Polski</option>
+          <option value="pt-BR">Português (Brasil)</option>
+          <option value="pt-PT">Português (Portugal)</option>
+          <option value="ro-RO">Română</option>
+          <option value="sk-SK">Slovenčina</option>
+          <option value="fi-FI">Suomi</option>
+          <option value="sv-SE">Svenska</option>
+          <option value="tr-TR">Türkçe</option>
+          <option value="bg-BG">български</option>
+          <option value="ru-RU">Pусский</option>
+          <option value="sr-RS">Српски</option>
+          <option value="ko-KR">한국어</option>
+          <option value="cmn-Hans-CN">中文 普通话 (中国大陆)</option>
+          <option value="cmn-Hans-HK">中文 普通话 (香港)</option>
+          <option value="cmn-Hant-TW">中文 中文 (台灣)</option>
+          <option value="yue-Hant-HK">中文 粵語 (香港)</option>
+          <option value="ja-JP">日本語</option>
+          <option value="la">Lingua latīna</option>
+        </select>
+        <!--<button id="button" onclick="toggleStartStop()">BUTTON</button>-->
+        <button id="start_button">
+          <img id="start_img" onclick="toggleStartStop()" src="images/mic.gif" alt="Start">
+        </button>
+      </div>
       <script type="text/javascript">
         selectLang = document.getElementById('selectLang');
         selectLang.selectedIndex = "12";
@@ -420,13 +437,15 @@
 
         function reset() {
           recognizing = false;
-          button.innerHTML = "Click to Speak";
+          // button.innerHTML = "Click to Speak";
+          document.getElementById('start_img').src = 'images/mic.gif';
         }
 
         function changeLang() {
           if (recognizing) {
             toggleStartStop();
-            button.innerHTML = "Switching...";
+            // button.innerHTML = "Switching...";
+            document.getElementById('start_img').src = 'images/mic-animation.gif';
             setTimeout(toggleStartStop, 1000);
           }
         }
@@ -439,7 +458,8 @@
             recognition.lang = selectLang.value;
             recognition.start();
             recognizing = true;
-            button.innerHTML = "Click to Stop";
+            // button.innerHTML = "Click to Stop";
+            document.getElementById('start_img').src = 'images/mic-animation.gif';
             document.getElementById('interim_span').innerHTML = "";
           }
         }
