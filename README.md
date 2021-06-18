@@ -10,7 +10,7 @@ Live speech recognition for you and your friends!
 - [X] User can see their friend's words be recognized live
 
 ### Plan
-<img src="umpire.jpeg">
+<img src="https://user-images.githubusercontent.com/61459043/122609822-3c1fc280-d044-11eb-82f0-b1b144951f08.jpeg">
 
 ### Part 1 Demo
 <img src='https://user-images.githubusercontent.com/61459043/122601956-ada54400-d037-11eb-8c35-0fa5699a78a3.gif' />
