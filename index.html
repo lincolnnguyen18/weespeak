@@ -7,7 +7,7 @@
     body {
       font-family: Arial Unicode MS, Lucida Sans Unicode, Code2000, sans-serif;
       font-size: 24px;
-      max-width: 700px;
+      max-width: 1000px;
       margin: auto;
       display: grid;
       height: 100vh;
@@ -15,6 +15,10 @@
       grid-template-areas:
         "chat"
         "bottom"
+    }
+    #interim_span {
+      transition: 0.5s;
+      animation: speech .7s linear 1;
     }
     #interim_span:before {
       content: '';
@@ -45,26 +49,26 @@
     .leftDiv {
       float: left;
       clear: both;
-      max-width: 50%;
+      max-width: 90%;
     }
     .leftMes {
       text-align: left;
       background: #c8dff1;
-      padding: 10px;
-      border-radius: 15px;
+      padding: .4em;
+      border-radius: .6em;
       color: black;
       position: relative;
     }
     .rightDiv {
       float: right;
       clear: both;
-      max-width: 50%;
+      max-width: 90%;
     }
     .rightMes {
       text-align: left;
       background: #ad80ce;
-        border-radius: .7em;
-      padding: .7em;
+      border-radius: .6em;
+      padding: .4em;
       color: white;
       position: relative;
       margin-top: 10px;
@@ -97,11 +101,11 @@
     }
     .leftLast {
         margin-top: 10px;
-        margin-bottom: 0px;
+        margin-bottom: 10px;
     }
     .rightLast {
         margin-top: 10px;
-        margin-bottom: 0px;
+        margin-bottom: 10px;
     }
     .rightLast:after {
         content: '';
@@ -309,7 +313,7 @@
       <div>
         <p id="final"></p>
       </div>
-      <div class="leftDiv" id="interim_parent">
+      <div class="leftDiv">
         <p id="interim_span" class="series leftMes"></p>
       </div>
       <div>
