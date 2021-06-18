@@ -21,8 +21,7 @@ Live speech recognition for you and your friends!
 
 - [ ] User can create a room
 - [ ] User can join a room
-- [ ] User can name themselves
-- [ ] User can chat
+- [ ] User can type chat
 - [ ] User given a random color
 
 ## WeeSpeak Part 3
