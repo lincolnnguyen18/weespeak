@@ -7,16 +7,25 @@
     body {
       font-family: Arial Unicode MS, Lucida Sans Unicode, Code2000, sans-serif;
       font-size: 24px;
-      max-width: 1700px;
+      max-width: 700px;
       margin: auto;
-      margin-left: 1%;
-      margin-right: 1%;
       display: grid;
       height: 100vh;
       grid-template-rows: 20fr minmax(0, 1fr);
       grid-template-areas:
         "chat"
         "bottom"
+    }
+    #interim_span:before {
+      content: '';
+      height: .4em;
+      width: .4em;
+      background: red;
+      border-radius: 100%;
+      position: absolute;
+      top: 50%;
+      left: -.9em;
+      transform: translateY(-50%);
     }
     #logo {
       text-align: center;
@@ -40,6 +49,11 @@
     }
     .leftMes {
       text-align: left;
+      background: #c8dff1;
+      padding: 10px;
+      border-radius: 15px;
+      color: black;
+      position: relative;
     }
     .rightDiv {
       float: right;
@@ -48,6 +62,12 @@
     }
     .rightMes {
       text-align: left;
+      background: #ad80ce;
+        border-radius: .7em;
+      padding: .7em;
+      color: white;
+      position: relative;
+      margin-top: 10px;
     }
     .hidden {
       display: none;
@@ -55,10 +75,60 @@
     #chat {
       overflow-y: auto;
       grid-area: chat;
+      padding: 1em;
     }
     #bottom {
       clear: both;
       grid-area: bottom;
+    }
+    .leftLast:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 25px;
+        width: 0;
+        height: 0;
+        border: 18px solid transparent;
+        border-top-color: #c8dff1;
+        border-bottom: 0;
+        border-left: 0;
+        margin-left: -10px;
+        margin-bottom: -17px;
+    }
+    .leftLast {
+        margin-top: 10px;
+        margin-bottom: 0px;
+    }
+    .rightLast {
+        margin-top: 10px;
+        margin-bottom: 0px;
+    }
+    .rightLast:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        right: 25px;
+        width: 0;
+        height: 0;
+        border: 18px solid transparent;
+        border-top-color: #ad80ce;
+        border-bottom: 0;
+        border-right: 0;
+        margin-right: -10px;
+        margin-bottom: -17px;
+    }
+    .leftMes:empty {
+      display: none;
+    }
+    .rightMes:empty {
+      display: none;
+    }
+    .series:after {
+        display: none;
+    }
+    .series {
+        margin-top: 10px;
+        margin-bottom: 0px;
     }
     @media (min-width: 1200px) {
       .leftDiv {
@@ -75,6 +145,10 @@
       var remoteConnection;
       var sendChannel;
       var userType;
+      var offer;
+      var answer;
+      var lastMessageSide;
+
       function generateOffer() {
         userType = 'sender';
         const iceConfiguration = { }
@@ -100,7 +174,15 @@
           if (data['type'] == 'interim') {
             document.getElementById('interim2').innerHTML = `<div class='rightDiv'><p class='rightMes'>${data['message']}</p></div>`;
           } else if (data['type'] == 'final') {
-            document.getElementById('final').innerHTML += `<div class='rightDiv'><p class='rightMes'>${data['message']}</p></div>`;
+            if (document.getElementById('final').lastChild) {
+              var lastBubble = document.getElementById('final').lastChild.lastChild
+              if (lastMessageSide == 'left' && lastBubble) {
+                lastBubble.classList.add('leftLast');
+                lastBubble.classList.remove('series');
+              }
+            }
+            document.getElementById('final').innerHTML += `<div class='rightDiv'><p class='series rightMes'>${data['message']}</p></div>`;
+            lastMessageSide = 'right';
           }
           chat = document.getElementById('chat');
           chat.scrollTop = chat.scrollHeight;
@@ -118,12 +200,13 @@
       }
       async function generateAnswer() {
         userType = 'receiver';
-        const offer = JSON.parse(document.getElementById('offerTextarea').value);
         remoteConnection = new RTCPeerConnection()
+        offer = JSON.parse(document.getElementById('offerTextarea').value);
 
         remoteConnection.onicecandidate = e =>  {
-        console.log(" NEW ice candidnat!! on localconnection reprinting SDP " )
-         console.log(JSON.stringify(remoteConnection.localDescription) )
+          console.log(" NEW ice candidnat!! on localconnection reprinting SDP " )
+          console.log(JSON.stringify(remoteConnection.localDescription) )
+          document.getElementById('answer').innerHTML = JSON.stringify(remoteConnection.localDescription);
         }
 
         remoteConnection.ondatachannel= e => {
@@ -134,7 +217,15 @@
                 if (data['type'] == 'interim') {
                   document.getElementById('interim2').innerHTML = `<div class='rightDiv'><p class='rightMes'>${data['message']}</p></div>`;
                 } else if (data['type'] == 'final') {
-                  document.getElementById('final').innerHTML += `<div class='rightDiv'><p class='rightMes'>${data['message']}</p></div>`;
+                  if (document.getElementById('final').lastChild) {
+                    var lastBubble = document.getElementById('final').lastChild.lastChild
+                    if (lastMessageSide == 'left' && lastBubble) {
+                      lastBubble.classList.add('leftLast');
+                      lastBubble.classList.remove('series');
+                    }
+                  }
+                  document.getElementById('final').innerHTML += `<div class='rightDiv'><p class='series rightMes'>${data['message']}</p></div>`;
+                  lastMessageSide = 'right';
                 }
                 chat = document.getElementById('chat');
                 chat.scrollTop = chat.scrollHeight;
@@ -154,13 +245,13 @@
         //create answer
         await remoteConnection.createAnswer().then(a => remoteConnection.setLocalDescription(a)).then(a=> {
           console.log(JSON.stringify(remoteConnection.localDescription));
-          document.getElementById('answer').innerHTML = JSON.stringify(remoteConnection.localDescription);
+          // document.getElementById('answer').innerHTML = JSON.stringify(remoteConnection.localDescription);
         });
         //send the anser to the client
       }
       function setAnswer() {
-        const answer = JSON.parse(document.getElementById('answerTextarea').value);
-        localConnection.setRemoteDescription (answer).then(a=>console.log("done"));
+        answer = JSON.parse(document.getElementById('answerTextarea').value);
+        localConnection.setRemoteDescription(answer).then(a=>console.log("done"));
       }
       function updateInterim(message) {
         data = {
@@ -175,7 +266,7 @@
         }
       }
       function sendFinal(message) {
-        document.getElementById('final').innerHTML += `<div class='leftDiv'><p class='leftMes'>${message}</p></div>`;
+        document.getElementById('final').innerHTML += `<div class='leftDiv'><p class='series leftMes'>${message}</p></div>`;
         data = {
           type: 'final',
           message: message
@@ -186,6 +277,7 @@
         } else {
           remoteConnection.channel.send(data);
         }
+        lastMessageSide = 'left';
       }
     </script>
     <div id="stupidStuff">
@@ -217,17 +309,16 @@
       <div>
         <p id="final"></p>
       </div>
+      <div class="leftDiv" id="interim_parent">
+        <p id="interim_span" class="series leftMes"></p>
+      </div>
       <div>
         <p id="interim"></p>
-        <p id="interim2" style="color:grey"></p>
-      </div>
-      <div class="leftDiv">
-        <span id="final_span"></span>
-        <span id="interim_span" style="color:grey"></span>
+        <p id="interim2"></p>
       </div>
     </div>
     <div class="hidden" id="bottom">
-      <select id="selectLang">
+      <select onchange='changeLang()' id="selectLang">
         <option value="af-ZA">Afrikaans</option>
         <option value="id-ID">Bahasa Indonesia</option>
         <option value="ms-MY">Bahasa Melayu</option>
@@ -317,7 +408,6 @@
               interim += event.results[i][0].transcript;
             }
           }
-          // final_span.innerHTML = final;
           interim_span.innerHTML = interim;
           updateInterim(interim);
           chat = document.getElementById('chat');
@@ -329,6 +419,14 @@
           button.innerHTML = "Click to Speak";
         }
 
+        function changeLang() {
+          if (recognizing) {
+            toggleStartStop();
+            button.innerHTML = "Switching...";
+            setTimeout(toggleStartStop, 1000);
+          }
+        }
+
         function toggleStartStop() {
           if (recognizing) {
             recognition.stop();
@@ -338,8 +436,7 @@
             recognition.start();
             recognizing = true;
             button.innerHTML = "Click to Stop";
-            final_span.innerHTML = "";
-            interim_span.innerHTML = "";
+            document.getElementById('interim_span').innerHTML = "";
           }
         }
       </script>
