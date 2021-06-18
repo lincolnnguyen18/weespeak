@@ -22,7 +22,7 @@ Live speech recognition for you and your friends!
 - [ ] User can create a room
 - [ ] User can join a room
 - [ ] User can type chat
-- [ ] User given a random color
+- [ ] User can choose color for their speech bubbles
 
 ## WeeSpeak Part 3
 
