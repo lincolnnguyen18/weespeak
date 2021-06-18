@@ -12,6 +12,9 @@ Live speech recognition for you and your friends!
 ### Plan
 <img src="umpire.jpeg">
 
+### Part 1 Demo
+<img src='https://user-images.githubusercontent.com/61459043/122601956-ada54400-d037-11eb-8c35-0fa5699a78a3.gif' />
+
 ## WeeSpeak Part 2
 
 ### User Stories
