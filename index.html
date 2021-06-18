@@ -410,11 +410,11 @@
         selectLang = document.getElementById('selectLang');
         selectLang.selectedIndex = "12";
 
-        var recognizing;
+        var recognizing = false;
         var recognition = new webkitSpeechRecognition();
         recognition.continuous = true;
         recognition.interimResults = true;
-        reset();
+        // reset();
         recognition.onend = reset;
 
         recognition.onresult = function (event) {
@@ -450,17 +450,15 @@
 
         function changeLang() {
           if (recognizing) {
-            toggleStartStop();
-            // button.innerHTML = "Switching...";
-            document.getElementById('start_img').src = 'images/mic-animation.gif';
-            setTimeout(toggleStartStop, 1000);
+            recognition.stop();
+            // reset();
           }
         }
 
         function toggleStartStop() {
           if (recognizing) {
             recognition.stop();
-            reset();
+            // reset();
           } else {
             recognition.lang = selectLang.value;
             recognition.start();
