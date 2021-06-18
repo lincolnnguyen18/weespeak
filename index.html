@@ -282,6 +282,8 @@
         }
       }
       function sendFinal(message) {
+        document.getElementById('interim_span').innerHTML = '';
+        updateInterim('');
         document.getElementById('final').innerHTML += `<div class='leftDiv'><p class='series leftMes'>${message}</p></div>`;
         data = {
           type: 'final',
@@ -436,6 +438,11 @@
         }
 
         function reset() {
+          var remnant = document.getElementById('interim_span').innerHTML;
+          if (remnant != '') {
+            console.log(`REMNANT: ${remnant}`);
+            sendFinal(remnant);
+          }
           recognizing = false;
           // button.innerHTML = "Click to Speak";
           document.getElementById('start_img').src = 'images/mic.gif';
