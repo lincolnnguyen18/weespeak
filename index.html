@@ -25,6 +25,10 @@
         "chat"
         "bottom"
     }
+    .float-left-bottom {
+      display: flex;
+      float: left;
+    }
     .float-right-bottom {
       display: flex;
       float: right;
@@ -61,7 +65,7 @@
     select,
     button {
       font-family: Arial Unicode MS, Lucida Sans Unicode, Code2000, sans-serif;
-      font-size: 14px;
+      font-size: .7em;
     }
     #stupidStuff,
     #stupidStuff select,
@@ -184,12 +188,12 @@
           const iceConfiguration = { }
           iceConfiguration.iceServers = [];
           iceConfiguration.iceServers.push({
-            urls: 'turn:turn.lincolnnguyen18.com',
-            username: 'guest',
-            credential: 'somepassword'
+            urls: 'turn:turn01.brie.fi:5349',
+            username: 'brie',
+            credential: 'fi'
           })
           iceConfiguration.iceServers.push({
-            urls: 'stun:stun.lincolnnguyen18.com'
+            urls: 'stun:turn01.brie.fi:5349'
           })
           localConnection = new RTCPeerConnection(iceConfiguration)
           localConnection.onicecandidate = e =>  {
@@ -223,6 +227,7 @@
             document.getElementById('stupidStuff').remove();
             document.getElementById('chat').classList.remove('hidden');
             document.getElementById('bottom').classList.remove('hidden');
+            afterOpen();
           }
           sendChannel.onclose =e => console.log("closed!!!!!!");
           localConnection.createOffer().then(function(o) {
@@ -267,6 +272,7 @@
                   document.getElementById('stupidStuff').remove();
                   document.getElementById('chat').classList.remove('hidden');
                   document.getElementById('bottom').classList.remove('hidden');
+                  afterOpen();
                 }
                 receiveChannel.onclose =e => console.log("closed!!!!!!");
                 remoteConnection.channel = receiveChannel;
@@ -312,6 +318,26 @@
           }
           lastMessageSide = 'left';
         }
+        function getLocalStream() {
+          const constraints = {video: false, audio: true}
+          navigator.mediaDevices.getUserMedia(constraints).then( stream => {
+              console.log(stream);
+              setLocalStream(stream);
+          }).catch( err => {
+              console.log("u got an error:" + err)
+          });
+        }
+        function setLocalStream(stream) {
+          window.localAudio.srcObject = stream;
+          window.localAudio.autoplay = true;
+          window.localStream = stream;
+        }
+        function afterOpen() {
+          getLocalStream();
+          if (window.localstream) {
+            
+          }
+        }
       </script>
       <div id="stupidStuff">
         <h1>WeeSpeak</h1>
@@ -353,6 +379,10 @@
         </div>
       </div>
       <div class="hidden" id="bottom">
+        <div class="float-left-bottom">
+          <audio controls id="remoteAudio" muted="true"></audio>
+          <audio controls id="localAudio" muted="true"></audio>
+        </div>
         <div class="float-right-bottom">
           <select onchange='changeLang()' id="selectLang">
             <option value="af-ZA">Afrikaans</option>
