@@ -28,7 +28,7 @@ Coturn was installed on Ubuntu.
   const iceConfiguration = { }
   iceConfiguration.iceServers = [];
   //turn server
-  /*iceConfiguration.iceServers.push({
+  iceConfiguration.iceServers.push({
                   urls: 'turn:turn.lincolnnguyen18.com',
                   username: 'guest',
                   credential: 'somepassword'
@@ -36,15 +36,15 @@ Coturn was installed on Ubuntu.
   //stun server
   iceConfiguration.iceServers.push({
                   urls: 'stun:stun.lincolnnguyen18.com'
-              })*/
-  iceConfiguration.iceServers.push({
+              })
+  /*iceConfiguration.iceServers.push({
     urls: 'turn:turn01.brie.fi:5349',
     username: 'brie',
     credential: 'fi'
   })
   iceConfiguration.iceServers.push({
     urls: 'stun:turn01.brie.fi:5349'
-  })
+  })*/
   
   const localConnection = new RTCPeerConnection(iceConfiguration)
   localConnection.onicecandidate = e =>  {
