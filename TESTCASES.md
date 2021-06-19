@@ -37,6 +37,16 @@ Coturn was installed on Ubuntu.
   iceConfiguration.iceServers.push({
                   urls: 'stun:stun.lincolnnguyen18.com'
               })
+  // OR
+  iceConfiguration.iceServers.push({
+    urls: 'turn:turn01.brie.fi:5349',
+    username: 'brie',
+    credential: 'fi'
+  })
+  iceConfiguration.iceServers.push({
+    urls: 'stun:turn01.brie.fi:5349'
+  })
+  
   const localConnection = new RTCPeerConnection(iceConfiguration)
   localConnection.onicecandidate = e =>  {
   console.log(" NEW ice candidnat!! on localconnection reprinting SDP " )
