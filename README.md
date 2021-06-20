@@ -29,10 +29,9 @@ Live speech recognition for you and your friends!
 ### User Stories
 
 - [ ] User can audio call a friend
-- [ ] User can playback audio from chat bubbles
+- [ ] User can playback audio starting from any word in a chat bubble
 - [ ] Words in chat bubble are highlighted as replayed
 - [ ] User can pause playback
-- [ ] User can playback audio starting from any word in a chat bubble
 
 ## WeeSpeak Part 4
 
