@@ -19,14 +19,32 @@ Live speech recognition for you and your friends!
 
 ### User Stories
 
-- [ ] User can create a room
-- [ ] User can join a room
-- [ ] User can type messages
-- [ ] User can choose color for their speech bubbles
+- [ ] User can login using Gmail
+- [ ] User can add friends
+- [ ] User can message a friend
+- [ ] User can customize the color for their speech bubbles
 
 ## WeeSpeak Part 3
 
-- [ ] Users can stream audio to each other
-- [ ] User can playback audio from chat bubbles
+### User Stories
+
+- [ ] User can audio call a friend
+- [ ] User can playback audio starting from any word in a chat bubble
 - [ ] Words in chat bubble are highlighted as replayed
+- [ ] User can pause playback
+
+## WeeSpeak Part 4
+
+### User Stories
+
+- [ ] User can video call a friend
+- [ ] User can share screen
+- [ ] User can share files
+
+## WeeSpeak Part 5
+
+### User Stories
+
+- [ ] User can send text messages and files between their own devices
+- [ ] User can login using Sign in with Apple
 - [ ] TURN server is secured by REST API
