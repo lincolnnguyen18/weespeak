@@ -22,7 +22,6 @@ Live speech recognition for you and your friends!
 - [ ] User can login using Gmail
 - [ ] User can add friends
 - [ ] User can message a friend
-- [ ] User can customize the color for their speech bubbles
 
 ### Plan
 <img src="https://user-images.githubusercontent.com/61459043/122832058-68d81200-d2b0-11eb-8691-93582a98e261.jpeg">
@@ -33,9 +32,8 @@ Live speech recognition for you and your friends!
 
 - [ ] User can logout
 - [ ] User can audio call a friend
-- [ ] User can playback audio starting from any word in a chat bubble
-- [ ] Words in chat bubble are highlighted as replayed
-- [ ] User can pause playback
+- [ ] User can have their english grammar corrected
+- [ ] User can have their messages translated
 
 ## WeeSpeak Part 4
 
@@ -44,11 +42,6 @@ Live speech recognition for you and your friends!
 - [ ] User can video call a friend
 - [ ] User can share screen
 - [ ] User can share files
-
-## WeeSpeak Part 5
-
-### User Stories
-
 - [ ] User can send text messages and files between their own devices
-- [ ] User can login using Sign in with Apple
 - [ ] TURN server is secured by REST API
+- [ ] User can customize the color for their speech bubbles
