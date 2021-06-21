@@ -1,4 +1,5 @@
 // go to https://npm.runkit.com/%40stewartmcgown%2Fgrammarly-api
+// go to https://codesandbox.io/s/simple-google-translate-api-example-d9qh5
 var grammarlyApi = require("@stewartmcgown/grammarly-api")
 
 // import { Grammarly } from 'grammarly-api';
