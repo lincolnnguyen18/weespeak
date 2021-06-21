@@ -1,0 +1,14 @@
+// go to https://npm.runkit.com/%40stewartmcgown%2Fgrammarly-api
+var grammarlyApi = require("@stewartmcgown/grammarly-api")
+
+// import { Grammarly } from 'grammarly-api';
+ 
+const text = `When we have shuffled off this mortal coil,
+Must give us pause - their's the respect
+That makes calamity of so long life.`;
+ 
+const free = new grammarlyApi.Grammarly();
+const correct = grammarlyApi.correct;
+ 
+const test1 = await free.analyse('he is an computer science student').then(correct);
+// const { corrected } = await free.analyse(text).then(correct);
