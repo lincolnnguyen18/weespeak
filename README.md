@@ -24,10 +24,14 @@ Live speech recognition for you and your friends!
 - [ ] User can message a friend
 - [ ] User can customize the color for their speech bubbles
 
+### Plan
+<img src="https://user-images.githubusercontent.com/61459043/122832058-68d81200-d2b0-11eb-8691-93582a98e261.jpeg">
+
 ## WeeSpeak Part 3
 
 ### User Stories
 
+- [ ] User can logout
 - [ ] User can audio call a friend
 - [ ] User can playback audio starting from any word in a chat bubble
 - [ ] Words in chat bubble are highlighted as replayed
