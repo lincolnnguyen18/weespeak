@@ -45,3 +45,8 @@ Live speech recognition for you and your friends!
 - [ ] User can send text messages and files between their own devices
 - [ ] TURN server is secured by REST API
 - [ ] User can customize the color for their speech bubbles
+
+## Future Ideas
+
+- Add chat bubble to SRS system
+- SRS checking with voice
