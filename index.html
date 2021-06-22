@@ -217,7 +217,7 @@
 						console.log("messsage received!!!"	+ e.data );
 						data = JSON.parse(e.data);
 						if (data['type'] == 'interim') {
-							document.getElementById('interim2').innerHTML = `<div class='rightDiv'><pre><p contenteditable="true" class='underline rightMes'>${data['message']}</p></pre></div>`;
+							document.getElementById('interim2').innerHTML = `<div class='rightDiv'><p class='underline rightMes'>${data['message']}</p></div>`;
 						} else if (data['type'] == 'final') {
 							if (document.getElementById('final').lastChild) {
 								var lastBubble = document.getElementById('final').lastChild.lastChild
@@ -226,7 +226,7 @@
 									lastBubble.classList.remove('series');
 								}
 							}
-							document.getElementById('final').innerHTML += `<div class='rightDiv'><pre><p contenteditable="true" class='series rightMes'>${data['message']}</p></pre></div>`;
+							document.getElementById('final').innerHTML += `<div class='rightDiv'><p class='series rightMes'>${data['message']}</p></div>`;
 							lastMessageSide = 'right';
 						}
 						chat = document.getElementById('chat');
@@ -267,7 +267,7 @@
 									console.log("messsage received!!!"	+ e.data );
 									data = JSON.parse(e.data);
 									if (data['type'] == 'interim') {
-										document.getElementById('interim2').innerHTML = `<div class='underline rightDiv'><pre><p contenteditable="true" class='rightMes'>${data['message']}</p></pre></div>`;
+										document.getElementById('interim2').innerHTML = `<div class='underline rightDiv'><p class='rightMes'>${data['message']}</p></div>`;
 									} else if (data['type'] == 'final') {
 										if (document.getElementById('final').lastChild) {
 											var lastBubble = document.getElementById('final').lastChild.lastChild
@@ -276,7 +276,9 @@
 												lastBubble.classList.remove('series');
 											}
 										}
-										document.getElementById('final').innerHTML += `<div class='rightDiv'><pre><p contenteditable="true" class='series rightMes'>${data['message']}</p></pre></div>`;
+										document.getElementById('final').innerHTML += `<div class='rightDiv'><p contenteditable="true" spellcheck="false" class='series rightMes'>${data['message']}</p></div>`;
+										var rights = document.querySelectorAll(".rightMes");
+										rights[rights.length - 2].focus();
 										lastMessageSide = 'right';
 									}
 									chat = document.getElementById('chat');
@@ -323,7 +325,9 @@
 				function sendFinal(message) {
 					document.getElementById('interim_span').innerHTML = '';
 					updateInterim('');
-					document.getElementById('final').innerHTML += `<div class='leftDiv'><pre><p contenteditable="true" class='series leftMes'>${message}</p></pre></div>`;
+					document.getElementById('final').innerHTML += `<div class='leftDiv'><p class='series leftMes' contenteditable="true" spellcheck="false">${message}</p></div>`;
+					var lefts = document.querySelectorAll(".leftMes");
+					lefts[lefts.length - 2].focus();
 					data = {
 						type: 'final',
 						message: message
@@ -384,14 +388,14 @@
 					<h1>WeeSpeak</h1>
 				</div>
 				<div>
-					<pre><p contenteditable="true" id="final"></p></pre>
+					<p id="final"></p>
 				</div>
 				<div class="leftDiv">
-					<pre><p contenteditable="true" id="interim_span" class="series leftMes"></pre></p>
+					<p id="interim_span" class="series leftMes"></p>
 				</div>
 				<div>
-					<pre><p contenteditable="true" id="interim"></p></pre>
-					<pre><p contenteditable="true" id="interim2"></p></pre>
+					<p id="interim"></p>
+					<p id="interim2"></p>
 				</div>
 			</div>
 			<div class="hidden" id="bottom">
