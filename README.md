@@ -64,10 +64,11 @@ Live speech recognition for you and your friends!
 - User can list goals for day at that wake up time
 - User can record completion of goals
 - User can make daily goal completion public to all users
-- User can make daily goal completion visible only to chosen users
-- User can rate day on a score from -10 to 10
-- User can view graph of all days with their completed/uncompleted goals
+- User can make daily goal completion visible only to chosen users (default is just themself)
+- User can rate day on a score from -10 to 10 (default will be 0)
+- User can view graph or calendar of all days with their completed/uncompleted goals as well as future goals/reminders
 - User can mark significant days for easy finding
+- User can make goals/reminders in advance
 
 ### WeeRead
 
