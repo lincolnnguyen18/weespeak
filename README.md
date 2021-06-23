@@ -59,7 +59,7 @@ Live speech recognition for you and your friends!
 - User can record completion of goals
 - User can make daily goal completion public to all users
 - User can make daily goal completion visible only to chosen users
-- User can click on Japanese words for immediate definitions
+- User can click on Japanese words for immediate definitions (hopefully Chinese, German, Korean, French, and Russian in the future as well)
 - User can use extension to interweave two languages on a site
 - User can use extension to highlight sections for clarification by community
 - User can view most popular and most recent sites users use extension for by language
