@@ -69,6 +69,9 @@ Live speech recognition for you and your friends!
 - User can view graph or calendar of all days with their completed/uncompleted goals as well as future goals/reminders
 - User can mark significant days for easy finding
 - User can make goals/reminders in advance
+- User can follow other users
+- User can set a time to interact with any followers
+- User can friend users
 
 ### WeeRead
 
@@ -78,3 +81,8 @@ Live speech recognition for you and your friends!
 - User can view most popular and most recent sites users use extension for by language
 - User can view most popular and most recent activity for questions for highlights
 - User can view unanswered/answered highlights by other users live on a website
+
+### WeeTech
+
+- Make language learning easier, more casual, and a fun way to make friends!
+- Make goal tracking easier, more casual, and a fun way to make friends!
