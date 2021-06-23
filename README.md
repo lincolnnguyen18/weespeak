@@ -60,7 +60,7 @@ Live speech recognition for you and your friends!
 - User can make daily goal completion public to all users
 - User can make daily goal completion visible only to chosen users
 - User can rate day on a score from -10 to 10
-- User can view graph of all days with all their completed/uncompleted goals
+- User can view graph of all days with their completed/uncompleted goals
 - User can click on Japanese words for immediate definitions (hopefully Chinese, German, Korean, French, and Russian in the future as well)
 - User can use extension to interweave two languages on a site
 - User can use extension to highlight sections for clarification by community
