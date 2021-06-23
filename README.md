@@ -34,6 +34,7 @@ Live speech recognition for you and your friends!
 - [ ] User can audio call a friend
 - [X] User can have their english grammar corrected
 - [ ] User can have their messages translated
+- [ ] User can click chat bubble to have it read by TTS
 
 ## WeeSpeak Part 4
 
