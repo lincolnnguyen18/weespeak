@@ -56,7 +56,7 @@ Live speech recognition for you and your friends!
 - User can review chat bubbles with word for word ASR checking
 - User can find new friends from other countries by language, proficiency in each other's language, video/audio preference, hobbies/goals
 
-### WeeDo
+### WeeTry
 
 - User can choose a permanent wake up time
 - User can change wake up time once a week
