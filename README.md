@@ -32,7 +32,7 @@ Live speech recognition for you and your friends!
 
 - [ ] User can logout
 - [ ] User can audio call a friend
-- [ ] User can have their english grammar corrected
+- [X] User can have their english grammar corrected
 - [ ] User can have their messages translated
 
 ## WeeSpeak Part 4
@@ -48,5 +48,7 @@ Live speech recognition for you and your friends!
 
 ## Future Ideas
 
-- Add chat bubble to SRS system
-- SRS checking with voice
+- Chat bubble flash cards with periodic checking
+- Word for word ASR checking of chat bubble
+- Connect users by language, proficiency in each language, video/audio preference, hobbies/goals
+- Daily goals completion tracker
