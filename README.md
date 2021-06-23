@@ -48,7 +48,14 @@ Live speech recognition for you and your friends!
 
 ## Future Ideas
 
-- Chat bubble flash cards with periodic checking
-- Word for word ASR checking of chat bubble
-- Connect users by language, proficiency in each language, video/audio preference, hobbies/goals
-- Daily goals completion tracker
+- User can share chat bubbles with community to practice speaking
+- User can report offensive chat bubbles
+- User can choose a chat bubble, correct it if needed, and save for review
+- User can review chat bubbles with word for word ASR checking
+- User can find new friends from other countries by language, proficiency in each other's language, video/audio preference, hobbies/goals
+- User can choose a permanent wake up time
+- User can change wake up time once a week
+- User can list goals for day at that wake up time
+- User can record completion of goals
+- User can make daily goal completion public to all users
+- User can make daily goal completion visible only to chosen users
