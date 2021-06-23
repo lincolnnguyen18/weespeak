@@ -48,11 +48,16 @@ Live speech recognition for you and your friends!
 
 ## Future Ideas
 
+### WeeSpeak
+
 - User can share chat bubbles with community to practice speaking
 - User can report offensive chat bubbles
 - User can choose a chat bubble, correct it if needed, and save for review
 - User can review chat bubbles with word for word ASR checking
 - User can find new friends from other countries by language, proficiency in each other's language, video/audio preference, hobbies/goals
+
+### WeeDo
+
 - User can choose a permanent wake up time
 - User can change wake up time once a week
 - User can list goals for day at that wake up time
@@ -62,6 +67,9 @@ Live speech recognition for you and your friends!
 - User can rate day on a score from -10 to 10
 - User can view graph of all days with their completed/uncompleted goals
 - User can mark significant days for easy finding
+
+### WeeRead
+
 - User can click on Japanese words for immediate definitions (hopefully Chinese, German, Korean, French, and Russian in the future as well)
 - User can use extension to interweave two languages on a site
 - User can use extension to highlight sections for clarification by community
