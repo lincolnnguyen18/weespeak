@@ -82,6 +82,12 @@ Live speech recognition for you and your friends!
 - User can view most popular and most recent sites users use extension for by language
 - User can view most popular and most recent activity for questions for highlights
 - User can view unanswered/answered highlights by other users live on a website
+- User can use extension to select relevant parts of website for automatic scraping and paging to split up word or text documents to upload to a machine translation service
+- User can upload translated text to share with community
+- User can upload machine translated snippets for selected text in a website
+- User can upvote good machine translations
+- Uesr can report incorrect or spam machine translations
+- User can answer questions in highlights
 
 ### WeeTech
 
