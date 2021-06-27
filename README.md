@@ -1,70 +1,95 @@
-# Getting Started with Create React App
+# WeeSpeak
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Live speech recognition for you and your friends!
 
-## Available Scripts
+## WeeSpeak Part 1
 
-In the project directory, you can run:
+### User Stories
+- [X] User can pick a language
+- [X] User can see their own words be recognized live
+- [X] User can see their friend's words be recognized live
 
-### `npm start`
+### Plan
+<img src="https://user-images.githubusercontent.com/61459043/122609822-3c1fc280-d044-11eb-82f0-b1b144951f08.jpeg">
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Part 1 Demo
+<img src='https://user-images.githubusercontent.com/61459043/122601956-ada54400-d037-11eb-8c35-0fa5699a78a3.gif' />
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## WeeSpeak Part 2
 
-### `npm test`
+### User Stories
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- [ ] User can login using Gmail
+- [ ] User can add friends
+- [ ] User can message a friend
 
-### `npm run build`
+### Plan
+<img src="https://user-images.githubusercontent.com/61459043/122832058-68d81200-d2b0-11eb-8691-93582a98e261.jpeg">
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## WeeSpeak Part 3
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### User Stories
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- [ ] User can logout
+- [ ] User can audio call a friend
+- [X] User can have their english grammar corrected
+- [ ] User can have their messages translated
+- [ ] User can click chat bubble to have it read by TTS
 
-### `npm run eject`
+## WeeSpeak Part 4
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### User Stories
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- [ ] User can video call a friend
+- [ ] User can share screen
+- [ ] User can share files
+- [ ] User can send text messages and files between their own devices
+- [ ] TURN server is secured by REST API
+- [ ] User can customize the color for their speech bubbles
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Future Ideas
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### WeeSpeak
 
-## Learn More
+- User can share chat bubbles with community to practice speaking
+- User can report offensive chat bubbles
+- User can choose a chat bubble, correct it if needed, and save for review
+- User can review chat bubbles with word for word ASR checking
+- User can find new friends from other countries by language, proficiency in each other's language, video/audio preference, hobbies/goals
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### WeeTry
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- User can choose a permanent wake up time
+- User can change wake up time once a week
+- User can list goals for day at that wake up time
+- User can list up to three unfinished goals at a time
+- User can record completion of goals
+- User can make daily goal completion public to all users
+- User can make daily goal completion visible only to chosen users (default is just themself)
+- User can rate day on a score from -10 to 10 (default will be 0)
+- User can view graph or calendar of all days with their completed/uncompleted goals as well as future goals/reminders
+- User can mark significant days for easy finding
+- User can make goals/reminders in advance
+- User can follow other users
+- User can set a time to interact with any followers
+- User can friend users
 
-### Code Splitting
+### WeeRead
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- User can click on Japanese words for immediate definitions (hopefully Chinese, German, Korean, French, and Russian in the future as well)
+- User can use extension to interweave two languages on a site
+- User can use extension to highlight sections for clarification by community
+- User can view most popular and most recent sites users use extension for by language
+- User can view most popular and most recent activity for questions for highlights
+- User can view unanswered/answered highlights by other users live on a website
+- User can use extension to select relevant parts of website for automatic scraping and paging to split up word or text documents to upload to a machine translation service
+- User can upload translated text to share with community
+- User can upload machine translated snippets for selected text in a website
+- User can upvote good machine translations
+- Uesr can report incorrect or spam machine translations
+- User can answer questions in highlights
 
-### Analyzing the Bundle Size
+### WeeTech
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Make language learning easier, more casual, and a fun way to make friends!
+- Make goal tracking easier, more casual, and a fun way to make friends!
