@@ -59,10 +59,6 @@ Live speech recognition for you and your friends!
 
 ### WeeTry
 
-- User can choose a permanent wake up time
-- User can change wake up time once a week
-- User can list goals for day at that wake up time
-- User can list up to three unfinished goals at a time
 - User can record completion of goals
 - User can make daily goal completion public to all users
 - User can make daily goal completion visible only to chosen users (default is just themself)
@@ -73,6 +69,13 @@ Live speech recognition for you and your friends!
 - User can follow other users
 - User can set a time to interact with any followers
 - User can friend users
+
+These might be too restrictive:
+
+- User can choose a permanent wake up time
+- User can change wake up time once a week
+- User can list goals for day at that wake up time
+- User can list up to three unfinished goals at a time
 
 ### WeeRead
 
