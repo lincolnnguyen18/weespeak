@@ -1,9 +1,5 @@
 import React from 'react'
 import Typography from '@material-ui/core/Typography'
-// import Button from '@material-ui/core/Button'
-import GoogleButton from 'react-google-button'
-// import Container from '@material-ui/core/Container';
-// import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import BlankAppbar from './BlankAppbar' 
 const useStyles = makeStyles((theme) => ({
@@ -19,10 +15,6 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
-function userRegistered() {
-	setTimeout(() => true, 3000);
-}
-
 export default function Login() {
 	const classes = useStyles();
 	return (
@@ -32,11 +24,8 @@ export default function Login() {
 					className={classes.slogan}
 					variant="h4"
 				>
-					Live Speech Recognition for You and Your Friends!
+					Sorry, that page was not found.
 				</Typography>
-				<GoogleButton
-				  onClick={() => { console.log('Google button clicked') }}
-				/>
 			</div>
 	)
 }
