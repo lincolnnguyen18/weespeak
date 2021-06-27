@@ -53,7 +53,8 @@ Live speech recognition for you and your friends!
 
 - User can share chat bubbles with community to practice speaking
 - User can report offensive chat bubbles
-- User can choose a chat bubble, correct it if needed, and save for review
+- User can rate, discuss, and correct chat bubble translations with other users
+- User can choose a chat bubble, correct its machine translation if needed, and save for review
 - User can review chat bubbles with word for word ASR checking
 - User can find new friends from other countries by language, proficiency in each other's language, video/audio preference, hobbies/goals
 
