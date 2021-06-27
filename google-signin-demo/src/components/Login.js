@@ -14,13 +14,17 @@ const useStyles = makeStyles((theme) => ({
         height: "100%",
         flexDirection: "column"
     },
+    slogan: {
+        marginBottom: "2em"
+    }
 }));
 
 export default function Login() {
     const classes = useStyles();
     return (
             <div className={classes.root}>
-                <Typography display="block"
+                <Typography
+                    className={classes.slogan}
                     variant="h4"
                 >
                     Live Speech Recognition for You and Your Friends!
