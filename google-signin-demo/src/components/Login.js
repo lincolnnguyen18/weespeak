@@ -22,7 +22,6 @@ export default function Login() {
             <div className={classes.root}>
                 <Typography display="block"
                     variant="h4"
-                    color="black"
                 >
                     Live Speech Recognition for You and Your Friends!
                 </Typography>
