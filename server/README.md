@@ -12,5 +12,6 @@ sudo docker exec -it mdb mongo
 nodemon server
 # production
 npm start
+# or
 node server
 ```
