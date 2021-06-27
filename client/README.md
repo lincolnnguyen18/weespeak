@@ -5,5 +5,5 @@
 # build for production
 npm run build
 # dev
-npm run start
+npm start
 ```
