@@ -1,20 +1,18 @@
-# Test Cases
+# WebRTC Process
 
-## WeeSpeak Part 1
+## WebRTC for static credentials
 
-### WebRTC for static credentials
-
-#### Issues
+### Issues
 
 - [X] Trickle ICE test fails for both STUN and TURN server on third attempt when executed from Coturn's LAN -> WebRTC seems to work fine for the tested situations so shelved for now
 
-#### Successes
+### Successes
 
 - WebRTC works with Coturn for two tabs from Coturn's LAN
 - WebRTC works with Coturn for two tabs from separate mobile network
 - WebRTC works with Coturn for two tabs between Coturn's LAN and a separate mobile network
 
-#### Coturn startup parameters
+### Coturn startup parameters
 
 Coturn was installed on Ubuntu.
 
@@ -22,7 +20,7 @@ Coturn was installed on Ubuntu.
   sudo turnserver -a -f -r -X 107.196.10.160/192.168.1.69 lincolnnguyen18.com
   ```
 
-#### Generate OFFER from A to B
+### Generate OFFER from A to B
 
   ```javascript
   const iceConfiguration = { }
@@ -60,7 +58,7 @@ Coturn was installed on Ubuntu.
   localConnection.createOffer().then(o => localConnection.setLocalDescription(o) )
   ```
 
-#### Generate ANSWER from B to A
+### Generate ANSWER from B to A
 
   ```javascript
   const offer = 
@@ -87,20 +85,20 @@ Coturn was installed on Ubuntu.
   //send the anser to the client
   ```
 
-#### Set B's ANSWER for A
+### Set B's ANSWER for A
 
   ```javascript
   const answer = 
   localConnection.setRemoteDescription (answer).then(a=>console.log("done"))
   ```
 
-#### Send MESSAGE from A to B
+### Send MESSAGE from A to B
 
   ```javascript
   sendChannel.send("hoho")
   ```
 
-#### Send MESSAGE from B to A
+### Send MESSAGE from B to A
 
   ```javascript
   remoteConnection.channel.send("haha")
