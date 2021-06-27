@@ -3,7 +3,7 @@ const path = require('path');
 
 const app = express();
 
-// Serve the static files from the React app
+// Serve the static files from the React app; use nginx for production
 app.use(express.static(path.join(__dirname, '/../client/build')));
 
 // An api endpoint that returns a short list of items
