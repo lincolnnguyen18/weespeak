@@ -19,6 +19,10 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+function userRegistered() {
+    setTimeout(() => true, 3000);
+}
+
 export default function Login() {
     const classes = useStyles();
     return (
