@@ -32,9 +32,9 @@ Live speech recognition for you and your friends!
 
 - [ ] User can logout
 - [ ] User can audio call a friend
+- [ ] User can view friend editting their chat bubble live
 - [X] User can have their english grammar corrected
 - [ ] User can have their messages translated
-- [ ] User can click chat bubble to have it read by TTS
 
 ## WeeSpeak Part 4
 
@@ -43,9 +43,8 @@ Live speech recognition for you and your friends!
 - [ ] User can video call a friend
 - [ ] User can share screen
 - [ ] User can share files
-- [ ] User can send text messages and files between their own devices
 - [ ] TURN server is secured by REST API
-- [ ] User can customize the color for their speech bubbles
+- [ ] User can customize the color of their speech bubbles
 
 ## Future Ideas
 
