@@ -45,6 +45,8 @@ Live speech recognition for you and your friends!
 - [ ] User can share files
 - [ ] TURN server is secured by REST API
 - [ ] User can customize the color of their speech bubbles
+- [ ] Detect user's language and update weespeak accordingly
+- [ ] Order language list by last accessed
 
 ## Future Ideas
 
