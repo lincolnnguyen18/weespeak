@@ -1,7 +1,7 @@
 import React from 'react'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles';
-import BlankAppbar from './BlankAppbar' 
+import Appbar from './Appbar' 
 const useStyles = makeStyles((theme) => ({
 	root: {
 		display: "flex",
@@ -19,7 +19,7 @@ export default function Login() {
 	const classes = useStyles();
 	return (
 			<div className={classes.root}>
-				<BlankAppbar />
+				<Appbar />
 				<Typography
 					className={classes.slogan}
 					variant="h4"
