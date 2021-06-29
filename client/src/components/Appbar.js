@@ -1,11 +1,12 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
+import Appbar from '@material-ui/core/Appbar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from "@material-ui/styles";
 import { withStyles } from "@material-ui/core/styles";
+import logo from '../blueonwhite2/android-chrome-512x512.svg';
 
 const WhiteTextTypography = withStyles({
 	root: {
@@ -27,32 +28,42 @@ const useStyles = makeStyles((theme) => ({
 	},
 	appbar: {
 		alignItems: "center"
-	}
+	},
+	logo: {
+		maxWidth: "40px",
+		marginRight: "10px"
+	},
+	homeButton: {
+		textDecoration: 'none',
+		display: 'flex',
+		alignItems: 'center'
+	},
 }));
 
-export default function ButtonAppBar() {
+export default function ButtonAppbar() {
 	const classes = useStyles();
 
 	return (
 		<ThemeProvider theme={theme}>
-			<AppBar position="fixed" className={classes.appbar}>
+			<Appbar position="fixed" className={classes.appbar}>
 				<Toolbar>
 					<a
 						href="/"
-						style={{ textDecoration: 'none' }}
+						className={classes.homeButton}
 					>
-					<WhiteTextTypography
-						variant="h5"
-						style={{
-							cursor: "pointer",
-							userSelect: "none"
-						}}
-					>
-						WeeSpeak
-					</WhiteTextTypography>
+						<img src={logo} alt="logo" className={classes.logo} />
+						<WhiteTextTypography
+							variant="h5"
+							style={{
+								cursor: "pointer",
+								userSelect: "none"
+							}}
+						>
+							WeeSpeak
+						</WhiteTextTypography>
 					</a>
 				</Toolbar>
-			</AppBar>
+			</Appbar>
 		</ThemeProvider>
 	);
 }
