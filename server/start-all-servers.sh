@@ -1,6 +1,8 @@
 git pull
 echo 'git pull done'
 npm run build --prefix ../client/
+npm install --prefix ../client/
+npm install --prefix ../server/
 echo 'npm run build for react done'
 screen -S weespeak-node -X quit
 screen -dmS weespeak-node
