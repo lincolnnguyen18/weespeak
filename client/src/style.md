@@ -1,3 +1,7 @@
+https://www.pngtosvg.com/
+
+colors: 2, simplify 0
+
 https://redketchup.io/favicon-generator
 
 blue: #9DBAD8
