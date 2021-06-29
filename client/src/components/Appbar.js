@@ -33,7 +33,6 @@ const useStyles = makeStyles((theme) => ({
 		width: '99%',
 		top: '1%',
 		borderRadius: '.7em',
-		minWidth: '500px'
 	},
 	logo: {
 		maxWidth: "40px",
