@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from "@material-ui/styles";
 import { withStyles } from "@material-ui/core/styles";
-import logo from '../blueonwhite2/android-chrome-512x512.svg';
+import logo from '../whiteBadge/512x512.svg';
 
 const WhiteTextTypography = withStyles({
 	root: {
@@ -27,7 +27,12 @@ const useStyles = makeStyles((theme) => ({
 		flexGrow: 1,
 	},
 	appbar: {
-		alignItems: "center"
+		alignItems: "center",
+		left: 'auto',
+		right: 'auto',
+		width: '99%',
+		borderRadius: '.7em',
+		minWidth: '500px'
 	},
 	logo: {
 		maxWidth: "40px",
