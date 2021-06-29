@@ -14,6 +14,7 @@ mongoose.connect(keys.mongodb.dbURI, () => {
 
 // Serve the static files from the React app; use nginx for production
 app.use(express.static(path.join(__dirname, '/../client/build')));
+// app.use('/favicon.ico', express.static('/../client/build/favicon.ico'));
 
 // set up routes
 app.use('/auth', authRoutes);
