@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
 		left: 'auto',
 		right: 'auto',
 		width: '99%',
+		top: '1%',
 		borderRadius: '.7em',
 		minWidth: '500px'
 	},
