@@ -50,10 +50,18 @@ const useStyles = makeStyles((theme) => ({
 		'& .MuiButton-contained': {
 			marginLeft: '2em',
 			borderRadius: '1.5em',
-			height: '75%',
+			height: '4.7em',
+			marginLeft: '0em',
+			marginTop: '2em',
+			[theme.breakpoints.up(445)]: {
+				marginLeft: '1em',
+				marginTop: '0em',
+			},
 		},
 		display: 'flex',
 		alignItems: 'center',
+		justifyContent: 'center',
+		flexWrap: 'wrap',
 	},
 }));
 
