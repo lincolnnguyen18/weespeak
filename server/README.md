@@ -9,8 +9,10 @@
 brew install letsencrypt
 # stop nginx before running letsencrypt
 nginx -s stop
-# run certbot; remember to add subdomains as well
+# run certbot; remember to add subdomains and add all domains to hosts file for computers on same LAN
 sudo certbot certonly --standalone
+# add additional domains
+certbot -d original, extra, extra --expand
 # 
 ```
 
@@ -19,11 +21,14 @@ sudo certbot certonly --standalone
 ```bash
 # nginx conf
 vim /etc/nginx/nginx.conf
+# nginx start, stop, restart, status
+sudo systemctl start nginx
+sudo systemctl stop nginx`
+sudo systemctl restart nginx
+sudo systemctl status nginx
 ```
 
 ## MongoDB
-
-### Server commands
 
 ```bash
 # mongodb conf
