@@ -1,11 +1,10 @@
 import React from 'react'
 import Typography from '@material-ui/core/Typography'
-// import Button from '@material-ui/core/Button'
 import GoogleButton from 'react-google-button'
-// import Container from '@material-ui/core/Container';
-// import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import BlankAppbar from './BlankAppbar' 
+import { useHistory } from "react-router-dom";
+
 const useStyles = makeStyles((theme) => ({
 	root: {
 		display: "flex",
@@ -19,12 +18,10 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
-function userRegistered() {
-	setTimeout(() => true, 3000);
-}
-
 export default function Login() {
 	const classes = useStyles();
+	const history = useHistory();
+
 	return (
 			<div className={classes.root}>
 				<BlankAppbar />
@@ -35,8 +32,12 @@ export default function Login() {
 					Live Speech Recognition for You and Your Friends!
 				</Typography>
 				<GoogleButton
-				  onClick={() => { console.log('Google button clicked') }}
+				  onClick={() => { window.location.href="/auth/google" }}
 				/>
+				{/*Testing SPA routing*/}
+				{/*<GoogleButton
+				  onClick={() => history.push("/auth/google")}
+				/>*/}
 			</div>
 	)
 }

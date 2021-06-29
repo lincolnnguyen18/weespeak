@@ -1,0 +1,46 @@
+load_module /usr/lib/nginx/modules/ngx_stream_module.so;
+stream {
+	upstream stream_mongo_backend {
+		server 127.0.0.1:27017;
+	}
+	server {
+		listen 27017;
+		proxy_pass stream_mongo_backend;
+	}
+}
+http {
+	server {
+		listen 80;
+		listen [::]:80;
+		server_name lincolnnguyen18.com;
+		return 301 https://lincolnnguyen18.com$request_uri;
+	}
+	server {
+		listen 443 ssl http2;
+		listen [::]:443 ssl http2;
+		ssl_certificate /etc/letsencrypt/live/lincolnnguyen18.com/fullchain.pem;
+		ssl_certificate_key /etc/letsencrypt/live/lincolnnguyen18.com/privkey.pem;
+		ssl_protocols TLSv1.3;
+		server_name lincolnnguyen18.com;
+		# root /home/lincoln/projects/weespeak/;
+		# root /home/lincoln/projects/webAudioDemo/;
+		location / {
+			root /home/lincoln/projects/websocket-chat/;
+			include mime.types;
+		}
+		location /weespeak {
+			alias /home/lincoln/projects/weespeak/;
+			index index.html;
+		}
+		location /wss {
+			proxy_ssl_certificate /etc/letsencrypt/live/lincolnnguyen18.com/fullchain.pem;
+			proxy_ssl_certificate_key /etc/letsencrypt/live/lincolnnguyen18.com/privkey.pem;
+			proxy_http_version 1.1;
+			proxy_set_header Upgrade $http_upgrade;
+			proxy_set_header Connection "upgrade";
+			proxy_pass http://127.0.0.1:8080;
+		}
+	}
+}
+
+events { }

@@ -1,17 +1,22 @@
 const express = require('express');
+const authRoutes = require('./routes/auth-routes');
 const path = require('path');
+const passportSetup = require('./config/passport-setup');
+const mongoose = require('mongoose');
+const keys = require('./config/keys');
 
 const app = express();
+
+// connect to mongodb
+mongoose.connect(keys.mongodb.dbURI, () => {
+	console.log('connected!');
+});
 
 // Serve the static files from the React app; use nginx for production
 app.use(express.static(path.join(__dirname, '/../client/build')));
 
-// An api endpoint that returns a short list of items
-app.get('/login', (req,res) => {
-	setTimeout(() => {
-		res.send('do google auth here')
-	}, 3000);
-});
+// set up routes
+app.use('/auth', authRoutes);
 
 // Handles any requests that don't match the ones above
 app.get('*', (req,res) =>{

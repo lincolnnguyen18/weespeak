@@ -1,13 +1,40 @@
 # Server Startup Processes
 
-## MongoDB server
+## NGINX
+
+### setup process
+
 ```bash
-# start mongodb server
-sudo docker run -p 27017:27017 --name mdb mongo
-# bash shell to mongodb docker instance
-sudo docker exec -it mdb bash
-# mongodb shell
-sudo docker exec -it mdb mongo
+# on mac if needed
+brew install letsencrypt
+# stop nginx before running letsencrypt
+nginx -s stop
+# run certbot; remember to add subdomains as well
+sudo certbot certonly --standalone
+# 
+```
+
+### commands
+
+```bash
+# nginx conf
+vim /etc/nginx/nginx.conf
+```
+
+## MongoDB
+
+### Server commands
+
+```bash
+# mongodb conf
+vim /etc/mongod.conf
+# start, stop, restart, status
+sudo systemctl start mongod
+sudo systemctl stop mongod
+sudo systemctl restart mongod
+sudo systemctl status mongod
+# connect to mdb shell
+mongo mongodb://username:password@mdb.weespeak.xyz
 ```
 
 ## Node.js Express server

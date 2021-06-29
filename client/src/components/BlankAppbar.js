@@ -37,14 +37,20 @@ export default function ButtonAppBar() {
 		<ThemeProvider theme={theme}>
 			<AppBar position="fixed" className={classes.appbar}>
 				<Toolbar>
+					<a
+						href="/"
+						style={{ textDecoration: 'none' }}
+					>
 					<WhiteTextTypography
 						variant="h5"
 						style={{
+							cursor: "pointer",
 							userSelect: "none"
 						}}
 					>
 						WeeSpeak
 					</WhiteTextTypography>
+					</a>
 				</Toolbar>
 			</AppBar>
 		</ThemeProvider>
