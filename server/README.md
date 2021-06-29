@@ -1,4 +1,4 @@
-# Server Startup Processes
+# Commands
 
 ## NGINX
 
@@ -30,6 +30,8 @@ sudo systemctl status nginx
 
 ## MongoDB
 
+### Server management
+
 ```bash
 # mongodb conf
 vim /etc/mongod.conf
@@ -39,7 +41,32 @@ sudo systemctl stop mongod
 sudo systemctl restart mongod
 sudo systemctl status mongod
 # connect to mdb shell
-mongo mongodb://username:password@mdb.weespeak.xyz
+mongo mongodb://username:password@mdb.weespeak.xyz/db-name
+```
+
+### Databae management
+
+```bash
+# switch to a db
+use db-name
+# create user
+db.createUser(
+  {
+    user: "username",
+    pwd: passwordPrompt(),  // or cleartext password
+    roles: [
+       { role: "readWrite", db: "db-name" }
+    ]
+  }
+)
+# show db admin users
+show users
+# delete user
+db.dropUser('their name here')
+# show collections
+show collections
+# show everything in a collection
+db.collection-name.find()
 ```
 
 ## Node.js Express server
