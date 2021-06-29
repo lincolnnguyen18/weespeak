@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Appbar from '@material-ui/core/Appbar';
+import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { createMuiTheme } from '@material-ui/core/styles';
@@ -50,7 +50,7 @@ export default function ButtonAppbar() {
 
 	return (
 		<ThemeProvider theme={theme}>
-			<Appbar position="fixed" className={classes.appbar}>
+			<AppBar position="fixed" className={classes.appbar}>
 				<Toolbar>
 					<a
 						href="/"
@@ -68,7 +68,7 @@ export default function ButtonAppbar() {
 						</WhiteTextTypography>
 					</a>
 				</Toolbar>
-			</Appbar>
+			</AppBar>
 		</ThemeProvider>
 	);
 }
