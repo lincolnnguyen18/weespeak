@@ -11,7 +11,6 @@ brew install letsencrypt
 nginx -s stop
 # run certbot; remember to add subdomains as well
 sudo certbot certonly --standalone
-# 
 ```
 
 ### commands
