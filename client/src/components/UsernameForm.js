@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from "@material-ui/styles";
@@ -13,6 +14,7 @@ theme.typography.h4 = {
 		fontSize: '2.4rem',
 	},
 	marginBottom: '2em',
+	textAlign: 'center',
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -20,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 		'& .MuiTextField-root': {
 			fontSize: '3em',
 			margin: theme.spacing(1),
-			width: '12ch',
+			width: '13ch',
 		},
 		'& #standard-secondary-label': {
 			fontSize: '.45em'
@@ -49,11 +51,6 @@ const useStyles = makeStyles((theme) => ({
 		justifyContent: 'center',
 		flexWrap: 'wrap',
 	},
-	input: {
-		"&:invalid": {
-			border: "red solid 2px"
-		}
-	}
 }));
 
 
@@ -63,7 +60,7 @@ export default function UsernameForm() {
 	const classes = useStyles();
 	const [error, setError] = useState(false);
 	const [ready, setReady] = useState(false);
-	const [errorMessage, setErrorMessage] = useState('');
+	const [errorMessage, setErrorMessage] = useState(' ');
 
 	function handleFormChange(event) {
 		let textfield = event.target;
@@ -81,11 +78,11 @@ export default function UsernameForm() {
 		} else if (!/^[a-zA-Z0-9_]{1,15}$/.test(username)) {
 			setError(true);
 			setReady(false);
-			setErrorMessage('Username can only have alphanumeric or underscore characters.');
+			setErrorMessage('Only have alphanumeric or underscore characters allowed.');
 		} else {
 			setError(false);
 			setReady(true);
-			setErrorMessage('');
+			setErrorMessage(' ');
 		}
 	}
 
@@ -99,22 +96,24 @@ export default function UsernameForm() {
 					Please choose a username:
 				</Typography>
 			</ThemeProvider>
-			<form className={classes.textfield} noValidate autoComplete="off">
-				<TextField
-					id={error ? "standard-error-helper-text" : "standard-secondary"}
-					color="secondary"
-					label="Enter a username here"
-					autoFocus
-					onChange={handleFormChange}
-					error={error}
-					helperText={errorMessage}
-				/>
-				<Button
-					variant="contained"
-					disabled={!ready}>
-					Confirm
-				</Button>
-			</form>
+				<form className={classes.textfield} noValidate autoComplete="off">
+					<TextField
+						inputProps={{style: {fontSize: '2em'}}} // font size of input text
+						InputLabelProps={{style: {fontSize: '.55em'}}} // font size of input label
+						id={error ? "standard-error-helper-text" : "standard-secondary"}
+						color="secondary"
+						label="Enter a username here"
+						autoFocus
+						onChange={handleFormChange}
+						error={error}
+						helperText={errorMessage}
+					/>
+					<Button
+						variant="contained"
+						disabled={!ready}>
+						Confirm
+					</Button>
+				</form>
 		</>
 	)
 }
