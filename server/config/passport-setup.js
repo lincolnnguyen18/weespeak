@@ -36,7 +36,8 @@ passport.use(
 					email: profile._json.email,
 					emailVerified: profile._json.email_verified,
 					picture: profile._json.picture,
-					locale: profile._json.locale
+					locale: profile._json.locale,
+					friends: [],
 				}).save().then((newUser) => {
 					console.log('new user created: ' + newUser);
 					done(null, newUser);

@@ -8,6 +8,7 @@ const userSchema = new Schema({
 	emailVerified: Boolean,
 	picture: String,
 	locale: String,
+	friends: [{type: mongoose.Schema.Types.ObjectId, ref: 'friend'}],
 });
 
 const User = mongoose.model('user', userSchema);
