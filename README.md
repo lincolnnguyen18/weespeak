@@ -71,6 +71,7 @@ Live speech recognition for you and your friends!
 - User can follow other users
 - User can set a time to interact with any followers
 - User can friend users
+- Integrated SRS system
 
 These might be too restrictive:
 
