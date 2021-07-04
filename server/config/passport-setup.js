@@ -7,6 +7,7 @@ passport.serializeUser((user, done) => {
 	done(null, user.id);
 });
 
+// TODO need to check if user is valid
 passport.deserializeUser((id, done) => {
 	User.findById(id).then((user) => {
 		done(null, user);

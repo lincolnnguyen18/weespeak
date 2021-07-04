@@ -8,12 +8,12 @@ const friendSchema = new Schema({
     status: {
       type: Number,
       enums: [
-          0,    //'add friend',
+          0,    //'add friend', unused
           1,    //'requested',
           2,    //'pending',
-          3,    //'friends'
+          3,    //'friends' unused
       ]
     }
   }, {timestamps: true})
 
-  module.exports = mongoose.model('friend', friendSchema)
+  module.exports = mongoose.model('friend-request', friendSchema)
