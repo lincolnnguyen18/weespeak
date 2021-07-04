@@ -278,7 +278,7 @@
 										}
 										document.getElementById('final').innerHTML += `<div class='rightDiv'><p contenteditable="true" spellcheck="false" class='series rightMes'>${data['message']}</p></div>`;
 										var rights = document.querySelectorAll(".rightMes");
-										rights[rights.length - 2].focus();
+										// rights[rights.length - 2].focus();
 										lastMessageSide = 'right';
 									}
 									chat = document.getElementById('chat');
@@ -327,7 +327,7 @@
 					updateInterim('');
 					document.getElementById('final').innerHTML += `<div class='leftDiv'><p class='series leftMes' contenteditable="true" spellcheck="false">${message}</p></div>`;
 					var lefts = document.querySelectorAll(".leftMes");
-					lefts[lefts.length - 2].focus();
+					// lefts[lefts.length - 2].focus();
 					data = {
 						type: 'final',
 						message: message
