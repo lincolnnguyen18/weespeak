@@ -7,6 +7,7 @@ passport.serializeUser((user, done) => {
 	done(null, user.id);
 });
 
+// TODO need to check if user is valid
 passport.deserializeUser((id, done) => {
 	User.findById(id).then((user) => {
 		done(null, user);
@@ -16,7 +17,7 @@ passport.deserializeUser((id, done) => {
 passport.use(
 	new GoogleStrategy({
 		// options for google strategy
-		callbackURL: '/auth/google/redirect',
+		callbackURL: keys.google.callbackURL,
 		clientID: keys.google.clientID,
 		clientSecret: keys.google.clientSecret
 	}, (accessToken, refreshToken, profile, done) => {
@@ -36,7 +37,8 @@ passport.use(
 					email: profile._json.email,
 					emailVerified: profile._json.email_verified,
 					picture: profile._json.picture,
-					locale: profile._json.locale
+					locale: profile._json.locale,
+					friends: [],
 				}).save().then((newUser) => {
 					console.log('new user created: ' + newUser);
 					done(null, newUser);
