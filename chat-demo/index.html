@@ -483,20 +483,22 @@
 					recognition.interimResults = true;
 					// reset();
 					recognition.onend = function() {
-						if (recognizing) {
-							console.log('how dare you stop now!')
-							var remnant = document.getElementById('interim_span').innerHTML;
-							if (remnant != '') {
-								console.log(`REMNANT: ${remnant}`);
-								sendFinal(remnant);
-							}
-							recognition.lang = selectLang.value;
-							recognition.start();
-							recognizing = true;
-						} else {
-							reset();
-							console.log('Speech recognition service disconnected');
-						}
+						// if (recognizing) {
+						// 	console.log('how dare you stop now!')
+						// 	var remnant = document.getElementById('interim_span').innerHTML;
+						// 	if (remnant != '') {
+						// 		console.log(`REMNANT: ${remnant}`);
+						// 		sendFinal(remnant);
+						// 	}
+						// 	recognition.lang = selectLang.value;
+						// 	recognition.start();
+						// 	recognizing = true;
+						// } else {
+						// 	reset();
+						// 	console.log('Speech recognition service disconnected');
+						// }
+						reset();
+						console.log('Speech recognition service disconnected');
 					}
 
 					recognition.onresult = function (event) {
