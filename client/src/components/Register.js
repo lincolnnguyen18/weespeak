@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Appbar from './Appbar' 
 import UsernameForm from './UsernameForm' 
 import { makeStyles } from '@material-ui/core/styles';
@@ -19,9 +19,9 @@ export default function Login() {
 	const classes = useStyles();
 
 	return (
-			<div className={classes.root}>
-				<Appbar />
-				<UsernameForm />
-			</div>
+		<div className={classes.root}>
+			<Appbar />
+			<UsernameForm />
+		</div>
 	)
 }

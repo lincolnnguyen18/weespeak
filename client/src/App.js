@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Login from './components/Login'
 import Register from './components/Register'
@@ -9,13 +10,13 @@ function App() {
 		<Router>
 			<Switch>
 				<Route exact path="/">
-					<Login />
+					<Home />
 				</Route>
 				<Route exact path="/register">
 					<Register />
 				</Route>
-				<Route exact path="/home">
-					<Home />
+				<Route exact path="/login">
+					<Login />
 				</Route>
 				<Route component={NotFound} />
 			</Switch>
