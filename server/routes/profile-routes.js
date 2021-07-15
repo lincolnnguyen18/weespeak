@@ -13,6 +13,15 @@ router.get('/', checkSignedIn, (req, res) => {
     res.status(200).send(`This is your information: ${req.user}`)
 })
 
+// Use to check if user has registered
+router.get('/getUsername', (req, res) => {
+    if (req.user === undefined) {
+        res.json({username: ""})
+    } else {
+        res.json({username: req.user.username})
+    }
+})
+
 router.get('/friends', checkSignedIn, (req, res, next) => {
     if (!req.query.fid) res.status(400).send('Missing required parameters')
     else next()

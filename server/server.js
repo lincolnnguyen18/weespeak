@@ -33,18 +33,27 @@ mongoose.connect(keys.mongodb.dbURI, (err) => {
 app.use('/auth', authRoutes);
 app.use('/profile', profileRoutes);
 
+// Serve the static files from the React app; use nginx for production
+app.use(express.static(path.join(__dirname, '/../client/build')));
+// app.use('/favicon.ico', express.static('/../client/build/favicon.ico'));
+
+// auto login
 app.use(function(req, res, next) {
 	console.log(req.user)
+	// if never logged in before
     if (req.user != null){
-        res.redirect('/profile');
+		// if username already created go directly to dashboard
+		if (req.user.username) {
+			console.log("username already created!")
+			res.redirect('/profile');
+		// else redirect to registration
+		} else {
+			res.redirect('localhost:5000/register');
+		}
     }   else{
         next();
     }
 });
-
-// Serve the static files from the React app; use nginx for production
-app.use(express.static(path.join(__dirname, '/../client/build')));
-// app.use('/favicon.ico', express.static('/../client/build/favicon.ico'));
 
 // Handles any requests that don't match the ones above
 app.get('*', (req,res) =>{
