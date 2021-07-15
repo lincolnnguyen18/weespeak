@@ -19,8 +19,10 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import logo from '../whiteBadge/512x512.svg';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import AddIcon from '@material-ui/icons/Add';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
 const drawerWidth = 240;
 
@@ -170,7 +172,7 @@ export default function PersistentDrawerLeft() {
 						>
 							<MenuItem onClick={handleClose}>Profile</MenuItem>
 							<MenuItem onClick={handleClose}>My account</MenuItem>
-							<MenuItem onClick={handleClose}>Logout</MenuItem>
+							<MenuItem onClick={() => { window.location.href = "/auth/logout" }}>Logout</MenuItem>
 						</Menu>
 					</div>
 				</Toolbar>
@@ -191,18 +193,19 @@ export default function PersistentDrawerLeft() {
 				</div>
 				<Divider />
 				<List>
-					{['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+					{['Add Friend'].map((text, index) => (
 						<ListItem button key={text}>
-							<ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+							<ListItemIcon><AddIcon /></ListItemIcon>
 							<ListItemText primary={text} />
 						</ListItem>
 					))}
 				</List>
 				<Divider />
 				<List>
-					{['All mail', 'Trash', 'Spam'].map((text, index) => (
+					{['Friend 1', 'Friend 2', 'Friend 3'].map((text, index) => (
 						<ListItem button key={text}>
-							<ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+							{/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
+							<ListItemIcon><FiberManualRecordIcon style={{width: "20px"}} /></ListItemIcon>
 							<ListItemText primary={text} />
 						</ListItem>
 					))}
