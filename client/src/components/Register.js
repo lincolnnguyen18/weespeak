@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import Appbar from './Appbar' 
 import UsernameForm from './UsernameForm' 
 import { makeStyles } from '@material-ui/core/styles';

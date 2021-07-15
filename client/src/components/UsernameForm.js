@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from "@material-ui/styles";
@@ -53,9 +52,6 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-
-// inputProps={{ className: classes.input, pattern: "[a-zA-Z0-9_]{4,15}" }}
-
 export default function UsernameForm() {
 	const classes = useStyles();
 	const [error, setError] = useState(false);
@@ -64,7 +60,6 @@ export default function UsernameForm() {
 	let username = ""
 
 	function handleFormChange(event) {
-		let textfield = event.target;
 		username = event.target.value;
 
 		postData('http://localhost:5000/profile/isUsernameAvailable', { username: username })
@@ -83,7 +78,7 @@ export default function UsernameForm() {
 				setError(true);
 				setReady(false);
 				setErrorMessage('Only have alphanumeric or underscore characters allowed.');
-			} else if (username.length > 0 && data['exists'] == "yes") {
+			} else if (username.length > 0 && data['exists'] === "yes") {
 				setError(true);
 				setReady(false);
 				setErrorMessage('Username is taken. Please pick a different username.');
@@ -95,14 +90,12 @@ export default function UsernameForm() {
 		});
 	}
 
-	// Example POST method implementation:
 	async function postData(url = '', data = {}) {
-		// Default options are marked with *
 		const response = await fetch(url, {
 		method: 'POST', // *GET, POST, PUT, DELETE, etc.
 		mode: 'cors', // no-cors, *cors, same-origin
 		cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-		// credentials: 'same-origin', // include, *same-origin, omit
+		credentials: 'same-origin', // include, *same-origin, omit
 		headers: {
 			'Content-Type': 'application/json'
 			// 'Content-Type': 'application/x-www-form-urlencoded',
@@ -119,7 +112,7 @@ export default function UsernameForm() {
 		postData('http://localhost:5000/profile/registerUsername', { username: username })
 		.then(data => {
 			console.log(data); // JSON data parsed by `data.json()` call
-			if (data["status"] == "success") {
+			if (data["status"] === "success") {
 				window.location.href = '/home'
 			}
 		});
