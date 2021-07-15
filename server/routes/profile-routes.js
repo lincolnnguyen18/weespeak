@@ -49,7 +49,7 @@ router.get('/getRegistrationStatus', (req, res) => {
         res.redirect('/register');
     } else {
         // res.json({status: "complete"})
-        res.redirect('/profile');
+        res.redirect('/');
     }
 })
 
