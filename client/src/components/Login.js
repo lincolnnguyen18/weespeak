@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Typography from '@material-ui/core/Typography'
 import GoogleButton from 'react-google-button'
 import Appbar from './Appbar' 
@@ -32,6 +32,15 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Login() {
 	const classes = useStyles();
+
+	useEffect(() => {
+		fetch('http://localhost:5000/profile/getRegistrationStatus')
+		.then(response => response.json())
+		.then(data => {
+			console.log(data)
+			// getUsername
+		});
+	}, []);
 
 	return (
 			<div className={classes.root}>

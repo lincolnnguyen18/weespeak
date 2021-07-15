@@ -13,12 +13,29 @@ router.get('/', checkSignedIn, (req, res) => {
     res.status(200).send(`This is your information: ${req.user}`)
 })
 
+// // Register user with username
+// router.patch('/registerUsername', checkSignedIn, async (req, res) => {
+//     // res.status(200).send(`This is your information: ${req.user}`)
+//     console.log(req.body.username)
+// })
+
+// Register user with username; testing
+router.patch('/registerUsername', async (req, res) => {
+    // res.status(200).send(`This is your information: ${req.user}`)
+    console.log(req.body.username)
+})
+
 // Use to check if user has registered
-router.get('/getUsername', (req, res) => {
+router.get('/getRegistrationStatus', (req, res) => {
     if (req.user === undefined) {
-        res.json({username: ""})
+        // res.json({status: "unregistered"})
+        res.redirect('/auth/google');
+    } else if (req.user.username === "") {
+        // res.json({status: "incomplete"})
+        res.redirect('/register');
     } else {
-        res.json({username: req.user.username})
+        // res.json({status: "complete"})
+        res.redirect('/');
     }
 })
 

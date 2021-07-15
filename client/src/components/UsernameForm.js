@@ -96,24 +96,26 @@ export default function UsernameForm() {
 					Please choose a username:
 				</Typography>
 			</ThemeProvider>
-				<form className={classes.textfield} noValidate autoComplete="off">
-					<TextField
-						inputProps={{style: {fontSize: '2em'}}} // font size of input text
-						InputLabelProps={{style: {fontSize: '.55em'}}} // font size of input label
-						id={error ? "standard-error-helper-text" : "standard-secondary"}
-						color="secondary"
-						label="Enter a username here"
-						autoFocus
-						onChange={handleFormChange}
-						error={error}
-						helperText={errorMessage}
-					/>
-					<Button
-						variant="contained"
-						disabled={!ready}>
-						Confirm
-					</Button>
-				</form>
+			<form className={classes.textfield} noValidate autoComplete="off">
+				<TextField
+					inputProps={{style: {fontSize: '2em'}}} // font size of input text
+					InputLabelProps={{style: {fontSize: '.55em'}}} // font size of input label
+					id={error ? "standard-error-helper-text" : "standard-secondary"}
+					color="secondary"
+					label="Enter a username here"
+					autoFocus
+					onChange={handleFormChange}
+					error={error}
+					helperText={errorMessage}
+				/>
+				<Button
+					variant="contained"
+					disabled={!ready}
+					onclick={() => console.log("cilcked!")}
+				>
+					Confirm
+				</Button>
+			</form>
 		</>
 	)
 }
