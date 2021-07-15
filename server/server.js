@@ -7,12 +7,8 @@ const mongoose = require('mongoose');
 const keys = require('./config/keys');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
-const cors = require('cors')
 
 const app = express();
-
-// For development; access api from react dev server
-app.use(cors())
 
 // Once user logs in, cookie is sent with id stored
 app.use(cookieSession({
