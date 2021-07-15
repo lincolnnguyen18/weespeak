@@ -61,29 +61,68 @@ export default function UsernameForm() {
 	const [error, setError] = useState(false);
 	const [ready, setReady] = useState(false);
 	const [errorMessage, setErrorMessage] = useState(' ');
+	let username = ""
 
 	function handleFormChange(event) {
 		let textfield = event.target;
-		let username = event.target.value;
+		username = event.target.value;
+
+		postData('http://localhost:5000/profile/isUsernameAvailable', { username: username })
+		.then(data => {
+			console.log(data['exists'])
+			// check length
+			if (username.length < 1) {
+				setError(true);
+				setReady(false);
+				setErrorMessage('Username must have at least 1 character.');
+			} else if (username.length > 15 ) {
+				setError(true);
+				setReady(false);
+				setErrorMessage('Username cannot be longer than 15 characters.');
+			} else if (!/^[a-zA-Z0-9_]{1,15}$/.test(username)) {
+				setError(true);
+				setReady(false);
+				setErrorMessage('Only have alphanumeric or underscore characters allowed.');
+			} else if (username.length > 0 && data['exists'] == "yes") {
+				setError(true);
+				setReady(false);
+				setErrorMessage('Username is taken. Please pick a different username.');
+			} else {
+				setError(false);
+				setReady(true);
+				setErrorMessage(' ');
+			}
+		});
+	}
+
+	// Example POST method implementation:
+	async function postData(url = '', data = {}) {
+		// Default options are marked with *
+		const response = await fetch(url, {
+		method: 'POST', // *GET, POST, PUT, DELETE, etc.
+		mode: 'cors', // no-cors, *cors, same-origin
+		cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+		// credentials: 'same-origin', // include, *same-origin, omit
+		headers: {
+			'Content-Type': 'application/json'
+			// 'Content-Type': 'application/x-www-form-urlencoded',
+		},
+		redirect: 'follow', // manual, *follow, error
+		referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+		body: JSON.stringify(data) // body data type must match "Content-Type" header
+		});
+		return response.json(); // parses JSON response into native JavaScript objects
+	}
+
+	function sendUsername() {
 		console.log(username);
-		// check length
-		if (username.length < 1) {
-			setError(true);
-			setReady(false);
-			setErrorMessage('Username must have at least 1 character.');
-		} else if (username.length > 15 ) {
-			setError(true);
-			setReady(false);
-			setErrorMessage('Username cannot be longer than 15 characters.');
-		} else if (!/^[a-zA-Z0-9_]{1,15}$/.test(username)) {
-			setError(true);
-			setReady(false);
-			setErrorMessage('Only have alphanumeric or underscore characters allowed.');
-		} else {
-			setError(false);
-			setReady(true);
-			setErrorMessage(' ');
-		}
+		postData('http://localhost:5000/profile/registerUsername', { username: username })
+		.then(data => {
+			console.log(data); // JSON data parsed by `data.json()` call
+			if (data["status"] == "success") {
+				window.location.href = '/home'
+			}
+		});
 	}
 
 	return (
@@ -111,7 +150,8 @@ export default function UsernameForm() {
 				<Button
 					variant="contained"
 					disabled={!ready}
-					onclick={() => console.log("cilcked!")}
+					// onClick={() => { console.log("cilcked!") }}
+					onClick={ sendUsername }
 				>
 					Confirm
 				</Button>
