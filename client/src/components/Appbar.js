@@ -28,11 +28,11 @@ const useStyles = makeStyles((theme) => ({
 	},
 	appbar: {
 		alignItems: "center",
-		left: 'auto',
-		right: 'auto',
-		width: '99%',
-		top: '1%',
-		borderRadius: '.7em',
+		// left: 'auto',
+		// right: 'auto',
+		// width: '99%',
+		// top: '1%',
+		// borderRadius: '.7em',
 	},
 	logo: {
 		maxWidth: "40px",
