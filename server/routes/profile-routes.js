@@ -39,7 +39,12 @@ router.get('/getRegistrationStatus', (req, res) => {
     }
 })
 
-router.get('/friends', checkSignedIn, (req, res, next) => {
+/**
+ * POST request on friends endpoint
+ * sends a friend request to another user
+ * required: friend id (fid)
+ */
+router.post('/friends', checkSignedIn, (req, res, next) => {
     if (!req.query.fid) res.status(400).send('Missing required parameters')
     else next()
 },
@@ -51,13 +56,52 @@ router.get('/friends', checkSignedIn, (req, res, next) => {
             requester: req.user._id, 
             recipient: user._id,
             status: 1}).save()
-            res.send('Friend Request Sent')
+            res.status(200).send('Friend Request Sent')
     })
     .catch((error) => {
         res.send(error)
     })
 })
 
+/**
+ * GET the list of friends and friend requests
+ */
+router.get('/friends', checkSignedIn, async (req, res) => {
+    const friends = await User.findById(req.user._id, 'friends').exec()
+    const friendRequests = await FriendRelationship.find({recipient: req.user._id}).exec()
+
+    res.status(200).send({friends: friends.friends, friendRequests})
+})
+
+/**
+ * Respond to a friend request with either decline or accept
+ * REQUIRES: fid, accept (does not do anything but just set to true)
+ */
+router.put('/friends', checkSignedIn, (req, res, next) => {
+    if (!req.query.fid || !req.query.accept) res.status(400).send('Missing required parameters')
+    else next()
+},
+(req, res, next) => {
+    FriendRelationship.findOneAndDelete({requester: req.query.fid, recipient: req.user._id})
+    .then(deletedDocument => {
+        if (!deletedDocument) res.status(400).send('No friend request exists')
+        else next() 
+    })
+},
+(req, res) => {
+
+    // Updates current user document
+    User.findByIdAndUpdate(req.user._id, {$push: {friends: req.query.fid}})
+    
+    // Updates friend user document
+    User.findByIdAndUpdate(req.query.fid, {$push: {friends: req.user._id}})
+    .then(updatedDocument => {
+        if (updatedDocument) res.send('Successfully added')
+        else res.send('Failed added')
+    })
+
+
+})
 
 
 module.exports = router
