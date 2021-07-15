@@ -18,6 +18,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import logo from '../whiteBadge/512x512.svg';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
 
 const drawerWidth = 240;
 
@@ -95,6 +98,8 @@ export default function PersistentDrawerLeft() {
 	const classes = useStyles();
 	const theme = useTheme();
 	const [open, setOpen] = React.useState(true);
+	const [anchorEl, setAnchorEl] = React.useState(null);
+	const openProfile = Boolean(anchorEl);
 
 	const handleDrawerOpen = () => {
 		setOpen(true);
@@ -103,6 +108,14 @@ export default function PersistentDrawerLeft() {
 	const handleDrawerClose = () => {
 		setOpen(false);
 	};
+
+	const handleMenu = (event) => {
+		setAnchorEl(event.currentTarget);
+	  };
+	
+	  const handleClose = () => {
+		setAnchorEl(null);
+	  };
 
 	return (
 		<div className={classes.root}>
@@ -128,6 +141,37 @@ export default function PersistentDrawerLeft() {
 						<Typography variant="h6" noWrap>
 							WeeSpeak
 						</Typography>
+					</div>
+					
+					<div>
+						<IconButton
+							aria-label="account of current user"
+							aria-controls="menu-appbar"
+							aria-haspopup="true"
+							onClick={handleMenu}
+							color="inherit"
+						>
+							<AccountCircle />
+						</IconButton>
+						<Menu
+							id="menu-appbar"
+							anchorEl={anchorEl}
+							anchorOrigin={{
+								vertical: 'top',
+								horizontal: 'right',
+							}}
+							keepMounted
+							transformOrigin={{
+								vertical: 'top',
+								horizontal: 'right',
+							}}
+							open={openProfile}
+							onClose={handleClose}
+						>
+							<MenuItem onClick={handleClose}>Profile</MenuItem>
+							<MenuItem onClick={handleClose}>My account</MenuItem>
+							<MenuItem onClick={handleClose}>Logout</MenuItem>
+						</Menu>
 					</div>
 				</Toolbar>
 			</AppBar>
