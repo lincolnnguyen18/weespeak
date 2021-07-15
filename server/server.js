@@ -10,7 +10,6 @@ const passport = require('passport');
 
 const app = express();
 
-
 // Once user logs in, cookie is sent with id stored
 app.use(cookieSession({
 	maxAge: 24 * 60 * 60 * 1000, // 1 day
@@ -22,17 +21,30 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // connect to mongodb
-mongoose.connect(keys.mongodb.dbURI, () => {
-	console.log('connected!');
+mongoose.connect(keys.mongodb.dbURI, (err) => {
+	if (err) {
+		console.log(err);
+	} else {
+		console.log('connected!');
+	}
+});
+
+// set up routes
+app.use('/auth', authRoutes);
+app.use('/profile', profileRoutes);
+
+app.use(function(req, res, next) {
+	console.log(req.user)
+    if (req.user != null){
+        res.redirect('/profile');
+    }   else{
+        next();
+    }
 });
 
 // Serve the static files from the React app; use nginx for production
 app.use(express.static(path.join(__dirname, '/../client/build')));
 // app.use('/favicon.ico', express.static('/../client/build/favicon.ico'));
-
-// set up routes
-app.use('/auth', authRoutes);
-app.use('/profile', profileRoutes);
 
 // Handles any requests that don't match the ones above
 app.get('*', (req,res) =>{

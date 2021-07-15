@@ -11,7 +11,7 @@ function checkSignedIn(req, res, next) {
 // Basic Profile display
 router.get('/', checkSignedIn, (req, res) => {
     res.status(200).send(`This is your information: ${req.user}`)
-}) 
+})
 
 router.get('/friends', checkSignedIn, (req, res, next) => {
     if (!req.query.fid) res.status(400).send('Missing required parameters')
