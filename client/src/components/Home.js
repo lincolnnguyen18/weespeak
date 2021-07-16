@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -15,16 +15,21 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import logo from '../whiteBadge/512x512.svg';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import AddIcon from '@material-ui/icons/Add';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import { withStyles } from "@material-ui/core/styles";
 
 const drawerWidth = 240;
+
+const WhiteTextTypography = withStyles({
+	root: {
+		color: "#FFFFFF"
+	}
+})(Typography);
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -94,6 +99,16 @@ const useStyles = makeStyles((theme) => ({
 		maxWidth: "40px",
 		marginRight: "10px"
 	},
+	greeting: {
+		fontSize: '3em',
+		textAlign: 'center',
+		marginTop: `${window.innerHeight / 4}px`,
+	},
+	greeting2: {
+		fontSize: '2em',
+		textAlign: 'center',
+		marginTop: '1em',
+	}
 }));
 
 export default function PersistentDrawerLeft() {
@@ -101,6 +116,7 @@ export default function PersistentDrawerLeft() {
 	const theme = useTheme();
 	const [open, setOpen] = React.useState(true);
 	const [anchorEl, setAnchorEl] = React.useState(null);
+	const [userInfo, setUserInfo] = React.useState({username: "", name: "", email: ""});
 	const openProfile = Boolean(anchorEl);
 
 	const handleDrawerOpen = () => {
@@ -113,11 +129,27 @@ export default function PersistentDrawerLeft() {
 
 	const handleMenu = (event) => {
 		setAnchorEl(event.currentTarget);
-	  };
-	
-	  const handleClose = () => {
+	};
+
+	const handleClose = () => {
 		setAnchorEl(null);
-	  };
+	};
+
+	useEffect(() => {
+		// real data
+		fetch('http://localhost:5000/profile/getUserInfo')
+		// mock data
+		// fetch("http://localhost:3000/getUserInfo")
+			.then(res => res.json())
+			.then(
+				(result) => {
+					setUserInfo({username: result.username, name: result.name, email: result.email});
+				},
+				(error) => {
+					console.error(error)
+				}
+			)
+	}, [])
 
 	return (
 		<div className={classes.root}>
@@ -140,11 +172,20 @@ export default function PersistentDrawerLeft() {
 					</IconButton>
 					<div className={classes.title}>
 						<img src={logo} alt="logo" className={classes.logo} />
-						<Typography variant="h6" noWrap>
+						<Typography
+							noWrap
+							style={{
+								color: "#FFFFFF",
+								fontSize: "1.4rem",
+								fontWeight: "500",
+								lineHeight: "1.6",
+								letterSpacing: "0.0075em",
+							}}
+						>
 							WeeSpeak
 						</Typography>
 					</div>
-					
+
 					<div>
 						<IconButton
 							aria-label="account of current user"
@@ -205,7 +246,7 @@ export default function PersistentDrawerLeft() {
 					{['Friend 1', 'Friend 2', 'Friend 3'].map((text, index) => (
 						<ListItem button key={text}>
 							{/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
-							<ListItemIcon><FiberManualRecordIcon style={{width: "20px"}} /></ListItemIcon>
+							<ListItemIcon><FiberManualRecordIcon style={{ width: "20px" }} /></ListItemIcon>
 							<ListItemText primary={text} />
 						</ListItem>
 					))}
@@ -217,7 +258,7 @@ export default function PersistentDrawerLeft() {
 				})}
 			>
 				<div className={classes.drawerHeader} />
-				<Typography paragraph>
+				{/* <Typography paragraph>
 					Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
 					ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
 					facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit
@@ -228,17 +269,15 @@ export default function PersistentDrawerLeft() {
 					imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus at augue. At augue eget
 					arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
 					donec massa sapien faucibus et molestie ac.
+				</Typography> */}
+				<Typography className={classes.greeting} style={{ marginLeft: open ? '-1em' : '.1em' }}>
+					Hello {userInfo.name}.
 				</Typography>
-				<Typography paragraph>
-					Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
-					facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
-					tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-					consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed
-					vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in. In
-					hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem et
-					tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin
-					nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra maecenas
-					accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
+				<Typography className={classes.greeting2} style={{ marginLeft: open ? '-1em' : '.1em' }}>
+					You are currently logged in using: <b>{userInfo.email}</b>.
+				</Typography>
+				<Typography className={classes.greeting2} style={{ marginLeft: open ? '-1em' : '.1em' }}>
+					Your username is: <b>{userInfo.username}</b>.
 				</Typography>
 			</main>
 		</div>

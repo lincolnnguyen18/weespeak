@@ -13,6 +13,10 @@ router.get('/', checkSignedIn, (req, res) => {
     res.status(200).send(`This is your information: ${req.user}`)
 })
 
+router.get('/getUserInfo', checkSignedIn, (req, res) => {
+    res.json({ username: req.user.username, name: req.user.name, email: req.user.email })
+})
+
 router.post('/isUsernameAvailable', async (req, res) => {
     const usernameExists = await User.exists({ username: req.body.username });
     if (usernameExists) {

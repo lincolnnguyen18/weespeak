@@ -8,12 +8,6 @@ import { ThemeProvider } from "@material-ui/styles";
 import { withStyles } from "@material-ui/core/styles";
 import logo from '../whiteBadge/512x512.svg';
 
-const WhiteTextTypography = withStyles({
-	root: {
-		color: "#FFFFFF"
-	}
-})(Typography);
-
 const theme = createMuiTheme({
 	palette: {
 		primary: {
@@ -57,15 +51,19 @@ export default function ButtonAppbar() {
 						className={classes.homeButton}
 					>
 						<img src={logo} alt="logo" className={classes.logo} />
-						<WhiteTextTypography
-							variant="h5"
+						<Typography
 							style={{
 								cursor: "pointer",
-								userSelect: "none"
+								userSelect: "none",
+								color: "#FFFFFF",
+								fontSize: "1.4rem",
+								fontWeight: "500",
+								lineHeight: "1.6",
+								letterSpacing: "0.0075em",
 							}}
 						>
 							WeeSpeak
-						</WhiteTextTypography>
+						</Typography>
 					</a>
 				</Toolbar>
 			</AppBar>
