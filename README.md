@@ -22,6 +22,7 @@ Live speech recognition for you and your friends!
 - [X] User can login using Gmail
 - [X] User can logout
 - [ ] User can add friends
+- [ ] User can see friends' online/offline status
 - [ ] User can message a friend
 
 ### Plan
