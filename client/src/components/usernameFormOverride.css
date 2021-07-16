@@ -1,0 +1,9 @@
+.MuiFormHelperText-root {
+  position: absolute;
+  margin-top: 3.8em;
+  font-size: .3em;
+}
+
+.MuiInputBase-input {
+  margin-top: -0.4em;
+}

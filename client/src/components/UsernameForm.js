@@ -5,6 +5,9 @@ import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from "@material-ui/styles";
+import Input from "@material-ui/core/Input";
+import { StylesProvider } from "@material-ui/core/styles";
+import "./usernameFormOverride.css";
 const theme = createMuiTheme();
 
 theme.typography.h4 = {
@@ -17,10 +20,17 @@ theme.typography.h4 = {
 };
 
 const useStyles = makeStyles((theme) => ({
+	helper: {
+		'.MuiFormHelperText-root': {
+			position: "absolute",
+			marginTop: "5em",
+		},
+	},
 	textfield: {
 		'& .MuiTextField-root': {
 			fontSize: '3em',
 			margin: theme.spacing(1),
+			marginTop: "0.5em",
 			width: '13ch',
 		},
 		'& #standard-secondary-label': {
@@ -34,6 +44,9 @@ const useStyles = makeStyles((theme) => ({
 		},
 		'& .MuiInput-colorSecondary.MuiInput-underline:after': {
 			borderBottomColor: '#5a8bbd'
+		},
+		'& .MuiInput-colorSecondary.MuiInput-underline.Mui-error:after': {
+			borderBottomColor: 'red'
 		},
 		'& .MuiButton-contained': {
 			borderRadius: '1.5em',
@@ -62,32 +75,46 @@ export default function UsernameForm() {
 	function handleFormChange(event) {
 		username = event.target.value;
 
-		postData('http://localhost:5000/profile/isUsernameAvailable', { username: username })
-		.then(data => {
-			console.log(data['exists'])
-			// check length
-			if (username.length < 1) {
-				setError(true);
-				setReady(false);
-				setErrorMessage('Username must have at least 1 character.');
-			} else if (username.length > 15 ) {
-				setError(true);
-				setReady(false);
-				setErrorMessage('Username cannot be longer than 15 characters.');
-			} else if (!/^[a-zA-Z0-9_]{1,15}$/.test(username)) {
-				setError(true);
-				setReady(false);
-				setErrorMessage('Only have alphanumeric or underscore characters allowed.');
-			} else if (username.length > 0 && data['exists'] === "yes") {
-				setError(true);
-				setReady(false);
-				setErrorMessage('Username is taken. Please pick a different username.');
-			} else {
-				setError(false);
-				setReady(true);
-				setErrorMessage(' ');
-			}
-		});
+		if (username.length < 1) {
+			setError(true);
+			setReady(false);
+			setErrorMessage('Username must have at least 1 character.');
+		} else if (username.length > 15 ) {
+			setError(true);
+			setReady(false);
+			setErrorMessage('Username cannot be longer than 15 characters.');
+		} else if (!/^[a-zA-Z0-9_]{1,15}$/.test(username)) {
+			setError(true);
+			setReady(false);
+			setErrorMessage('Only have alphanumeric or underscore characters allowed.');
+		} else {
+			postData('http://localhost:5000/profile/isUsernameAvailable', { username: username })
+			.then(data => {
+				// console.log(data['exists'])
+				// check length
+				if (username.length < 1) {
+					setError(true);
+					setReady(false);
+					setErrorMessage('Username must have at least 1 character.');
+				} else if (username.length > 15 ) {
+					setError(true);
+					setReady(false);
+					setErrorMessage('Username cannot be longer than 15 characters.');
+				} else if (!/^[a-zA-Z0-9_]{1,15}$/.test(username)) {
+					setError(true);
+					setReady(false);
+					setErrorMessage('Only have alphanumeric or underscore characters allowed.');
+				} else if (username.length > 0 && data['exists'] === "yes") {
+					setError(true);
+					setReady(false);
+					setErrorMessage('Username is taken. Please pick a different username.');
+				} else {
+					setError(false);
+					setReady(true);
+					setErrorMessage(' ');
+				}
+			});
+		}
 	}
 
 	async function postData(url = '', data = {}) {
@@ -128,27 +155,30 @@ export default function UsernameForm() {
 					Please choose a username:
 				</Typography>
 			</ThemeProvider>
-			<form className={classes.textfield} noValidate autoComplete="off">
-				<TextField
-					inputProps={{style: {fontSize: '2em'}}} // font size of input text
-					InputLabelProps={{style: {fontSize: '.55em'}}} // font size of input label
-					id={error ? "standard-error-helper-text" : "standard-secondary"}
-					color="secondary"
-					label="Enter a username here"
-					autoFocus
-					onChange={handleFormChange}
-					error={error}
-					helperText={errorMessage}
-				/>
-				<Button
-					variant="contained"
-					disabled={!ready}
-					// onClick={() => { console.log("cilcked!") }}
-					onClick={ sendUsername }
-				>
-					Confirm
-				</Button>
-			</form>
+			<StylesProvider injectFirst>
+				<form className={classes.textfield} noValidate autoComplete="off">
+					<TextField
+						inputProps={{style: {fontSize: '2em'}}} // font size of input text
+						InputLabelProps={{style: {fontSize: '.55em'}}} // font size of input label
+						id={error ? "standard-error-helper-text" : "standard-secondary"}
+						color="secondary"
+						label=""
+						placeholder="Enter username here"
+						autoFocus
+						onChange={handleFormChange}
+						error={error}
+						helperText={errorMessage}
+					/>
+					<Button
+						variant="contained"
+						disabled={!ready}
+						// onClick={() => { console.log("cilcked!") }}
+						onClick={ sendUsername }
+					>
+						Confirm
+					</Button>
+				</form>
+			</StylesProvider>
 		</>
 	)
 }

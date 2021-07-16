@@ -14,6 +14,8 @@ import Divider from "@material-ui/core/Divider";
 import FaceIcon from '@material-ui/icons/Face';
 import AddIcon from '@material-ui/icons/Add';
 import Icon from '@material-ui/core/Icon';
+import { StylesProvider } from "@material-ui/core/styles";
+import "./stylesOverride.css";
 
 export default function ScrollDialog() {
   const [open, setOpen] = React.useState(false);
@@ -62,14 +64,16 @@ export default function ScrollDialog() {
         <DialogTitle id="scroll-dialog-title" style={{ textAlign: "center" }}>
           Find a Friend
           <br />
-          <Input
-            // placeholder="Separate search terms with commas"
-            placeholder="Enter your friend's username here"
-            inputProps={{ "aria-label": "description" }}
-            fullWidth
-            autoComplete="off"
-            autoFocus
-          />
+					<StylesProvider injectFirst>
+						<Input
+							// placeholder="Separate search terms with commas"
+							placeholder="Enter your friend's username here"
+							inputProps={{ "aria-label": "description" }}
+							fullWidth
+							autoComplete="off"
+							autoFocus
+						/>
+					</StylesProvider>
         </DialogTitle>
         <DialogContent dividers={scroll === "paper"}>
           <DialogContentText
