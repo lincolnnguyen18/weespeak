@@ -25,12 +25,6 @@ import { withStyles } from "@material-ui/core/styles";
 
 const drawerWidth = 240;
 
-const WhiteTextTypography = withStyles({
-	root: {
-		color: "#FFFFFF"
-	}
-})(Typography);
-
 const useStyles = makeStyles((theme) => ({
 	root: {
 		display: 'flex',
@@ -211,7 +205,7 @@ export default function PersistentDrawerLeft() {
 							open={openProfile}
 							onClose={handleClose}
 						>
-							<MenuItem onClick={handleClose}>Settings</MenuItem>
+							{/* <MenuItem onClick={handleClose}>Settings</MenuItem> */}
 							<MenuItem onClick={() => { window.location.href = "/auth/logout" }}>Logout</MenuItem>
 							<MenuItem onClick={handleClose}>Delete account</MenuItem>
 						</Menu>

@@ -5,7 +5,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from "@material-ui/styles";
-import { withStyles } from "@material-ui/core/styles";
 import logo from '../whiteBadge/512x512.svg';
 
 const theme = createMuiTheme({
