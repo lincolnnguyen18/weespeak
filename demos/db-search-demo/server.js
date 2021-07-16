@@ -20,35 +20,15 @@ app.get('/users', paginatedResults(User), (req, res) => {
   res.json(res.paginatedResults)
 })
 
-// function escapeRegExp(string) {
-//   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
-// }
-
 function paginatedResults(model) {
   return async (req, res, next) => {
     const page = parseInt(req.query.page)
-    const limit = parseInt(req.query.limit)
-
+    const searchTerm = unescape(req.query.search)
+    const limit = 1
     const startIndex = (page - 1) * limit
-    const endIndex = page * limit
-
     const results = {}
+    let search = new RegExp(searchTerm, 'i')
 
-    let search = new RegExp('hoho', 'i')
-
-    if (endIndex < await model.countDocuments().exec()) {
-      results.next = {
-        page: page + 1,
-        limit: limit
-      }
-    }
-    
-    if (startIndex > 0) {
-      results.previous = {
-        page: page - 1,
-        limit: limit
-      }
-    }
     try {
       // db.users.find({ $or: [{"username": /Ma/i}, { "name": /Lin/i } ]})
       results.results = await model.find({
