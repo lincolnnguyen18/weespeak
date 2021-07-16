@@ -21,7 +21,6 @@ import AddIcon from '@material-ui/icons/Add';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
-import { withStyles } from "@material-ui/core/styles";
 
 const drawerWidth = 240;
 
