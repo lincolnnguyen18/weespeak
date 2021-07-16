@@ -19,7 +19,8 @@ Live speech recognition for you and your friends!
 
 ### User Stories
 
-- [ ] User can login using Gmail
+- [X] User can login using Gmail
+- [X] User can logout
 - [ ] User can add friends
 - [ ] User can message a friend
 
@@ -30,7 +31,6 @@ Live speech recognition for you and your friends!
 
 ### User Stories
 
-- [ ] User can logout
 - [ ] User can audio call a friend
 - [ ] User can view friend editting their chat bubble live
 - [X] User can have their english grammar corrected
