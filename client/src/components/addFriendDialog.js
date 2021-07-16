@@ -13,6 +13,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import FaceIcon from '@material-ui/icons/Face';
 import AddIcon from '@material-ui/icons/Add';
+import Icon from '@material-ui/core/Icon';
 
 export default function ScrollDialog() {
   const [open, setOpen] = React.useState(false);
@@ -36,6 +37,11 @@ export default function ScrollDialog() {
       }
     }
   }, [open]);
+
+  // // For testing
+  // React.useEffect(() => {
+  //   console.log(svgs)
+  // }, []);
 
   return (
     <div>
@@ -66,54 +72,56 @@ export default function ScrollDialog() {
         </DialogTitle>
         <DialogContent dividers={scroll === "paper"}>
           <DialogContentText
-            id="scroll-dialog-description"
-            ref={descriptionElementRef}
-            padding="0 10px"
+            // id="scroll-dialog-description"
+            // ref={descriptionElementRef}
+            // padding="0 10px"
           >
             <List>
               {[
-                "Username",
-                "Username",
-                "Username",
-                "Username",
-                "Username",
-                "Username",
-                "Username",
-                "Username",
-                "Username",
-                "Username",
-                "Username",
-                "Username",
-                "Username",
-                "Username",
-                "Username",
-                "Username",
-                "Username",
-                "Username",
-                "Username",
-                "Username",
-                "Username",
-                "Username",
-                "Username",
-                "Username",
-                "Username",
-                "Username",
-                "Username",
-                "Username",
-                "Username",
-                "Username",
+                "Username1",
+                "Username2",
+                "Username3",
+                "Username4",
+                "Username5",
+                "Username6",
+                "Username7",
+                "Username8",
+                "Username9",
+                "Username10",
+                "Username11",
+                "Username12",
+                "Username13",
+                "Username14",
+                "Username15",
+                "Username16",
+                "Username17",
+                "Username18",
+                "Username19",
+                "Username20",
+                "Username21",
+                "Username22",
+                "Username23",
+                "Username24",
+                "Username25",
+                "Username26",
+                "Username27",
+                "Username28",
+                "Username29",
+                "Username30",
               ].map((text, index) => (
                 <>
-                  <ListItem button key={text}>
+                  <ListItem button key={index}>
                     {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
                     <ListItemText
                       primary={text}
-                      secondary={
-                        <div>
-                          <div>Status: Male, College Student, 21 years old</div>
-                          <div>Hobbies: Cooking, Running, Reading light novels, Studying, Progamming.</div>
-                        </div>
-                      }
+                      // secondary={
+                      //   <div>
+                      //     {/* <div>Native language(s): English, Vietnamese</div>
+                      //     <div>Language(s) of interest: Japanese</div> */}
+                      //     <div>Status: Male, College Student, 21 years old</div>
+                      //     <div>Hobbies: Cooking, Running, Reading light novels, Studying, Progamming.</div>
+                      //   </div>
+                      // }
                     />
                     <ListItemIcon><FaceIcon style={{marginLeft: "28px"}}/></ListItemIcon>
                   </ListItem>
