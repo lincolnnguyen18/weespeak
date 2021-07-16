@@ -211,9 +211,9 @@ export default function PersistentDrawerLeft() {
 							open={openProfile}
 							onClose={handleClose}
 						>
-							<MenuItem onClick={handleClose}>Profile</MenuItem>
-							<MenuItem onClick={handleClose}>My account</MenuItem>
+							<MenuItem onClick={handleClose}>Settings</MenuItem>
 							<MenuItem onClick={() => { window.location.href = "/auth/logout" }}>Logout</MenuItem>
+							<MenuItem onClick={handleClose}>Delete account</MenuItem>
 						</Menu>
 					</div>
 				</Toolbar>
@@ -236,8 +236,8 @@ export default function PersistentDrawerLeft() {
 				<List>
 					{['Add Friend'].map((text, index) => (
 						<ListItem button key={text}>
-							<ListItemIcon><AddIcon /></ListItemIcon>
 							<ListItemText primary={text} />
+							<ListItemIcon><AddIcon style={{marginLeft: "28px"}}/></ListItemIcon>
 						</ListItem>
 					))}
 				</List>
@@ -246,8 +246,8 @@ export default function PersistentDrawerLeft() {
 					{['Friend 1', 'Friend 2', 'Friend 3'].map((text, index) => (
 						<ListItem button key={text}>
 							{/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
-							<ListItemIcon><FiberManualRecordIcon style={{ width: "20px" }} /></ListItemIcon>
 							<ListItemText primary={text} />
+							<ListItemIcon><FiberManualRecordIcon style={{ width: "20px", marginLeft: "31px"}} /></ListItemIcon>
 						</ListItem>
 					))}
 				</List>
