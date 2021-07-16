@@ -13,7 +13,6 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import FaceIcon from '@material-ui/icons/Face';
 import AddIcon from '@material-ui/icons/Add';
-import Icon from '@material-ui/core/Icon';
 import { StylesProvider } from "@material-ui/core/styles";
 import "./stylesOverride.css";
 
@@ -67,11 +66,12 @@ export default function ScrollDialog() {
 					<StylesProvider injectFirst>
 						<Input
 							// placeholder="Separate search terms with commas"
-							placeholder="Enter your friend's username here"
+							placeholder="Enter your friend's name or username here"
 							inputProps={{ "aria-label": "description" }}
 							fullWidth
 							autoComplete="off"
 							autoFocus
+							type="search"
 						/>
 					</StylesProvider>
         </DialogTitle>
@@ -83,50 +83,53 @@ export default function ScrollDialog() {
           >
             <List>
               {[
-                "Username1",
-                "Username2",
-                "Username3",
-                "Username4",
-                "Username5",
-                "Username6",
-                "Username7",
-                "Username8",
-                "Username9",
-                "Username10",
-                "Username11",
-                "Username12",
-                "Username13",
-                "Username14",
-                "Username15",
-                "Username16",
-                "Username17",
-                "Username18",
-                "Username19",
-                "Username20",
-                "Username21",
-                "Username22",
-                "Username23",
-                "Username24",
-                "Username25",
-                "Username26",
-                "Username27",
-                "Username28",
-                "Username29",
-                "Username30",
+                "Real name",
+                "Real name",
+								"Real name",
+								"Real name",
+								"Real name",
+								"Real name",
+                "Real name",
+								"Real name",
+								"Real name",
+								"Real name",
+								"Real name",
+                "Real name",
+								"Real name",
+								"Real name",
+								"Real name",
+								"Real name",
+                "Real name",
+								"Real name",
+								"Real name",
+								"Real name",
+								"Real name",
+                "Real name",
+								"Real name",
+								"Real name",
+								"Real name",
+								"Real name",
+                "Real name",
+								"Real name",
+								"Real name",
+								"Real name",
+								"Real name",
+                "Real name",
+								"Real name",
+								"Real name",
+								"Real name",
+								"Real name",
+                "Real name",
+								"Real name",
+								"Real name",
+								"Real name",
               ].map((text, index) => (
                 <>
                   <ListItem button key={index}>
                     {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
                     <ListItemText
                       primary={text}
-                      // secondary={
-                      //   <div>
-                      //     {/* <div>Native language(s): English, Vietnamese</div>
-                      //     <div>Language(s) of interest: Japanese</div> */}
-                      //     <div>Status: Male, College Student, 21 years old</div>
-                      //     <div>Hobbies: Cooking, Running, Reading light novels, Studying, Progamming.</div>
-                      //   </div>
-                      // }
+                      secondary="@username"
                     />
                     <ListItemIcon><FaceIcon style={{marginLeft: "28px"}}/></ListItemIcon>
                   </ListItem>
@@ -137,7 +140,7 @@ export default function ScrollDialog() {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleClose} className="myButton" fontSize="1rem">
             Cancel
           </Button>
         </DialogActions>

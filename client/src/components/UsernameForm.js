@@ -5,7 +5,6 @@ import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from "@material-ui/styles";
-import Input from "@material-ui/core/Input";
 import { StylesProvider } from "@material-ui/core/styles";
 import "./usernameFormOverride.css";
 const theme = createMuiTheme();

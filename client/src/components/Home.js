@@ -17,19 +17,10 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import logo from '../whiteBadge/512x512.svg';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import AddIcon from '@material-ui/icons/Add';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import AddFriendDialog from './addFriendDialog';
-import OverridesCss from './InputTest'
 
 const drawerWidth = 240;
 
@@ -102,9 +93,9 @@ const useStyles = makeStyles((theme) => ({
 		marginRight: "10px"
 	},
 	greeting: {
-		fontSize: '2em',
+		fontSize: '3em',
 		textAlign: 'center',
-		marginTop: `${window.innerHeight / 3.2}px`,
+		marginTop: `${window.innerHeight / 3.5}px`,
 	},
 	greeting2: {
 		fontSize: '2em',
@@ -118,7 +109,7 @@ export default function PersistentDrawerLeft() {
 	const theme = useTheme();
 	const [open, setOpen] = React.useState(true);
 	const [anchorEl, setAnchorEl] = React.useState(null);
-	const [userInfo, setUserInfo] = React.useState({username: "", email: ""});
+	const [userInfo, setUserInfo] = React.useState({name: "", username: "", email: ""});
 	const openProfile = Boolean(anchorEl);
 
 	const handleDrawerOpen = () => {
@@ -145,7 +136,7 @@ export default function PersistentDrawerLeft() {
 			.then(res => res.json())
 			.then(
 				(result) => {
-					setUserInfo({username: result.username, email: result.email});
+					setUserInfo({name: result.name, username: result.username, email: result.email});
 				},
 				(error) => {
 					console.error(error)
@@ -240,10 +231,10 @@ export default function PersistentDrawerLeft() {
 				</List>
 				<Divider />
 				<List>
-					{['Friend 1', 'Friend 2', 'Friend 3'].map((text, index) => (
+					{['Real Name 1', 'Real Name 2', 'Real Name 3'].map((text, index) => (
 						<ListItem button key={text}>
 							{/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
-							<ListItemText primary={text} />
+							<ListItemText primary={text} secondary="@username"/>
 							<ListItemIcon><FiberManualRecordIcon style={{ width: "20px", marginLeft: "31px"}} /></ListItemIcon>
 						</ListItem>
 					))}
@@ -271,6 +262,9 @@ export default function PersistentDrawerLeft() {
 					Hello.
 				</Typography> */}
 				<Typography className={classes.greeting} style={{ marginLeft: open ? '-1em' : '.1em' }}>
+					Hello <b>{userInfo.name}</b>.
+				</Typography>
+				<Typography className={classes.greeting2} style={{ marginLeft: open ? '-1em' : '.1em' }}>
 					You are currently logged in using: <b>{userInfo.email}</b>.
 				</Typography>
 				<Typography className={classes.greeting2} style={{ marginLeft: open ? '-1em' : '.1em' }}>
