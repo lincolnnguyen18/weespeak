@@ -1,0 +1,14 @@
+.textOverflow span {
+  max-width: 160px;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: -3px;
+}
+
+.textOverflow p {
+  max-width: 160px;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

@@ -21,8 +21,11 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import AddFriendDialog from './addFriendDialog';
+import Avatar from '@material-ui/core/Avatar';
+import { StylesProvider } from "@material-ui/core/styles";
+import "./homeOverride.css";
 
-const drawerWidth = 240;
+const drawerWidth = 280;
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -231,12 +234,14 @@ export default function PersistentDrawerLeft() {
 				</List>
 				<Divider />
 				<List>
-					{['Real Name 1', 'Real Name 2', 'Real Name 3'].map((text, index) => (
-						<ListItem button key={text}>
-							{/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
-							<ListItemText primary={text} secondary="@username"/>
-							<ListItemIcon><FiberManualRecordIcon style={{ width: "20px", marginLeft: "31px"}} /></ListItemIcon>
-						</ListItem>
+					{['XXXXXXXXJDIAJFIOFJIOEJFOI', 'Real Name 2', 'Real Name 3'].map((text, index) => (
+						<StylesProvider injectFirst>
+							<ListItem button key={text}>
+								<ListItemIcon><Avatar alt="Remy Sharp" src="https://lh3.googleusercontent.com/a/AATXAJyV5x-KGJctWAnEDEmr5RwJQa0fi9TaxtxTAP2X=s96-c" /></ListItemIcon>
+								<ListItemText className="textOverflow" primary={text} secondary="@usernameusernameusernameusernameusernameusername"/>
+								<ListItemIcon><FiberManualRecordIcon style={{ width: "20px", marginLeft: "31px"}} /></ListItemIcon>
+							</ListItem>
+						</StylesProvider>
 					))}
 				</List>
 			</Drawer>

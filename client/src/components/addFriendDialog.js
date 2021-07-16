@@ -11,8 +11,8 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
-import FaceIcon from '@material-ui/icons/Face';
 import AddIcon from '@material-ui/icons/Add';
+import Avatar from '@material-ui/core/Avatar';
 import { StylesProvider } from "@material-ui/core/styles";
 import "./stylesOverride.css";
 
@@ -126,12 +126,11 @@ export default function ScrollDialog() {
               ].map((text, index) => (
                 <>
                   <ListItem button key={index}>
-                    {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
+										<ListItemIcon><Avatar alt="Remy Sharp" src="https://lh3.googleusercontent.com/a/AATXAJyV5x-KGJctWAnEDEmr5RwJQa0fi9TaxtxTAP2X=s96-c" /></ListItemIcon>
                     <ListItemText
                       primary={text}
                       secondary="@username"
                     />
-                    <ListItemIcon><FaceIcon style={{marginLeft: "28px"}}/></ListItemIcon>
                   </ListItem>
                   <Divider />
                 </>

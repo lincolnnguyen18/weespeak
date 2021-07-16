@@ -139,7 +139,7 @@ export default function UsernameForm() {
 		.then(data => {
 			console.log(data); // JSON data parsed by `data.json()` call
 			if (data["status"] === "success") {
-				window.location.href = '/home'
+				window.location.href = '/'
 			}
 		});
 	}
