@@ -14,7 +14,7 @@ router.get('/', checkSignedIn, (req, res) => {
 })
 
 router.get('/getUserInfo', checkSignedIn, (req, res) => {
-    res.json({ username: req.user.username, name: req.user.name, email: req.user.email })
+    res.json({ username: req.user.username, email: req.user.email })
 })
 
 router.post('/isUsernameAvailable', async (req, res) => {

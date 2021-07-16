@@ -117,7 +117,7 @@ export default function PersistentDrawerLeft() {
 	const theme = useTheme();
 	const [open, setOpen] = React.useState(true);
 	const [anchorEl, setAnchorEl] = React.useState(null);
-	const [userInfo, setUserInfo] = React.useState({username: "", name: "", email: ""});
+	const [userInfo, setUserInfo] = React.useState({username: "", email: ""});
 	const openProfile = Boolean(anchorEl);
 
 	const handleDrawerOpen = () => {
@@ -144,7 +144,7 @@ export default function PersistentDrawerLeft() {
 			.then(res => res.json())
 			.then(
 				(result) => {
-					setUserInfo({username: result.username, name: result.name, email: result.email});
+					setUserInfo({username: result.username, email: result.email});
 				},
 				(error) => {
 					console.error(error)
@@ -267,7 +267,7 @@ export default function PersistentDrawerLeft() {
 					donec massa sapien faucibus et molestie ac.
 				</Typography> */}
 				<Typography className={classes.greeting} style={{ marginLeft: open ? '-1em' : '.1em' }}>
-					Hello {userInfo.name}.
+					Hello.
 				</Typography>
 				<Typography className={classes.greeting2} style={{ marginLeft: open ? '-1em' : '.1em' }}>
 					You are currently logged in using: <b>{userInfo.email}</b>.

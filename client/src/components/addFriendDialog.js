@@ -39,8 +39,8 @@ export default function ScrollDialog() {
 
   return (
     <div>
-      <ListItem button key='Add Friend' onClick={handleClickOpen("paper")}>
-        <ListItemText primary='Add Friend' />
+      <ListItem button key='Find a Friend' onClick={handleClickOpen("paper")}>
+        <ListItemText primary='Find a Friend' />
         <ListItemIcon><AddIcon style={{marginLeft: "28px"}}/></ListItemIcon>
       </ListItem>
       <Dialog
@@ -54,10 +54,10 @@ export default function ScrollDialog() {
         style={{ maxWidth: "500px", margin: "auto" }}
       >
         <DialogTitle id="scroll-dialog-title" style={{ textAlign: "center" }}>
-          Add Friend
+          Find a Friend
           <br />
           <Input
-            placeholder="Enter you friend's real name, email, or username"
+            placeholder="Separate search terms with commas"
             inputProps={{ "aria-label": "description" }}
             fullWidth
             autoComplete="off"
@@ -72,25 +72,49 @@ export default function ScrollDialog() {
           >
             <List>
               {[
-                "Real Name",
-                "Real Name",
-                "Real Name",
-                "Real Name",
-                "Real Name",
-                "Real Name",
-                "Real Name",
-                "Real Name",
-                "Real Name",
-                "Real Name",
-                "Real Name",
-                "Real Name",
-                "Real Name",
-                "Real Name",
+                "Username",
+                "Username",
+                "Username",
+                "Username",
+                "Username",
+                "Username",
+                "Username",
+                "Username",
+                "Username",
+                "Username",
+                "Username",
+                "Username",
+                "Username",
+                "Username",
+                "Username",
+                "Username",
+                "Username",
+                "Username",
+                "Username",
+                "Username",
+                "Username",
+                "Username",
+                "Username",
+                "Username",
+                "Username",
+                "Username",
+                "Username",
+                "Username",
+                "Username",
+                "Username",
               ].map((text, index) => (
                 <>
                   <ListItem button key={text}>
                     {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
-                    <ListItemText primary={text} secondary="@username" />
+                    <ListItemText
+                      primary={text}
+                      secondary={
+                        <div>
+                          <div>Status: Male, College Student, 21 years old</div>
+                          <div>Hobbies: Cooking, Running, Reading light novels, Studying, Progamming.</div>
+                        </div>
+                      }
+                    />
                     <ListItemIcon><FaceIcon style={{marginLeft: "28px"}}/></ListItemIcon>
                   </ListItem>
                   <Divider />
