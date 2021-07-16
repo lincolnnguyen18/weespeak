@@ -101,9 +101,9 @@ const useStyles = makeStyles((theme) => ({
 		marginRight: "10px"
 	},
 	greeting: {
-		fontSize: '3em',
+		fontSize: '2em',
 		textAlign: 'center',
-		marginTop: `${window.innerHeight / 4}px`,
+		marginTop: `${window.innerHeight / 3.2}px`,
 	},
 	greeting2: {
 		fontSize: '2em',
@@ -266,10 +266,10 @@ export default function PersistentDrawerLeft() {
 					arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
 					donec massa sapien faucibus et molestie ac.
 				</Typography> */}
-				<Typography className={classes.greeting} style={{ marginLeft: open ? '-1em' : '.1em' }}>
+				{/* <Typography className={classes.greeting} style={{ marginLeft: open ? '-1em' : '.1em' }}>
 					Hello.
-				</Typography>
-				<Typography className={classes.greeting2} style={{ marginLeft: open ? '-1em' : '.1em' }}>
+				</Typography> */}
+				<Typography className={classes.greeting} style={{ marginLeft: open ? '-1em' : '.1em' }}>
 					You are currently logged in using: <b>{userInfo.email}</b>.
 				</Typography>
 				<Typography className={classes.greeting2} style={{ marginLeft: open ? '-1em' : '.1em' }}>
