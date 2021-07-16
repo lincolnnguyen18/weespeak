@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
+const cors = require('cors')
 const User = require('./users')
 
 mongoose.connect('mongodb://localhost/weespeak', { useNewUrlParser: true, useUnifiedTopology: true })
@@ -20,13 +21,15 @@ const db = mongoose.connection
 //     User.create({ name: 'Dog eating', username: '@whyman' }),
 //     User.create({ name: 'Cat meaowing', username: '@doyoulikeman' }),
 //     User.create({ name: 'Another test', username: '@123_2131' }),
-//     User.create({ name: 'Tests are cool', username: '@jiofw9__' }),
+//     User.create({ name: 'Helloooo helllooooooooooooooooooooooooooooo', username: '@jiofw9__' }),
 //     User.create({ name: 'Tigers rock', username: '@___' }),
 //     User.create({ name: 'ROcks rolling', username: '@iamsanta' }),
 //     User.create({ name: 'Meowing horse', username: '@youaresanta' }),
 //     User.create({ name: 'Pigs growing', username: '@wearesantas' }),
 //   ]).then(() => console.log('Added Users'))
 // })
+
+app.use(cors())
 
 app.get('/users', paginatedResults(User), (req, res) => {
   res.json(res.paginatedResults)
@@ -36,7 +39,7 @@ function paginatedResults(model) {
   return async (req, res, next) => {
     const page = parseInt(req.query.page)
     const searchTerm = unescape(req.query.search)
-    const limit = 3
+    const limit = 10
     const startIndex = (page - 1) * limit
     const results = {}
     let search = new RegExp(searchTerm, 'i')

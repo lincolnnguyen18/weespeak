@@ -13,12 +13,14 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import AddIcon from '@material-ui/icons/Add';
 import Avatar from '@material-ui/core/Avatar';
+import ReactDOM from 'react-dom'
 import { StylesProvider } from "@material-ui/core/styles";
 import "./addFriendDialogOverride.css";
 
 export default function ScrollDialog() {
   const [open, setOpen] = React.useState(false);
   const [scroll, setScroll] = React.useState("paper");
+	const [findFriends, setFindFriends] = React.useState(null);
 
   const handleClickOpen = (scrollType) => () => {
     setOpen(true);
@@ -30,19 +32,43 @@ export default function ScrollDialog() {
   };
 
   const descriptionElementRef = React.useRef(null);
+
   React.useEffect(() => {
     if (open) {
-      const { current: descriptionElement } = descriptionElementRef;
-      if (descriptionElement !== null) {
-        descriptionElement.focus();
-      }
+      // const { current: descriptionElement } = descriptionElementRef;
+      // if (descriptionElement !== null) {
+      //   descriptionElement.focus();
+      // }
+			console.log('opened!')
     }
   }, [open]);
 
-  // // For testing
-  // React.useEffect(() => {
-  //   console.log(svgs)
-  // }, []);
+	const handleScroll = (e) => {
+		if (open) {
+			let target = e.target
+			let scrollPos = (target.scrollHeight - target.scrollTop) - target.clientHeight
+			// console.log(scrollPos)
+			if (scrollPos == 0) {
+				console.log("load more people!")
+			}
+		}
+	}
+
+	React.useEffect(() => {
+		// real data
+		fetch('http://localhost:1234/users?page=1&search=')
+			.then(res => res.json())
+			.then(
+				(result) => {
+					// setUserInfo({name: result.name, username: result.username, email: result.email});
+					// console.log(result['results'][0]['name'])
+					console.log(result['results'])
+				},
+				(error) => {
+					console.error(error)
+				}
+			)
+	}, [])
 
   return (
     <div>
@@ -66,7 +92,7 @@ export default function ScrollDialog() {
 					<StylesProvider injectFirst>
 						<Input
 							// placeholder="Separate search terms with commas"
-							placeholder="Enter your friend's name or username here"
+							placeholder="Enter your friend's name or @username here"
 							inputProps={{ "aria-label": "description" }}
 							fullWidth
 							autoComplete="off"
@@ -75,62 +101,29 @@ export default function ScrollDialog() {
 						/>
 					</StylesProvider>
         </DialogTitle>
-        <DialogContent dividers={scroll === "paper"}>
+        <DialogContent
+					dividers={scroll === "paper"}
+					onScroll={handleScroll}
+				>
           <DialogContentText
-            // id="scroll-dialog-description"
-            // ref={descriptionElementRef}
-            // padding="0 10px"
+            id="scroll-dialog-description"
+            ref={descriptionElementRef}
           >
             <List>
-              {[
-                "FJIEWOJFIOEWJFIOEWJFIOWEJ FEWIFOEWJIOFJWEIOJFIEOWJFIEWO",
-                "Real name",
-								"Real name",
-								"Real name",
-								"Real name",
-								"Real name",
-                "Real name",
-								"Real name",
-								"Real name",
-								"Real name",
-								"Real name",
-                "Real name",
-								"Real name",
-								"Real name",
-								"Real name",
-								"Real name",
-                "Real name",
-								"Real name",
-								"Real name",
-								"Real name",
-								"Real name",
-                "Real name",
-								"Real name",
-								"Real name",
-								"Real name",
-								"Real name",
-                "Real name",
-								"Real name",
-								"Real name",
-								"Real name",
-								"Real name",
-                "Real name",
-								"Real name",
-								"Real name",
-								"Real name",
-								"Real name",
-                "Real name",
-								"Real name",
-								"Real name",
-								"Real name",
-              ].map((text, index) => (
+							{Array(15).fill({
+									"friends": [],
+								"_id": "77777",
+								"name": "THIS IS A TESTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
+								"username": "@TEST_TEST_EST_TEST_123",
+								"__v": 0
+								}).map((person, index) => (
                 <>
                   <ListItem button key={index}>
 										<ListItemIcon><Avatar alt="Real Name" src="https://lh3.googleusercontent.com/a/AATXAJyV5x-KGJctWAnEDEmr5RwJQa0fi9TaxtxTAP2X=s96-c" /></ListItemIcon>
 										<StylesProvider injectFirst>
 											<ListItemText
-												primary={text}
-												secondary="@username"
+												primary={person['name']}
+												secondary={person['username']}
 												className="textOverflow2"
 											/>
 										</StylesProvider>
