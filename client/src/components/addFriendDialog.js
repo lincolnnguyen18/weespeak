@@ -14,7 +14,7 @@ import Divider from "@material-ui/core/Divider";
 import AddIcon from '@material-ui/icons/Add';
 import Avatar from '@material-ui/core/Avatar';
 import { StylesProvider } from "@material-ui/core/styles";
-import "./stylesOverride.css";
+import "./addFriendDialogOverride.css";
 
 export default function ScrollDialog() {
   const [open, setOpen] = React.useState(false);
@@ -127,10 +127,13 @@ export default function ScrollDialog() {
                 <>
                   <ListItem button key={index}>
 										<ListItemIcon><Avatar alt="Real Name" src="https://lh3.googleusercontent.com/a/AATXAJyV5x-KGJctWAnEDEmr5RwJQa0fi9TaxtxTAP2X=s96-c" /></ListItemIcon>
-                    <ListItemText
-                      primary={text}
-                      secondary="@username"
-                    />
+										<StylesProvider injectFirst>
+											<ListItemText
+												primary={text}
+												secondary="@username"
+												className="textOverflow2"
+											/>
+										</StylesProvider>
                   </ListItem>
                   <Divider />
                 </>

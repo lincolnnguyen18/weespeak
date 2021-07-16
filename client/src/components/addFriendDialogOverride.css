@@ -1,0 +1,17 @@
+.MuiInput-underline:after {
+  border-bottom-color: #5a8bbd;
+}
+
+/* #myButton {
+  color: #5b87b5;
+} */
+
+.textOverflow2 span {
+  max-width: 95%;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: -3px;
+  word-break: break-all;
+  white-space: nowrap;
+}
