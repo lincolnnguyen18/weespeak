@@ -4,6 +4,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   margin-bottom: -3px;
+  word-break: break-all;
+  white-space: nowrap;
 }
 
 .textOverflow p {

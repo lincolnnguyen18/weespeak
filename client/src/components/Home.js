@@ -234,11 +234,11 @@ export default function PersistentDrawerLeft() {
 				</List>
 				<Divider />
 				<List>
-					{['XXXXXXXXJDIAJFIOFJIOEJFOI', 'Real Name 2', 'Real Name 3'].map((text, index) => (
+					{['FJIAOJFEIO FEWJIOWEFJ', 'Real Name 2', 'Real Name 3'].map((text, index) => (
 						<StylesProvider injectFirst>
 							<ListItem button key={text}>
 								<ListItemIcon><Avatar alt="Remy Sharp" src="https://lh3.googleusercontent.com/a/AATXAJyV5x-KGJctWAnEDEmr5RwJQa0fi9TaxtxTAP2X=s96-c" /></ListItemIcon>
-								<ListItemText className="textOverflow" primary={text} secondary="@usernameusernameusernameusernameusernameusername"/>
+								<ListItemText className="textOverflow" primary={text} secondary="@user421nam_e__usernameusernameusernameusernameusername"/>
 								<ListItemIcon><FiberManualRecordIcon style={{ width: "20px", marginLeft: "31px"}} /></ListItemIcon>
 							</ListItem>
 						</StylesProvider>

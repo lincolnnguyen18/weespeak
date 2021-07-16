@@ -83,7 +83,7 @@ export default function ScrollDialog() {
           >
             <List>
               {[
-                "Real name",
+                "FJIEWOJFIOEWJFIOEWJFIOWEJ FEWIFOEWJIOFJWEIOJFIEOWJFIEWO",
                 "Real name",
 								"Real name",
 								"Real name",
@@ -126,7 +126,7 @@ export default function ScrollDialog() {
               ].map((text, index) => (
                 <>
                   <ListItem button key={index}>
-										<ListItemIcon><Avatar alt="Remy Sharp" src="https://lh3.googleusercontent.com/a/AATXAJyV5x-KGJctWAnEDEmr5RwJQa0fi9TaxtxTAP2X=s96-c" /></ListItemIcon>
+										<ListItemIcon><Avatar alt="Real Name" src="https://lh3.googleusercontent.com/a/AATXAJyV5x-KGJctWAnEDEmr5RwJQa0fi9TaxtxTAP2X=s96-c" /></ListItemIcon>
                     <ListItemText
                       primary={text}
                       secondary="@username"
