@@ -32,9 +32,9 @@ Live speech recognition for you and your friends!
 ### User Stories
 
 - [ ] User can audio call a friend
-- [ ] User can view friend editting their chat bubble live
-- [X] User can have their english grammar corrected
-- [ ] User can have their messages translated
+- [ ] User can have their speech recognized live
+- [ ] User can view friend editing their chat bubble live
+- [ ] User can have their messages translated live
 
 ## WeeSpeak Part 4
 
@@ -47,6 +47,7 @@ Live speech recognition for you and your friends!
 - [ ] User can customize the color of their speech bubbles
 - [ ] Detect user's language and update weespeak accordingly
 - [ ] Order language list by last accessed
+- [X] User can have their english grammar corrected
 
 ## Future Ideas
 
