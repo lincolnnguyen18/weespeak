@@ -63,7 +63,8 @@ export default function ScrollDialog() {
           Find a Friend
           <br />
           <Input
-            placeholder="Separate search terms with commas"
+            // placeholder="Separate search terms with commas"
+            placeholder="Enter your friend's username here"
             inputProps={{ "aria-label": "description" }}
             fullWidth
             autoComplete="off"
