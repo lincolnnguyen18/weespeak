@@ -206,6 +206,10 @@ export default function PersistentDrawerLeft() {
 						>
 							{/* <MenuItem onClick={handleClose}>Settings</MenuItem> */}
 							<MenuItem onClick={() => { window.location.href = "/auth/logout" }}>Logout</MenuItem>
+							<MenuItem onClick={handleClose}>Change name</MenuItem>
+							<MenuItem onClick={handleClose}>Change username</MenuItem>
+							<MenuItem onClick={handleClose}>Change profile picture</MenuItem>
+							{/* <MenuItem onClick={handleClose}>Change profile description</MenuItem> */}
 							<MenuItem onClick={handleClose}>Delete account</MenuItem>
 						</Menu>
 					</div>
