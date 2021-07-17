@@ -170,9 +170,9 @@ export default function UsernameForm() {
 						error={error}
 						helperText={errorMessage}
 						onKeyDown={ (e) => {
-							e.preventDefault()
 							console.log(e.keyCode)
 							if (e.keyCode === 13) {
+								e.preventDefault()
 								sendUsername()
 							}
 						}}
