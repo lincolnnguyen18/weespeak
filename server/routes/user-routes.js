@@ -42,7 +42,7 @@ function paginatedResults(model) {
  * Example: http://localhost:5000/user/isUsernameAvailable?username=joe
  */
 router.get('/isUsernameAvailable', async (req, res) => {
-    const usernameExists = await User.exists({ username: '@' + unescape(req.query.username) });
+    const usernameExists = await User.exists({ username: '@' + unescape(req.query.username).replace(/[.*+?^${}()|[\]\\]/g, '\\$&') });
     if (usernameExists) {
         res.json({available: "false"})
     } else {
@@ -63,15 +63,16 @@ router.get('/info', checkSignedIn, (req, res) => {
  * Example: http://localhost:5000/user/username
  */
 router.post('/username', checkSignedIn, async (req, res) => {
-    const usernameExists = await User.exists({ username: req.body.username });
-    if (/^[a-zA-Z0-9_]{1,15}$/.test(req.body.username) && !usernameExists) {
-        // console.log(`Username is available so updating username of user with id: '${req.user._id}' with new username: '${req.body.username}'`)
+    reqUsername = req.body.username
+    const usernameExists = await User.exists({ username: '@' + reqUsername.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') });
+    if (/^[a-zA-Z0-9_]{1,15}$/.test(reqUsername) && !usernameExists) {
+        console.log(`Username ${'@' + reqUsername} is available so updating username of user with id: '${req.user._id}' with new username: '${req.body.username}'`)
         const filter = { _id: req.user._id }
-        const update = { username: '@' + req.body.username }
+        const update = { username: '@' + reqUsername }
         await User.findOneAndUpdate(filter, update)
         res.json({status: "success"})
     } else {
-        // console.log(`Username is not available. Please pick a different username.`)
+        console.log(`Username '${'@' + reqUsername}' is not available. Please pick a different username.`)
         res.json({status: "failure"})
     }
 })

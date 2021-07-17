@@ -69,6 +69,7 @@ export default function UsernameForm() {
 	const [error, setError] = useState(false);
 	const [ready, setReady] = useState(false);
 	const [errorMessage, setErrorMessage] = useState(' ');
+	const textfieldRef = React.useRef(null);
 	let username = ""
 
 	function handleFormChange(event) {
@@ -134,7 +135,8 @@ export default function UsernameForm() {
 	}
 
 	function sendUsername() {
-		postData('http://localhost:5000/user/username', { username: username })
+		console.log(`posting ${textfieldRef.current.value}`)
+		postData('http://localhost:5000/user/username', { username: textfieldRef.current.value })
 		.then(data => {
 			if (data["status"] === "success") {
 				window.location.href = '/'
@@ -165,6 +167,7 @@ export default function UsernameForm() {
 						onChange={handleFormChange}
 						error={error}
 						helperText={errorMessage}
+						inputRef={textfieldRef}
 						onKeyDown={ (e) => {
 							if (e.keyCode === 13) {
 								e.preventDefault()
