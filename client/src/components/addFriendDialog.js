@@ -23,6 +23,7 @@ export default function ScrollDialog() {
 	let [findFriendsPage, setFindFriendsPage] = useState(1)
 	let [searchTerm, setSearchTerm] = useState("")
 	let [waiting, setWaiting] = useState(true)
+	let [dialogTitle, setDialogTitle] = useState("Find a Friend")
 
 	const handleClickOpen = (scrollType) => () => {
 		setOpen(true);
@@ -34,8 +35,12 @@ export default function ScrollDialog() {
 	};
 
 	const updateSearch = (e) => {
+		setDialogTitle("Find a Friend")
 		let currentQuery = e.target.value
 		if (currentQuery !== searchTerm) {
+			if (currentQuery.trim().length !== 0) {
+				setDialogTitle("Searching...")
+			}
 			setTimeout(() => {
 				if (currentQuery.trim().length !== 0) {
 					setWaiting(true)
@@ -50,17 +55,19 @@ export default function ScrollDialog() {
 		}
 	}
 
-	const doSearch = (e) => {
+	const doSearch = async (e) => {
 		if (e.keyCode === 13) {
+			setDialogTitle("Searching...")
 			let searchThing = e.target.value
 			if (searchThing.trim().length !== 0) {
 				setWaiting(true)
 				setSearchTerm(searchThing)
-				fetchMorePeople(searchThing, true, 1)
+				await fetchMorePeople(searchThing, true, 1).then(setDialogTitle("Find a Friend"))
 				setFindFriendsPage(1)
 			} else {
 				setFindFriends([])
 				setSearchTerm("")
+				setDialogTitle("Find a Friend")
 			}
 		}
 	}
@@ -78,14 +85,19 @@ export default function ScrollDialog() {
 	// Browser dev tools debugging
 	// target = document.getElementsByClassName("MuiDialogContent-root")[0]
 	const handleScroll = async (e) => {
-		if (open) {
-			let target = e.target
-			let reachedBottom = target.scrollHeight - target.offsetHeight - target.scrollTop < 1
-			// console.log(target.scrollHeight - target.offsetHeight - target.scrollTop)
-			if (waiting && reachedBottom && searchTerm !== "") {
-				setWaiting(false)
-				await fetchMorePeople(searchTerm, false, findFriendsPage).then(() => console.log("finished fetching"))
-				setFindFriendsPage(findFriendsPage += 1)
+		let target = e.target
+		let reachedBottom = target.scrollHeight - target.offsetHeight - target.scrollTop < 1
+		if (open && reachedBottom) {
+			setFindFriendsPage(findFriendsPage += 1)
+			if (findFriendsPage !== 1) {
+				// console.log(target.scrollHeight - target.offsetHeight - target.scrollTop)
+				if (waiting && reachedBottom && searchTerm !== "") {
+					setWaiting(false)
+					setDialogTitle("Loading more...")
+					await fetchMorePeople(searchTerm, false, findFriendsPage).then(() => {
+						console.log("finished fetching")
+					})
+				}
 			}
 		}
 	}
@@ -97,8 +109,17 @@ export default function ScrollDialog() {
 			.then(res => res.json())
 			.then(
 				(result) => {
+					if (result['results'].length === 0) {
+						console.log("no more to show")
+						setWaiting(false)
+						setDialogTitle("No more to load.")
+					} else {
+						setWaiting(true)
+						setDialogTitle("Find a Friend")
+					}
 					if (newSearch && result['results'].length === 0) {
 						setFindFriends([])
+						setDialogTitle("No users found.")
 					} else if (newSearch) {
 						setFindFriends(result['results'])
 					} else {
@@ -109,12 +130,6 @@ export default function ScrollDialog() {
 						}
 					}
 					// console.log(`length of fetched result is ${result['results'].length}`)
-					if (result['results'].length === 0) {
-						console.log("no more to show")
-						setWaiting(false)
-					} else {
-						setWaiting(true)
-					}
 				},
 				(error) => {
 					console.error(error)
@@ -144,7 +159,7 @@ export default function ScrollDialog() {
 					style={{ maxWidth: "500px", margin: "auto" }}
 				>
 					<DialogTitle id="scroll-dialog-title" style={{ textAlign: "center" }}>
-						Find a Friend
+						{dialogTitle}
 						<br />
 						{/* <StylesProvider injectFirst>
 							<Input
@@ -222,6 +237,7 @@ export default function ScrollDialog() {
 									</>
 								))
 								}
+								<Divider />
 							</List>
 						</DialogContentText>
 					</DialogContent>
