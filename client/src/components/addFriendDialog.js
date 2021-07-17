@@ -72,11 +72,14 @@ export default function ScrollDialog() {
     }
   }, [open]);
 
+	// Browser dev tools debugging
+	// target = document.getElementsByClassName("MuiDialogContent-root")[0]
 	const handleScroll = (e) => {
 		if (open) {
 			let target = e.target
-			let scrollPos = (target.scrollHeight - target.scrollTop) - target.clientHeight
-			if (scrollPos < 2 && searchTerm !== "") {
+			// let scrollPos = (target.scrollHeight - target.scrollTop) - target.clientHeight
+			let reachedBottom = target.scrollHeight - target.offsetHeight - target.scrollTop < 1
+			if (reachedBottom && searchTerm !== "") {
 				fetchMorePeople(searchTerm, false, findFriendsPage + 1)
 				setFindFriendsPage(findFriendsPage += 1)
 			}
