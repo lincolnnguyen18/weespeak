@@ -15,3 +15,11 @@
   word-break: break-all;
   white-space: nowrap;
 }
+
+.temporaryHide {
+  display: none;
+}
+
+#dialogInput {
+  margin-top: 0.8em;
+}
