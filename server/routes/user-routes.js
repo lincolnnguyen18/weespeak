@@ -106,7 +106,10 @@ router.get('/isSignedIn', (req, res) => {
  * GET paginated list of users based on search criteria
  * Example: http://localhost:5000/user/search?page=1&search=thanh&limit=10
  */
- router.get('/search', checkSignedIn, paginatedResults(User), (req, res) => {
+// For production
+// router.get('/search', checkSignedIn, paginatedResults(User), (req, res) => {
+// For development
+router.get('/search', paginatedResults(User), (req, res) => {
     res.json(res.paginatedResults)
 })
 

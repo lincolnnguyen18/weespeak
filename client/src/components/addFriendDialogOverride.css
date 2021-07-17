@@ -10,6 +10,14 @@ body > div.MuiDialog-root > div.MuiDialog-container.MuiDialog-scrollPaper > div 
   height: 80%;
 }
 
+body > div.MuiDialog-root > div.MuiDialog-container.MuiDialog-scrollPaper > div > div.MuiDialogContent-root.MuiDialogContent-dividers {
+  padding-top: 0;
+}
+
+#scroll-dialog-description > ul {
+  padding-top: 0;
+}
+
 .cancelButton {
   padding: 6px 8px !important;
 }
