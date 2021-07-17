@@ -102,7 +102,7 @@ export default function ScrollDialog() {
 
 	const fetchMorePeople = (searchWord, newSearch, page) => {
 		console.log(`finding page: ${page} and searching for ${searchWord}`)
-		fetch(`http://localhost:1234/users?page=${page}&search=${escape(searchWord.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))}&limit=${Math.ceil(window.innerHeight / 76)}`)
+		fetch(`http://localhost:5000/users?page=${page}&search=${escape(searchWord.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))}&limit=${Math.ceil(window.innerHeight / 76)}`)
 			.then(res => res.json())
 			.then(
 				(result) => {
