@@ -38,6 +38,7 @@ export default function ScrollDialog() {
 	const updateSearch = (e) => {
 		if (updating) {
 			setUpdating(false)
+			setWaiting(false)
 			setDialogTitle("Find a Friend")
 			setTimeout(() => {
 				if (e.target.value !== searchTerm) {
@@ -45,39 +46,42 @@ export default function ScrollDialog() {
 					setFindFriendsPage(1)
 					if (e.target.value.trim().length !== 0) {
 						setDialogTitle("Searching...")
-					}
-						if (e.target.value.trim().length !== 0) {
+						setSearchTerm(e.target.value)
+						fetchMorePeople(e.target.value, true, 1).then(() => {
+							setUpdating(true)
 							setWaiting(true)
-							setSearchTerm(e.target.value)
-							fetchMorePeople(e.target.value, true, 1)
-						} else {
-							setFindFriends([])
-							setSearchTerm("")
-							setFindFriendsPage(1)
-							console.log(`current page is ${findFriendsPage} and waiting is ${waiting}`)
-						}
+						})
+					} else {
+						setFindFriends([])
+						setSearchTerm("")
+						setFindFriendsPage(1)
+						setUpdating(true)
+						setWaiting(true)
+						console.log(`current page is ${findFriendsPage} and waiting is ${waiting}`)
+					}
 				}
-				setUpdating(true)
 			}, 1000);
 		}
 	}
 
-	const doSearch = (e) => {
-		if (e.keyCode === 13) {
-			setDialogTitle("Searching...")
-			let searchThing = e.target.value
-			if (searchThing.trim().length !== 0) {
-				setWaiting(true)
-				setFindFriendsPage(1)
-				setSearchTerm(searchThing)
-				fetchMorePeople(searchThing, true, 1)
-			} else {
-				setFindFriends([])
-				setSearchTerm("")
-				setDialogTitle("Find a Friend")
-			}
-		}
-	}
+	// const doSearch = (e) => {
+	// 	if (e.keyCode === 13) {
+	// 		setDialogTitle("Searching...")
+	// 		let searchThing = e.target.value
+	// 		if (searchThing.trim().length !== 0) {
+	// 			setWaiting(true)
+	// 			setFindFriendsPage(1)
+	// 			setSearchTerm(searchThing)
+	// 			fetchMorePeople(searchThing, true, 1).then(() => {
+	// 				setUpdating(true)
+	// 			})
+	// 		} else {
+	// 			setFindFriends([])
+	// 			setSearchTerm("")
+	// 			setDialogTitle("Find a Friend")
+	// 		}
+	// 	}
+	// }
 
 	const dialogContentRef = React.useRef(null);
 	const descriptionElementRef = React.useRef(null);
@@ -172,7 +176,7 @@ export default function ScrollDialog() {
 									autoFocus
 									fullWidth
 									id="dialogInput"
-									onKeyDown={doSearch}
+									// onKeyDown={doSearch}
 									onChange={updateSearch}
 								/>
 						</DialogTitle>
