@@ -79,6 +79,7 @@ const db = mongoose.connection
 
 app.use(cors())
 
+// Example: http://localhost:1234/users?page=1&search=thanh&limit=10
 app.get('/users', paginatedResults(User), (req, res) => {
   res.json(res.paginatedResults)
 })

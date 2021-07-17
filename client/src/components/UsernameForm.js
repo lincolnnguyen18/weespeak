@@ -87,8 +87,10 @@ export default function UsernameForm() {
 			setReady(false);
 			setErrorMessage('Only have alphanumeric or underscore characters allowed.');
 		} else {
-			postData('http://localhost:5000/profile/isUsernameAvailable', { username: username })
-			.then(data => {
+			fetch(`http://localhost:5000/user/isUsernameAvailable?username=${escape(username)}`)
+			.then(res => res.json())
+			.then(result => {
+				console.log(result)
 				// console.log(data['exists'])
 				// check length
 				if (username.length < 1) {
@@ -103,7 +105,7 @@ export default function UsernameForm() {
 					setError(true);
 					setReady(false);
 					setErrorMessage('Only have alphanumeric or underscore characters allowed.');
-				} else if (username.length > 0 && data['exists'] === "yes") {
+				} else if (username.length > 0 && result['available'] === "false") {
 					setError(true);
 					setReady(false);
 					setErrorMessage('Username is taken. Please pick a different username.');
@@ -135,7 +137,7 @@ export default function UsernameForm() {
 
 	function sendUsername() {
 		console.log(username);
-		postData('http://localhost:5000/profile/registerUsername', { username: username })
+		postData('http://localhost:5000/user/username', { username: username })
 		.then(data => {
 			console.log(data); // JSON data parsed by `data.json()` call
 			if (data["status"] === "success") {
@@ -167,11 +169,17 @@ export default function UsernameForm() {
 						onChange={handleFormChange}
 						error={error}
 						helperText={errorMessage}
+						onKeyDown={ (e) => {
+							e.preventDefault()
+							console.log(e.keyCode)
+							if (e.keyCode === 13) {
+								sendUsername()
+							}
+						}}
 					/>
 					<Button
 						variant="contained"
 						disabled={!ready}
-						// onClick={() => { console.log("cilcked!") }}
 						onClick={ sendUsername }
 					>
 						Confirm

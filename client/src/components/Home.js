@@ -132,10 +132,7 @@ export default function PersistentDrawerLeft() {
 	};
 
 	useEffect(() => {
-		// real data
-		fetch('http://localhost:5000/profile/getUserInfo')
-		// mock data
-		// fetch("http://localhost:3000/getUserInfo")
+		fetch('http://localhost:5000/user/info')
 			.then(res => res.json())
 			.then(
 				(result) => {

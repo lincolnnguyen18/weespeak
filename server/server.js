@@ -1,5 +1,5 @@
 const express = require('express');
-const profileRoutes = require('./routes/profile-routes');
+const userRoutes = require('./routes/user-routes');
 const authRoutes = require('./routes/auth-routes');
 const path = require('path');
 const passportSetup = require('./config/passport-setup');
@@ -10,11 +10,14 @@ const passport = require('passport');
 const cors = require('cors')
 const bodyParser = require('body-parser');
 
+// Instantiate express
 const app = express();
 
-// For development; access api from react dev server
+// For development only; remove for production!!!
 app.use(cors())
 app.options('*', cors())
+
+// Request body parser
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -24,28 +27,24 @@ app.use(cookieSession({
 	keys: [keys.session.cookieKey] // use key to encrypt the cookie
 }));
 
-// initialize passport
+// Initialize passport
 app.use(passport.initialize());
 app.use(passport.session());
 
-// connect to mongodb
-mongoose.connect(keys.mongodb.dbURI, (err) => {
-	if (err) {
-		console.log(err);
-	} else {
-		console.log('connected!');
-	}
-});
+// Connect to mongodb
+mongoose.connect(keys.mongodb.dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
+	.catch( error => console.log(error));
+console.log('connected!');
 
-// set up routes
+// Set up routes
 app.use('/auth', authRoutes);
-app.use('/profile', profileRoutes);
+app.use('/user', userRoutes);
 
-// Serve the static files from the React app; use nginx for production
+// Serve the static files from the React app; use nginx for production, maybe
 app.use(express.static(path.join(__dirname, '/../client/build'), { index : false }));
 app.use('/favicon.ico', express.static('/../client/build/favicon.ico'));
 
-
+// Dashboard
 app.get('/', (req, res) => {
 	if (req.user === undefined || req.user.username === "") {
 		res.redirect("/login")
@@ -54,6 +53,7 @@ app.get('/', (req, res) => {
 	}
 })
 
+// Login/future landing page
 app.get('/login', (req, res) => {
 	if (req.user !== undefined && req.user.username !== "") {
 		res.redirect("/")
@@ -63,6 +63,7 @@ app.get('/login', (req, res) => {
 	res.sendFile(path.join(__dirname+'/../client/build/index.html'));
 })
 
+// Registration page; only username for now, maybe more things like profile picture, profile description in the future
 app.get('/register', (req, res) => {
 	if (req.user !== undefined && req.user.username === "") {
 		res.sendFile(path.join(__dirname+'/../client/build/index.html'));
@@ -71,12 +72,12 @@ app.get('/register', (req, res) => {
 	}
 })
 
-// Handles any requests that don't match the ones above
+// Handles any requests that don't match the ones above; 404 page
 app.get('*', (req,res) =>{
 	res.sendFile(path.join(__dirname+'/../client/build/index.html'));
 });
 
+// Start server
 const port = process.env.PORT || 5000;
 app.listen(port);
 console.log('App is listening on port ' + port);
-

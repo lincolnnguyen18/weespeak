@@ -3,31 +3,41 @@ const { response } = require('express')
 const User = require('../models/user-model')
 const FriendRelationship = require('../models/friend-relationship-model')
 
+// Utility functions
+
 function checkSignedIn(req, res, next) {
     if (!req.user) res.redirect('/auth/google')
     else next()
 }
 
-// Basic Profile display
-router.get('/', checkSignedIn, (req, res) => {
-    res.status(200).send(`This is your information: ${req.user}`)
-})
+// API endpoints for "user" resource
 
-router.get('/getUserInfo', checkSignedIn, (req, res) => {
-    res.json({ name: req.user.name, email: req.user.email, username: req.user.username })
-})
-
-router.post('/isUsernameAvailable', async (req, res) => {
-    const usernameExists = await User.exists({ username: req.body.username });
+/**
+ * GET whether or not a username is available
+ * Example: http://localhost:5000/user/isUsernameAvailable?username=joe
+ */
+router.get('/isUsernameAvailable', async (req, res) => {
+    const usernameExists = await User.exists({ username: '@' + unescape(req.query.username) });
     if (usernameExists) {
-        res.json({exists: "yes"})
+        res.json({available: "false"})
     } else {
-        res.json({exists: "no"})
+        res.json({available: "true"})
     }
 }) 
 
-// Register user with username
-router.post('/registerUsername', checkSignedIn, async (req, res) => {
+/**
+ * GET info of user
+ * Example: http://localhost:5000/user/info
+ */
+router.get('/info', checkSignedIn, (req, res) => {
+    res.json({ name: req.user.name, email: req.user.email, username: req.user.username })
+})
+
+/**
+ * POST new username for user
+ * Example: http://localhost:5000/user/username
+ */
+router.post('/username', checkSignedIn, async (req, res) => {
     console.log(req.body.username)
     console.log(req.user)
     const usernameExists = await User.exists({ username: req.body.username });
@@ -43,21 +53,24 @@ router.post('/registerUsername', checkSignedIn, async (req, res) => {
     }
 })
 
-// Use to check if user has registered
-router.get('/getRegistrationStatus', (req, res) => {
+/**
+ * GET registration status of user and redirect them to appropriate route
+ * Example: http://localhost:5000/user/registrationStatus
+ */
+router.get('/registrationStatus', (req, res) => {
     if (req.user === undefined) {
-        // res.json({status: "unregistered"})
         res.redirect('/auth/google');
     } else if (req.user.username === "") {
-        // res.json({status: "incomplete"})
         res.redirect('/register');
     } else {
-        // res.json({status: "complete"})
         res.redirect('/');
     }
 })
 
-// Use to check if user is signed in
+/**
+ * GET whether or not user is signed in
+ * Example: http://localhost:5000/user/isSignedIn
+ */
 router.get('/isSignedIn', (req, res) => {
     if (req.user === undefined || req.user.username === "") {
         res.json({signedIn: "false"})

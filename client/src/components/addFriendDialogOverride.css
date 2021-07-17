@@ -2,9 +2,13 @@
   border-bottom-color: #5a8bbd;
 }
 
-/* #myButton {
-  color: #5b87b5;
-} */
+body > div.MuiDialog-root > div.MuiDialog-container.MuiDialog-scrollPaper {
+  align-items: center;
+}
+
+body > div.MuiDialog-root > div.MuiDialog-container.MuiDialog-scrollPaper > div {
+  height: 80%;
+}
 
 .textOverflow2 span {
   max-width: 95%;
@@ -21,5 +25,5 @@
 }
 
 #dialogInput {
-  margin-top: 0.8em;
+  margin-top: 0;
 }
