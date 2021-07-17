@@ -23,6 +23,7 @@ export default function ScrollDialog() {
 	let [findFriendsPage, setFindFriendsPage] = useState(1)
 	let [searchTerm, setSearchTerm] = useState("")
 	let [waiting, setWaiting] = useState(true)
+	let [updating, setUpdating] = useState(true)
 	let [dialogTitle, setDialogTitle] = useState("Find a Friend")
 
 	const handleClickOpen = (scrollType) => () => {
@@ -37,7 +38,8 @@ export default function ScrollDialog() {
 	const updateSearch = (e) => {
 		setDialogTitle("Find a Friend")
 		let currentQuery = e.target.value
-		if (currentQuery !== searchTerm) {
+		if (updating && currentQuery !== searchTerm) {
+			setUpdating(false)
 			if (currentQuery.trim().length !== 0) {
 				setDialogTitle("Searching...")
 			}
@@ -51,7 +53,7 @@ export default function ScrollDialog() {
 					setFindFriends([])
 					setSearchTerm("")
 				}
-			}, 100);
+			}, 1000);
 		}
 	}
 
@@ -108,6 +110,7 @@ export default function ScrollDialog() {
 			.then(res => res.json())
 			.then(
 				(result) => {
+					setUpdating(true)
 					if (result['results'].length === 0) {
 						console.log("no more to show")
 						setWaiting(false)
