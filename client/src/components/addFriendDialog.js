@@ -87,18 +87,16 @@ export default function ScrollDialog() {
 	const handleScroll = async (e) => {
 		let target = e.target
 		let reachedBottom = target.scrollHeight - target.offsetHeight - target.scrollTop < 1
-		if (open && reachedBottom) {
-			// setFindFriendsPage(findFriendsPage += 1)
-			// if (findFriendsPage > 1) {
-				// console.log(target.scrollHeight - target.offsetHeight - target.scrollTop)
-				if (waiting && reachedBottom && searchTerm !== "") {
-					setWaiting(false)
-					setDialogTitle("Loading more...")
-					await fetchMorePeople(searchTerm, false, findFriendsPage).then(() => {
-						console.log("finished fetching")
-						setFindFriendsPage(findFriendsPage += 1)
-					})
-				}
+		if (open && reachedBottom & waiting & searchTerm !== "") {
+			if (findFriendsPage == 1) {
+				setFindFriendsPage(findFriendsPage += 1)
+			}
+			setWaiting(false)
+			setDialogTitle("Loading more...")
+			await fetchMorePeople(searchTerm, false, findFriendsPage).then(() => {
+				console.log("finished fetching")
+				setFindFriendsPage(findFriendsPage += 1)
+			})
 			// }
 		}
 	}

@@ -111,9 +111,10 @@ router.get('/isSignedIn', (req, res) => {
 // router.get('/search', checkSignedIn, paginatedResults(User), (req, res) => {
 // For development
 router.get('/search', paginatedResults(User), (req, res) => {
-    setTimeout(() => {
-        res.json(res.paginatedResults)
-    }, 1000);
+    // setTimeout(() => {
+    //     res.json(res.paginatedResults)
+    // }, 1000);
+    res.json(res.paginatedResults)
 })
 
 /**
