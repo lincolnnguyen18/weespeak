@@ -138,7 +138,7 @@ export default function UsernameForm() {
 	function sendUsername() {
 		console.log(`posting ${textfieldRef.current.value}`)
 		// postData('http://localhost:5000/user/username', { username: textfieldRef.current.value })
-		postData(`${process.env.MAINREACT_APP_MAIN_URL_URL}/user/username`, { username: textfieldRef.current.value })
+		postData(`${process.env.REACT_APP_MAIN_URL}/user/username`, { username: textfieldRef.current.value })
 		.then(data => {
 			if (data["status"] === "success") {
 				window.location.href = '/'
