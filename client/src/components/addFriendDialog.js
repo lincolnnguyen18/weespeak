@@ -22,7 +22,7 @@ export default function ScrollDialog() {
 	let [findFriends, setFindFriends] = useState([]);
 	let [findFriendsPage, setFindFriendsPage] = useState(1)
 	let [searchTerm, setSearchTerm] = useState("")
-	let [waiting, setWaiting] = useState(false)
+	let [waiting, setWaiting] = useState(true)
 
 	const handleClickOpen = (scrollType) => () => {
 		setOpen(true);
@@ -38,6 +38,7 @@ export default function ScrollDialog() {
 		if (currentQuery !== searchTerm) {
 			setTimeout(() => {
 				if (currentQuery.trim().length !== 0) {
+					setWaiting(true)
 					setSearchTerm(currentQuery)
 					fetchMorePeople(currentQuery, true, 1)
 				} else {
@@ -53,6 +54,7 @@ export default function ScrollDialog() {
 		if (e.keyCode === 13) {
 			let searchThing = e.target.value
 			if (searchThing.trim().length !== 0) {
+				setWaiting(true)
 				setSearchTerm(searchThing)
 				fetchMorePeople(searchThing, true, 1)
 				setFindFriendsPage(1)
@@ -80,11 +82,9 @@ export default function ScrollDialog() {
 			let target = e.target
 			let reachedBottom = target.scrollHeight - target.offsetHeight - target.scrollTop < 1
 			// console.log(target.scrollHeight - target.offsetHeight - target.scrollTop)
-			if (!waiting && reachedBottom && searchTerm !== "") {
-				setWaiting(true)
-				await fetchMorePeople(searchTerm, false, findFriendsPage + 1).then(() => console.log("finished fetching"))
-				setFindFriendsPage(findFriendsPage += 1)
+			if (waiting && reachedBottom && searchTerm !== "") {
 				setWaiting(false)
+				await fetchMorePeople(searchTerm, false, findFriendsPage + 1).then(() => console.log("finished fetching"))
 			}
 		}
 	}
@@ -106,6 +106,14 @@ export default function ScrollDialog() {
 						} else {
 							setFindFriends([...findFriends, ...result['results']])
 						}
+					}
+					// console.log(`length of fetched result is ${result['results'].length}`)
+					if (result['results'].length === 0) {
+						console.log("no more to show")
+						setWaiting(false)
+					} else {
+						setFindFriendsPage(findFriendsPage += 1)
+						setWaiting(true)
 					}
 				},
 				(error) => {
