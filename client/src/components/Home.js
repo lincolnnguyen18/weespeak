@@ -132,8 +132,10 @@ export default function PersistentDrawerLeft() {
 	};
 
 	useEffect(() => {
-		fetch('http://localhost:5000/user/info')
-			.then(res => res.json())
+		// fetch('http://localhost:5000/user/info')
+		console.log(`fetching from ${process.env.REACT_APP_MAIN_URL}/user/info`)
+		fetch(`${process.env.REACT_APP_MAIN_URL}/user/info`)
+			.then(res => console.log(res))
 			.then(
 				(result) => {
 					setUserInfo({name: result.name, username: result.username, email: result.email});
