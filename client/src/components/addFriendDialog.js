@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -17,20 +17,21 @@ import { StylesProvider } from "@material-ui/core/styles";
 import "./addFriendDialogOverride.css";
 
 export default function ScrollDialog() {
-  const [open, setOpen] = useState(false);
-  const [scroll, setScroll] = useState("paper");
+	const [open, setOpen] = useState(false);
+	const [scroll, setScroll] = useState("paper");
 	let [findFriends, setFindFriends] = useState([]);
 	let [findFriendsPage, setFindFriendsPage] = useState(1)
 	let [searchTerm, setSearchTerm] = useState("")
+	let [waiting, setWaiting] = useState(false)
 
-  const handleClickOpen = (scrollType) => () => {
-    setOpen(true);
-    setScroll(scrollType);
-  };
-	
-  const handleClose = () => {
-    setOpen(false);
-  };
+	const handleClickOpen = (scrollType) => () => {
+		setOpen(true);
+		setScroll(scrollType);
+	};
+
+	const handleClose = () => {
+		setOpen(false);
+	};
 
 	const updateSearch = (e) => {
 		let currentQuery = e.target.value
@@ -63,33 +64,35 @@ export default function ScrollDialog() {
 	}
 
 	const dialogContentRef = React.useRef(null);
-  const descriptionElementRef = React.useRef(null);
+	const descriptionElementRef = React.useRef(null);
 
-  React.useEffect(() => {
-    if (open) {
+	React.useEffect(() => {
+		if (open) {
 			setFindFriends([])
 			setSearchTerm("")
-    }
-  }, [open]);
+		}
+	}, [open]);
 
 	// Browser dev tools debugging
 	// target = document.getElementsByClassName("MuiDialogContent-root")[0]
-	const handleScroll = (e) => {
+	const handleScroll = async (e) => {
 		if (open) {
 			let target = e.target
-			// let scrollPos = (target.scrollHeight - target.scrollTop) - target.clientHeight
 			let reachedBottom = target.scrollHeight - target.offsetHeight - target.scrollTop < 1
-			if (reachedBottom && searchTerm !== "") {
-				fetchMorePeople(searchTerm, false, findFriendsPage + 1)
+			// console.log(target.scrollHeight - target.offsetHeight - target.scrollTop)
+			if (!waiting && reachedBottom && searchTerm !== "") {
+				setWaiting(true)
+				await fetchMorePeople(searchTerm, false, findFriendsPage + 1).then(() => console.log("finished fetching"))
 				setFindFriendsPage(findFriendsPage += 1)
+				setWaiting(false)
 			}
 		}
 	}
 
-	const fetchMorePeople = (searchWord, newSearch, page) => {
+	const fetchMorePeople = async (searchWord, newSearch, page) => {
 		// console.log(`finding page: ${page} and searching for ${searchWord}`)
 		// fetch(`http://localhost:5000/user/search?page=${page}&search=${escape(searchWord.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))}&limit=${Math.ceil(window.innerHeight / 76)}`)
-		fetch(`${process.env.REACT_APP_MAIN_URL}/user/search?page=${page}&search=${escape(searchWord.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))}&limit=${Math.ceil(window.innerHeight / 76)}`)
+		await fetch(`${process.env.REACT_APP_MAIN_URL}/user/search?page=${page}&search=${escape(searchWord.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))}&limit=${Math.ceil(window.innerHeight / 76)}`)
 			.then(res => res.json())
 			.then(
 				(result) => {
@@ -114,12 +117,12 @@ export default function ScrollDialog() {
 	// React.useEffect(() => {
 	// }, [])
 
-  return (
-    <div>
-      <ListItem button key='Find a Friend' onClick={handleClickOpen("paper")}>
-        <ListItemText primary='Find a Friend' />
-        <ListItemIcon><AddIcon style={{marginLeft: "28px"}}/></ListItemIcon>
-      </ListItem>
+	return (
+		<div>
+			<ListItem button key='Find a Friend' onClick={handleClickOpen("paper")}>
+				<ListItemText primary='Find a Friend' />
+				<ListItemIcon><AddIcon style={{ marginLeft: "28px" }} /></ListItemIcon>
+			</ListItem>
 			<StylesProvider injectFirst>
 				<Dialog
 					open={open}
@@ -153,7 +156,7 @@ export default function ScrollDialog() {
 						dividers={scroll === "paper"}
 						onScroll={handleScroll}
 						ref={dialogContentRef}
-						// style={{display: findFriends.length === 0 ? 'none' : 'block'}}
+					// style={{display: findFriends.length === 0 ? 'none' : 'block'}}
 					>
 						<DialogContentText
 							id="scroll-dialog-description"
@@ -183,21 +186,21 @@ export default function ScrollDialog() {
 								))}
 							</List> */}
 							<List>
-								{ findFriends.map((person, index) => (
-										<>
-											<ListItem button key={index}>
-												<ListItemIcon><Avatar alt="Real Name" src="https://lh3.googleusercontent.com/a/AATXAJyV5x-KGJctWAnEDEmr5RwJQa0fi9TaxtxTAP2X=s96-c" /></ListItemIcon>
-												<StylesProvider injectFirst>
-													<ListItemText
-														primary={person['name']}
-														secondary={person['username']}
-														className="textOverflow2"
-													/>
-												</StylesProvider>
-											</ListItem>
-											<Divider />
-										</>
-									))
+								{findFriends.map((person, index) => (
+									<>
+										<ListItem button key={index}>
+											<ListItemIcon><Avatar alt="Real Name" src="https://lh3.googleusercontent.com/a/AATXAJyV5x-KGJctWAnEDEmr5RwJQa0fi9TaxtxTAP2X=s96-c" /></ListItemIcon>
+											<StylesProvider injectFirst>
+												<ListItemText
+													primary={person['name']}
+													secondary={person['username']}
+													className="textOverflow2"
+												/>
+											</StylesProvider>
+										</ListItem>
+										<Divider />
+									</>
+								))
 								}
 							</List>
 						</DialogContentText>
@@ -209,6 +212,6 @@ export default function ScrollDialog() {
 					</DialogActions>
 				</Dialog>
 			</StylesProvider>
-    </div>
-  );
+		</div>
+	);
 }
