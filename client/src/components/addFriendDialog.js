@@ -84,7 +84,8 @@ export default function ScrollDialog() {
 			// console.log(target.scrollHeight - target.offsetHeight - target.scrollTop)
 			if (waiting && reachedBottom && searchTerm !== "") {
 				setWaiting(false)
-				await fetchMorePeople(searchTerm, false, findFriendsPage + 1).then(() => console.log("finished fetching"))
+				await fetchMorePeople(searchTerm, false, findFriendsPage).then(() => console.log("finished fetching"))
+				setFindFriendsPage(findFriendsPage += 1)
 			}
 		}
 	}
@@ -112,7 +113,6 @@ export default function ScrollDialog() {
 						console.log("no more to show")
 						setWaiting(false)
 					} else {
-						setFindFriendsPage(findFriendsPage += 1)
 						setWaiting(true)
 					}
 				},

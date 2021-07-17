@@ -146,7 +146,7 @@ export default function PersistentDrawerLeft() {
 			.then(res => res.json())
 			.then(
 				(result) => {
-					console.log(result);
+					// console.log(result);
 					setUserInfo({name: result.name, username: result.username, email: result.email});
 				},
 				(error) => {
