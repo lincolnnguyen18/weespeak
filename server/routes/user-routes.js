@@ -63,17 +63,15 @@ router.get('/info', checkSignedIn, (req, res) => {
  * Example: http://localhost:5000/user/username
  */
 router.post('/username', checkSignedIn, async (req, res) => {
-    console.log(req.body.username)
-    console.log(req.user)
     const usernameExists = await User.exists({ username: req.body.username });
     if (/^[a-zA-Z0-9_]{1,15}$/.test(req.body.username) && !usernameExists) {
-        console.log(`Username is available so updating username of user with id: '${req.user._id}' with new username: '${req.body.username}'`)
+        // console.log(`Username is available so updating username of user with id: '${req.user._id}' with new username: '${req.body.username}'`)
         const filter = { _id: req.user._id }
         const update = { username: '@' + req.body.username }
         await User.findOneAndUpdate(filter, update)
         res.json({status: "success"})
     } else {
-        console.log(`Username is not available. Please pick a different username.`)
+        // console.log(`Username is not available. Please pick a different username.`)
         res.json({status: "failure"})
     }
 })

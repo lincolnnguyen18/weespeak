@@ -90,8 +90,6 @@ export default function UsernameForm() {
 			fetch(`http://localhost:5000/user/isUsernameAvailable?username=${escape(username)}`)
 			.then(res => res.json())
 			.then(result => {
-				console.log(result)
-				// console.log(data['exists'])
 				// check length
 				if (username.length < 1) {
 					setError(true);
@@ -136,10 +134,8 @@ export default function UsernameForm() {
 	}
 
 	function sendUsername() {
-		console.log(username);
 		postData('http://localhost:5000/user/username', { username: username })
 		.then(data => {
-			console.log(data); // JSON data parsed by `data.json()` call
 			if (data["status"] === "success") {
 				window.location.href = '/'
 			}
@@ -170,7 +166,6 @@ export default function UsernameForm() {
 						error={error}
 						helperText={errorMessage}
 						onKeyDown={ (e) => {
-							console.log(e.keyCode)
 							if (e.keyCode === 13) {
 								e.preventDefault()
 								sendUsername()

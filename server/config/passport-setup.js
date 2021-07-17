@@ -26,11 +26,11 @@ passport.use(
 		User.findOne({googleId: profile._json.sub}).then((currentUser) => {
 			if (currentUser) {
 				// already have user
-				console.log('user is: ', currentUser);
+				// console.log('user is: ', currentUser);
 				done(null, currentUser);
 			} else {
 				// if not, create user in db
-				console.log(profile);
+				// console.log(profile);
 				new User({
 					username: "",
 					name: profile._json.name,

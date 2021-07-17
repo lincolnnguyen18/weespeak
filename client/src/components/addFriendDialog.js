@@ -27,33 +27,20 @@ export default function ScrollDialog() {
     setOpen(true);
     setScroll(scrollType);
   };
-
-	// const firstLoad = () => {
-	// 	let roughNumber = window.innerHeight / 76
-	// 	let roundUpToNearestTen = Math.ceil(roughNumber / 10) * 10
-	// 	let timesToFetch = roundUpToNearestTen / 10
-	// 	console.log(timesToFetch)
-	// 	fetchMorePeople()
-	// }
 	
   const handleClose = () => {
     setOpen(false);
-		console.log(findFriends)
   };
 
 	const updateSearch = (e) => {
 		let currentQuery = e.target.value
-		console.log(`comparing currentquery ${currentQuery} with searchTerm ${searchTerm}`)
 		if (currentQuery !== searchTerm) {
-			console.log("update search in 0.5 seconds....")
 			setTimeout(() => {
 				if (currentQuery.trim().length !== 0) {
 					setSearchTerm(currentQuery)
 					fetchMorePeople(currentQuery, true, 1)
-					console.log("updated!")
 				} else {
 					setFindFriends([])
-					console.log("cleared!")
 					setSearchTerm("")
 				}
 				setFindFriendsPage(1)
@@ -68,10 +55,8 @@ export default function ScrollDialog() {
 				setSearchTerm(searchThing)
 				fetchMorePeople(searchThing, true, 1)
 				setFindFriendsPage(1)
-				console.log("updated!")
 			} else {
 				setFindFriends([])
-				console.log("cleared!")
 				setSearchTerm("")
 			}
 		}
@@ -82,7 +67,6 @@ export default function ScrollDialog() {
 
   React.useEffect(() => {
     if (open) {
-			console.log('dialog opened!')
 			setFindFriends([])
 			setSearchTerm("")
     }
@@ -92,7 +76,6 @@ export default function ScrollDialog() {
 		if (open) {
 			let target = e.target
 			let scrollPos = (target.scrollHeight - target.scrollTop) - target.clientHeight
-			console.log(scrollPos)
 			if (scrollPos < 2 && searchTerm !== "") {
 				fetchMorePeople(searchTerm, false, findFriendsPage + 1)
 				setFindFriendsPage(findFriendsPage += 1)
@@ -101,14 +84,12 @@ export default function ScrollDialog() {
 	}
 
 	const fetchMorePeople = (searchWord, newSearch, page) => {
-		console.log(`finding page: ${page} and searching for ${searchWord}`)
+		// console.log(`finding page: ${page} and searching for ${searchWord}`)
 		fetch(`http://localhost:5000/user/search?page=${page}&search=${escape(searchWord.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))}&limit=${Math.ceil(window.innerHeight / 76)}`)
 			.then(res => res.json())
 			.then(
 				(result) => {
 					if (newSearch && result['results'].length === 0) {
-						console.log(result['results'])
-						console.log("empty")
 						setFindFriends([])
 					} else if (newSearch) {
 						setFindFriends(result['results'])
@@ -118,7 +99,6 @@ export default function ScrollDialog() {
 						} else {
 							setFindFriends([...findFriends, ...result['results']])
 						}
-						console.log("notEmpty; current list:")
 					}
 				},
 				(error) => {
