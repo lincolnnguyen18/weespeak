@@ -264,13 +264,13 @@ export default function PersistentDrawerLeft() {
 					Hello.
 				</Typography> */}
 				<Typography className={classes.greeting} style={{ marginLeft: open ? '-1em' : '.1em' }}>
-					Hello <b>{userInfo.name}</b>.
+					Hello <b>{userInfo.name}</b>
 				</Typography>
 				<Typography className={classes.greeting2} style={{ marginLeft: open ? '-1em' : '.1em' }}>
-					You are currently logged in using: <b>{userInfo.email}</b>.
+					You are currently logged in using: <b>{userInfo.email}</b>
 				</Typography>
 				<Typography className={classes.greeting2} style={{ marginLeft: open ? '-1em' : '.1em' }}>
-					Your username is: <b>{userInfo.username}</b>.
+					Your username is: <b>{userInfo.username}</b>
 				</Typography>
 			</main>
 		</div>
