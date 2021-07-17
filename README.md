@@ -21,17 +21,22 @@ Live speech recognition for you and your friends!
 
 - [X] User can login using Gmail
 - [X] User can logout
-- [ ] User can add friends
-- [ ] User can see friends' online/offline status
-- [ ] User can message a friend
+- [X] User can search for other users
 
 ### Plan
 <img src="https://user-images.githubusercontent.com/61459043/122832058-68d81200-d2b0-11eb-8691-93582a98e261.jpeg">
+
+### Part 2 Demo
+<img src='https://user-images.githubusercontent.com/61459043/126027612-b388dcd6-27df-426a-8fea-c8c7dbc56c7f.gif' />
 
 ## WeeSpeak Part 3
 
 ### User Stories
 
+- [ ] User can send friend requests
+- [ ] User can accept friend requests
+- [ ] User can see friends' online/offline status
+- [ ] User can message a friend
 - [ ] User can audio call a friend
 - [ ] User can have their speech recognized live
 - [ ] User can view friend editing their chat bubble live
