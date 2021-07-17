@@ -5,7 +5,6 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import Input from "@material-ui/core/Input";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -15,6 +14,7 @@ import AddIcon from '@material-ui/icons/Add';
 import Avatar from '@material-ui/core/Avatar';
 import { StylesProvider } from "@material-ui/core/styles";
 import "./addFriendDialogOverride.css";
+import TextField from '@material-ui/core/TextField';
 
 export default function ScrollDialog() {
 	const [open, setOpen] = useState(false);
@@ -124,6 +124,7 @@ export default function ScrollDialog() {
 				<ListItemIcon><AddIcon style={{ marginLeft: "28px" }} /></ListItemIcon>
 			</ListItem>
 			<StylesProvider injectFirst>
+			<form noValidate autoComplete="off">
 				<Dialog
 					open={open}
 					onClose={handleClose}
@@ -137,7 +138,7 @@ export default function ScrollDialog() {
 					<DialogTitle id="scroll-dialog-title" style={{ textAlign: "center" }}>
 						Find a Friend
 						<br />
-						<StylesProvider injectFirst>
+						{/* <StylesProvider injectFirst>
 							<Input
 								// placeholder="Separate search terms with commas"
 								placeholder="Enter your friend's name or @username here"
@@ -149,6 +150,17 @@ export default function ScrollDialog() {
 								autoFocus
 								id="dialogInput"
 								type="text"
+							/>
+						</StylesProvider> */}
+						<StylesProvider injectFirst>
+							<TextField
+								label=""
+								placeholder="Enter your friend's name or @username"
+								autoFocus
+								fullWidth
+								id="dialogInput"
+								onKeyDown={doSearch}
+								onChange={updateSearch}
 							/>
 						</StylesProvider>
 					</DialogTitle>
@@ -211,6 +223,7 @@ export default function ScrollDialog() {
 						</Button>
 					</DialogActions>
 				</Dialog>
+				</form>
 			</StylesProvider>
 		</div>
 	);

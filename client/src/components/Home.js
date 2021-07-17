@@ -29,7 +29,9 @@ const drawerWidth = 280;
 
 const useStyles = makeStyles((theme) => ({
 	root: {
-		display: 'flex',
+		// display: 'flex',
+		height: "100%",
+		marginLeft: {drawerWidth}
 	},
 	appBar: {
 		transition: theme.transitions.create(['margin', 'width'], {
@@ -75,14 +77,16 @@ const useStyles = makeStyles((theme) => ({
 			easing: theme.transitions.easing.sharp,
 			duration: theme.transitions.duration.leavingScreen,
 		}),
-		marginLeft: -drawerWidth,
+		// marginLeft: -drawerWidth,
+		height: "100%",
+		display: "grid",
 	},
 	contentShift: {
 		transition: theme.transitions.create('margin', {
 			easing: theme.transitions.easing.easeOut,
 			duration: theme.transitions.duration.enteringScreen,
 		}),
-		marginLeft: 0,
+		marginLeft: drawerWidth,
 	},
 	title: {
 		flexGrow: 1,
@@ -98,12 +102,16 @@ const useStyles = makeStyles((theme) => ({
 	greeting: {
 		fontSize: '3em',
 		textAlign: 'center',
-		marginTop: `${window.innerHeight / 3.5}px`,
+		// marginTop: `${window.innerHeight / 3.5}px`,
+		marginTop: '0'
 	},
 	greeting2: {
 		fontSize: '2em',
 		textAlign: 'center',
 		marginTop: '1em',
+	},
+	greetingBox: {
+		marginTop: '-5%',
 	}
 }));
 
@@ -270,15 +278,17 @@ export default function PersistentDrawerLeft() {
 				{/* <Typography className={classes.greeting} style={{ marginLeft: open ? '-1em' : '.1em' }}>
 					Hello.
 				</Typography> */}
-				<Typography className={classes.greeting} style={{ marginLeft: open ? '-1em' : '.1em' }}>
-					Hello <b>{userInfo.name}</b>
-				</Typography>
-				<Typography className={classes.greeting2} style={{ marginLeft: open ? '-1em' : '.1em' }}>
-					You are currently logged in using: <b>{userInfo.email}</b>
-				</Typography>
-				<Typography className={classes.greeting2} style={{ marginLeft: open ? '-1em' : '.1em' }}>
-					Your username is: <b>{userInfo.username}</b>
-				</Typography>
+				<div className={classes.greetingBox}>
+					<Typography className={classes.greeting}>
+						Hello <b>{userInfo.name}</b>
+					</Typography>
+					<Typography className={classes.greeting2}>
+						You are currently logged in using: <b>{userInfo.email}</b>
+					</Typography>
+					<Typography className={classes.greeting2}>
+						Your username is: <b>{userInfo.username}</b>
+					</Typography>
+				</div>
 			</main>
 		</div>
 	);

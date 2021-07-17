@@ -2,12 +2,20 @@
   border-bottom-color: #5a8bbd;
 }
 
+#scroll-dialog-title > h2 > div > div {
+  border-bottom-color: #5a8bbd;
+}
+
 body > div.MuiDialog-root > div.MuiDialog-container.MuiDialog-scrollPaper {
   align-items: center;
 }
 
 body > div.MuiDialog-root > div.MuiDialog-container.MuiDialog-scrollPaper > div {
   height: 80%;
+}
+
+.MuiInput-colorSecondary.MuiInput-underline:after {
+  border-bottom-color: #5a8bbd;
 }
 
 body > div.MuiDialog-root > div.MuiDialog-container.MuiDialog-scrollPaper > div > div.MuiDialogContent-root.MuiDialogContent-dividers {
