@@ -39,13 +39,17 @@ export default function ScrollDialog() {
 		if (updating) {
 			setUpdating(false)
 			setWaiting(false)
-			setDialogTitle("Find a Friend")
+			if (e.target.value.trim().length !== 0 && e.target.value !== searchTerm) {
+				setDialogTitle("Loading...")
+			} else if (e.target.value.trim().length === 0) {
+				setDialogTitle("Find a Friend")
+			}
 			setTimeout(() => {
 				if (e.target.value !== searchTerm) {
 					setFindFriends([])
 					setFindFriendsPage(1)
 					if (e.target.value.trim().length !== 0) {
-						setDialogTitle("Searching...")
+						// setDialogTitle("Searching...")
 						setSearchTerm(e.target.value)
 						fetchMorePeople(e.target.value, true, 1).then(() => {
 							setUpdating(true)
@@ -231,7 +235,6 @@ export default function ScrollDialog() {
 									</>
 								))
 								}
-								<Divider />
 							</List>
 						</DialogContentText>
 					</DialogContent>
