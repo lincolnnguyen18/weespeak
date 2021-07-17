@@ -10,6 +10,31 @@ function checkSignedIn(req, res, next) {
     else next()
 }
 
+function paginatedResults(model) {
+    return async (req, res, next) => {
+        const page = parseInt(req.query.page)
+        const searchTerm = unescape(req.query.search)
+        const limit = parseInt(req.query.limit)
+        const startIndex = (page - 1) * limit
+        const results = {}
+        let search = new RegExp(searchTerm, 'i')
+
+        try {
+            // db.users.find({ $or: [{"username": /Ma/i}, { "name": /Lin/i } ]})
+            results.results = await model.find({
+                $or: [
+                    { "username": { $regex: search } },
+                    { "name": { $regex: search } },
+                ]
+            }).limit(limit).skip(startIndex).exec()
+            res.paginatedResults = results
+            next()
+        } catch (e) {
+            res.status(500).json({ message: e.message })
+        }
+    }
+}
+
 // API endpoints for "user" resource
 
 /**
@@ -87,32 +112,6 @@ router.get('/isSignedIn', (req, res) => {
     res.json(res.paginatedResults)
 })
 
-function paginatedResults(model) {
-    return async (req, res, next) => {
-        const page = parseInt(req.query.page)
-        const searchTerm = unescape(req.query.search)
-        const limit = parseInt(req.query.limit)
-        const startIndex = (page - 1) * limit
-        const results = {}
-        let search = new RegExp(searchTerm, 'i')
-
-        try {
-            // db.users.find({ $or: [{"username": /Ma/i}, { "name": /Lin/i } ]})
-            results.results = await model.find({
-                $or: [
-                    { "username": { $regex: search } },
-                    { "name": { $regex: search } },
-                ]
-            }).limit(limit).skip(startIndex).exec()
-            res.paginatedResults = results
-            next()
-        } catch (e) {
-            res.status(500).json({ message: e.message })
-        }
-    }
-}
-  
-
 /**
  * POST request on friends endpoint
  * sends a friend request to another user
@@ -174,8 +173,6 @@ router.put('/friends', checkSignedIn, (req, res, next) => {
         else res.send('Failed added')
     })
 
-
 })
-
 
 module.exports = router
