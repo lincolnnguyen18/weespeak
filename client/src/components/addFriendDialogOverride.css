@@ -41,7 +41,7 @@ body > div.MuiDialog-root > div.MuiDialog-container.MuiDialog-scrollPaper > div 
   overflow: hidden;
   text-overflow: ellipsis;
   margin-bottom: -3px;
-  word-break: break-all;
+  /* word-break: break-all; */
   white-space: nowrap;
 }
 

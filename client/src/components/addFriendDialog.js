@@ -103,7 +103,7 @@ export default function ScrollDialog() {
 		let target = e.target
 		let reachedBottom = target.scrollHeight - target.offsetHeight - target.scrollTop < 1
 		if (open && reachedBottom & waiting & searchTerm !== "") {
-			if (findFriendsPage == 1) {
+			if (findFriendsPage === 1) {
 				setFindFriendsPage(findFriendsPage += 1)
 			}
 			setWaiting(false)
