@@ -28,7 +28,8 @@ Live speech recognition for you and your friends!
 
 ### Part 2 Demo
 <!-- <img src='https://user-images.githubusercontent.com/61459043/126027612-b388dcd6-27df-426a-8fea-c8c7dbc56c7f.gif' /> -->
-<img src='https://user-images.githubusercontent.com/61459043/126030401-e6cb3d62-fe95-4993-8ea5-73fcd787bfb7.gif' />
+<!-- <img src='https://user-images.githubusercontent.com/61459043/126030401-e6cb3d62-fe95-4993-8ea5-73fcd787bfb7.gif' /> -->
+<img src='https://user-images.githubusercontent.com/61459043/126030682-5892a2f9-9f66-4f54-a761-e6fb6e7a2ed6.gif' />
 
 ## WeeSpeak Part 3
 
