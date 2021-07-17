@@ -36,23 +36,28 @@ export default function ScrollDialog() {
 	};
 
 	const updateSearch = (e) => {
-		setDialogTitle("Find a Friend")
-		let currentQuery = e.target.value
-		if (updating && currentQuery !== searchTerm) {
+		if (updating) {
 			setUpdating(false)
-			if (currentQuery.trim().length !== 0) {
-				setDialogTitle("Searching...")
-			}
-			setFindFriendsPage(1)
+			setDialogTitle("Find a Friend")
 			setTimeout(() => {
-				if (currentQuery.trim().length !== 0) {
-					setWaiting(true)
-					setSearchTerm(currentQuery)
-					fetchMorePeople(currentQuery, true, 1)
-				} else {
+				if (e.target.value !== searchTerm) {
 					setFindFriends([])
-					setSearchTerm("")
+					setFindFriendsPage(1)
+					if (e.target.value.trim().length !== 0) {
+						setDialogTitle("Searching...")
+					}
+						if (e.target.value.trim().length !== 0) {
+							setWaiting(true)
+							setSearchTerm(e.target.value)
+							fetchMorePeople(e.target.value, true, 1)
+						} else {
+							setFindFriends([])
+							setSearchTerm("")
+							setFindFriendsPage(1)
+							console.log(`current page is ${findFriendsPage} and waiting is ${waiting}`)
+						}
 				}
+				setUpdating(true)
 			}, 1000);
 		}
 	}
@@ -110,7 +115,6 @@ export default function ScrollDialog() {
 			.then(res => res.json())
 			.then(
 				(result) => {
-					setUpdating(true)
 					if (result['results'].length === 0) {
 						console.log("no more to show")
 						setWaiting(false)
