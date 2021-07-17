@@ -41,6 +41,7 @@ export default function ScrollDialog() {
 			if (currentQuery.trim().length !== 0) {
 				setDialogTitle("Searching...")
 			}
+			setFindFriendsPage(1)
 			setTimeout(() => {
 				if (currentQuery.trim().length !== 0) {
 					setWaiting(true)
@@ -50,7 +51,6 @@ export default function ScrollDialog() {
 					setFindFriends([])
 					setSearchTerm("")
 				}
-				setFindFriendsPage(1)
 			}, 100);
 		}
 	}
@@ -61,9 +61,9 @@ export default function ScrollDialog() {
 			let searchThing = e.target.value
 			if (searchThing.trim().length !== 0) {
 				setWaiting(true)
+				setFindFriendsPage(1)
 				setSearchTerm(searchThing)
 				await fetchMorePeople(searchThing, true, 1).then(setDialogTitle("Find a Friend"))
-				setFindFriendsPage(1)
 			} else {
 				setFindFriends([])
 				setSearchTerm("")
@@ -88,17 +88,18 @@ export default function ScrollDialog() {
 		let target = e.target
 		let reachedBottom = target.scrollHeight - target.offsetHeight - target.scrollTop < 1
 		if (open && reachedBottom) {
-			setFindFriendsPage(findFriendsPage += 1)
-			if (findFriendsPage !== 1) {
+			// setFindFriendsPage(findFriendsPage += 1)
+			// if (findFriendsPage > 1) {
 				// console.log(target.scrollHeight - target.offsetHeight - target.scrollTop)
 				if (waiting && reachedBottom && searchTerm !== "") {
 					setWaiting(false)
 					setDialogTitle("Loading more...")
 					await fetchMorePeople(searchTerm, false, findFriendsPage).then(() => {
 						console.log("finished fetching")
+						setFindFriendsPage(findFriendsPage += 1)
 					})
 				}
-			}
+			// }
 		}
 	}
 
