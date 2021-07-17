@@ -62,7 +62,7 @@ export default function ScrollDialog() {
 		}
 	}
 
-	const doSearch = async (e) => {
+	const doSearch = (e) => {
 		if (e.keyCode === 13) {
 			setDialogTitle("Searching...")
 			let searchThing = e.target.value
@@ -70,7 +70,7 @@ export default function ScrollDialog() {
 				setWaiting(true)
 				setFindFriendsPage(1)
 				setSearchTerm(searchThing)
-				await fetchMorePeople(searchThing, true, 1).then(setDialogTitle("Find a Friend"))
+				fetchMorePeople(searchThing, true, 1)
 			} else {
 				setFindFriends([])
 				setSearchTerm("")
@@ -104,7 +104,6 @@ export default function ScrollDialog() {
 				console.log("finished fetching")
 				setFindFriendsPage(findFriendsPage += 1)
 			})
-			// }
 		}
 	}
 
@@ -121,11 +120,11 @@ export default function ScrollDialog() {
 						setDialogTitle("No more to load.")
 					} else {
 						setWaiting(true)
-						setDialogTitle("Find a Friend")
+						setDialogTitle(`Users matching "${searchWord}"`)
 					}
 					if (newSearch && result['results'].length === 0) {
 						setFindFriends([])
-						setDialogTitle("No users found.")
+						setDialogTitle(`No users found for "${searchWord}"`)
 					} else if (newSearch) {
 						setFindFriends(result['results'])
 					} else {
@@ -135,7 +134,6 @@ export default function ScrollDialog() {
 							setFindFriends([...findFriends, ...result['results']])
 						}
 					}
-					// console.log(`length of fetched result is ${result['results'].length}`)
 				},
 				(error) => {
 					console.error(error)
@@ -164,35 +162,21 @@ export default function ScrollDialog() {
 					// maxWidth="sm"
 					style={{ maxWidth: "500px", margin: "auto" }}
 				>
-					<DialogTitle id="scroll-dialog-title" style={{ textAlign: "center" }}>
-						{dialogTitle}
-						<br />
-						{/* <StylesProvider injectFirst>
-							<Input
-								// placeholder="Separate search terms with commas"
-								placeholder="Enter your friend's name or @username here"
-								inputProps={{ "aria-label": "description" }}
-								fullWidth
-								autoComplete="off"
-								onKeyDown={doSearch}
-								onChange={updateSearch}
-								autoFocus
-								id="dialogInput"
-								type="text"
-							/>
-						</StylesProvider> */}
-						<StylesProvider injectFirst>
-							<TextField
-								label=""
-								placeholder="Enter your friend's name or @username"
-								autoFocus
-								fullWidth
-								id="dialogInput"
-								onKeyDown={doSearch}
-								onChange={updateSearch}
-							/>
-						</StylesProvider>
-					</DialogTitle>
+					<StylesProvider injectFirst>
+						<DialogTitle id="scroll-dialog-title" style={{ textAlign: "center" }}>
+							{dialogTitle}
+							<br />
+								<TextField
+									label=""
+									placeholder="Enter your friend's name or @username"
+									autoFocus
+									fullWidth
+									id="dialogInput"
+									onKeyDown={doSearch}
+									onChange={updateSearch}
+								/>
+						</DialogTitle>
+					</StylesProvider>
 					<DialogContent
 						dividers={scroll === "paper"}
 						onScroll={handleScroll}

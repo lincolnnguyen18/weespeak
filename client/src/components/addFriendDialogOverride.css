@@ -30,6 +30,11 @@ body > div.MuiDialog-root > div.MuiDialog-container.MuiDialog-scrollPaper > div 
   padding: 6px 8px !important;
 }
 
+#scroll-dialog-title > h2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .textOverflow2 span {
   max-width: 95%;
   display: inline-block;
