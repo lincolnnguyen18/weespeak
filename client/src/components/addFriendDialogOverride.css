@@ -10,6 +10,10 @@ body > div.MuiDialog-root > div.MuiDialog-container.MuiDialog-scrollPaper > div 
   height: 80%;
 }
 
+.cancelButton {
+  padding: 6px 8px !important;
+}
+
 .textOverflow2 span {
   max-width: 95%;
   display: inline-block;
@@ -25,5 +29,5 @@ body > div.MuiDialog-root > div.MuiDialog-container.MuiDialog-scrollPaper > div 
 }
 
 #dialogInput {
-  margin-top: 0;
+  margin-top: 0.1em;
 }

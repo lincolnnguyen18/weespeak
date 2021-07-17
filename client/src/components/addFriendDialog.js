@@ -219,7 +219,7 @@ export default function ScrollDialog() {
 						</DialogContentText>
 					</DialogContent>
 					<DialogActions>
-						<Button onClick={handleClose} className="myButton" fontSize="1rem">
+						<Button onClick={handleClose} className="cancelButton" fontSize="1rem">
 							Cancel
 						</Button>
 					</DialogActions>
