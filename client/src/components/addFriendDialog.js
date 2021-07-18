@@ -77,12 +77,16 @@ export default function ScrollDialog() {
 			} else {
 				setDialogTitle(`More users matching "${text.current}"`)
 				setFindFriends([...findFriends, ...result['results']])
+				if (result['results'].length < Math.ceil(window.innerHeight / 76)) {
+					noMoreToLoad.current = true
+					fetchInProgress.current = false
+				}
 			}
 		})
 	}
 
 	// Search function
-	const search = async (text) => {
+	const search = (text) => {
 		// Don't interrupt fetch in progress
 		if (fetchInProgress.current === true) {
 			return
@@ -91,19 +95,52 @@ export default function ScrollDialog() {
 		fetchInProgress.current = true
 		noMoreToLoad.current = false
 		page.current = 1
-		
-		// Fetch first page of users matching search
-		await fetch(`${process.env.REACT_APP_MAIN_URL}/user/search?page=1&search=${escape(text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))}&limit=${Math.ceil(window.innerHeight / 76)}`)
+
+		console.log(`search ${text}`)
+
+		fetch(`${process.env.REACT_APP_MAIN_URL}/user/search?page=1&search=${escape(text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))}&limit=${Math.ceil(window.innerHeight / 76)}`)
 		.then(res => res.json())
 		.then(result => {
-			if (result['results'].length === 0) {
-				setDialogTitle(`No users found for "${text}"`)
-				setFindFriends([])
-			} else if (text.length !== 0)  {
-				setDialogTitle(`Users matching "${text}"`)
-				setFindFriends(result['results'])
+			result = result['results']
+			if (result.length < Math.ceil(window.innerHeight / 76)) {
+				noMoreToLoad.current = true
 			}
+			if (result.length === 0) {
+				// setDialogTitle(`No users found matching "${text}"`)
+				console.log(`No users found matching "${text}"`)
+			}
+			if (findFriends.length > 0) {
+				console.log(`Users matching "${text}"`)
+			} else {
+				console.log(`No users found matching "${text}"`)
+			}
+			// if (findFriends.length > 0) {
+			// 	setDialogTitle(`Users matching "${text.current}"`)
+			// } else {
+			// 	setDialogTitle(`No users found matching "${text.current}"`)
+			// }
+			console.log(result)
+			setFindFriends(result)
 		})
+		
+		// // Fetch first page of users matching search
+		// await fetch(`${process.env.REACT_APP_MAIN_URL}/user/search?page=1&search=${escape(text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))}&limit=${Math.ceil(window.innerHeight / 76)}`)
+		// .then(res => res.json())
+		// .then(result => {
+		// 	if (result['results'].length < Math.ceil(window.innerHeight / 76)) {
+		// 		noMoreToLoad.current = true
+		// 		fetchInProgress.current = false
+		// 	}
+		// 	if (result['results'].length === 0) {
+		// 		setDialogTitle(`No users found for "${text}"`)
+		// 		setFindFriends([])
+		// 	} else if (text.length !== 0)  {
+		// 		setDialogTitle(`Users matching "${text}"`)
+		// 		setFindFriends(result['results'])
+		// 	}
+		// })
+
+
 	};
 
 	/**
@@ -132,8 +169,9 @@ export default function ScrollDialog() {
 		clearTimeout(timeout);
 
     timeout = setTimeout(() => {
-			search(e.target.value.trim())
-		}, 1000);
+			value = e.target.value.trim()
+			search(value)
+		}, 2000);
 	}
 
 	// React.useEffect(() => {
