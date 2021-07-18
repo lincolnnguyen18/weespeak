@@ -87,7 +87,7 @@ export default function ScrollDialog() {
 				// fetchInProgress.current = false
 			} else {
 				console.log(`Users matching "${currentSearch.current}"`)
-				setDialogTitle("Scroll down to load more")
+				// setDialogTitle("Scroll down to load more")
 				setFindFriends([...findFriends, ...result['results']])
 			}
 		})
@@ -151,7 +151,7 @@ export default function ScrollDialog() {
 	const handleSearch = (e) => {
 		// Don't search duplicate strings
 		let value = e.target.value.trim()
-		if (value === text.current) {
+		if (value === text.current || value === currentSearch.current) {
 			return
 		} else {
 			text.current = value
@@ -172,15 +172,15 @@ export default function ScrollDialog() {
 		// dialogTitle.current = "Loading..."
 		setDialogTitle("Loading...")
 
-		search()
+		// search()
 
 		// Otherwise search if user has stopped typing for # ms
-		// clearTimeout(timeout);
+		clearTimeout(timeout);
 
-    // timeout = setTimeout(() => {
-		// 	// console.log("Execute search!")
-		// 	search()
-		// }, 500);
+    timeout = setTimeout(() => {
+			// console.log("Execute search!")
+			search()
+		}, 3000);
 	}
 
 	// React.useEffect(() => {
