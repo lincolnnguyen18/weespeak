@@ -186,7 +186,9 @@ export default function ScrollDialog() {
 
 	const handleItemClick = (person) => {
 		console.log(person)
-		postData(`/user/friends?fid=${person._id}`, {})
+		postData(`/user/friends?fid=${person._id}`, {}).then(result => {
+			console.log(result)
+		})
 	}
 
 	return (

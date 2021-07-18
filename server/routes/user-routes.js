@@ -124,25 +124,38 @@ router.get('/search', async (req, res) => {
  * required: friend id (fid)
  */
 router.post('/friends', checkSignedIn, (req, res, next) => {
-    if (!req.query.fid) res.status(400).send('Missing required parameters')
-    else next()
-},
-(req, res) => {
-    const fid = req.query.fid
-    // Check if fid is valid
-    User.findById(fid).then((user) => {
-        console.log(user)
-        // // Updates current user document
-        // User.findByIdAndUpdate(req.user._id, {$push: {friends: req.query.fid}})
-        // new FriendRelationship({
-        //     requester: req.user._id, 
-        //     recipient: user._id,
-        //     status: 1}).save()
-        //     res.status(200).send('Friend Request Sent')
-    })
-    .catch((error) => {
-        res.send(error)
-    })
+        if (!req.query.fid) res.status(400).send('Missing required parameters')
+        else next()
+    },
+    async (req, res) => {
+        const requesterId = req.user.id
+        const requestedId = req.query.fid
+        let requester = null
+        let requested = null
+        
+        // Load requester and requested users' data
+        await User.findById(requesterId).then((result) => {
+            requester = result
+        })
+        await User.findById(requestedId).then((result) => {
+            requested = result
+        })
+        console.log(requester)
+        console.log(requested)
+
+        // Check if requested user already requested or friended
+        if (requester.friendRequests.includes(requestedId)) {
+            console.log("already requested")
+            return res.json({ status: "already requested" })
+        } else if (requester.friends.includes(requestedId)) {
+            console.log("already friended")
+            return res.json({ status: "already friended" })
+        }
+
+        // Otherwise add request to requester and requested
+        await User.findByIdAndUpdate(requesterId, { $push: { "friendRequests": requestedId } }).exec()
+        await User.findByIdAndUpdate(requested, { $push: { "friendRequests": requesterId } }).exec()
+        return res.json({ status: "request sent" })
 })
 
 // /**
