@@ -19,12 +19,6 @@ import TextField from '@material-ui/core/TextField';
 export default function ScrollDialog() {
 	const [open, setOpen] = useState(false);
 	const [scroll, setScroll] = useState("paper");
-	let [findFriends, setFindFriends] = useState([]);
-	let [findFriendsPage, setFindFriendsPage] = useState(1)
-	let [searchTerm, setSearchTerm] = useState("")
-	let [waiting, setWaiting] = useState(true)
-	let [updating, setUpdating] = useState(true)
-	let [dialogTitle, setDialogTitle] = useState("Find a Friend")
 
 	const handleClickOpen = (scrollType) => () => {
 		setOpen(true);
@@ -35,118 +29,114 @@ export default function ScrollDialog() {
 		setOpen(false);
 	};
 
-	const updateSearch = (e) => {
-		if (updating) {
-			setUpdating(false)
-			setWaiting(false)
-			if (e.target.value.trim().length !== 0 && e.target.value !== searchTerm) {
-				setDialogTitle("Loading...")
-			} else if (e.target.value.trim().length === 0) {
-				setDialogTitle("Find a Friend")
-			}
-			setTimeout(() => {
-				if (e.target.value !== searchTerm) {
-					setFindFriends([])
-					setFindFriendsPage(1)
-					if (e.target.value.trim().length !== 0) {
-						// setDialogTitle("Searching...")
-						setSearchTerm(e.target.value)
-						fetchMorePeople(e.target.value, true, 1).then(() => {
-							setUpdating(true)
-							setWaiting(true)
-						})
-					} else {
-						setFindFriends([])
-						setSearchTerm("")
-						setFindFriendsPage(1)
-						setUpdating(true)
-						setWaiting(true)
-						console.log(`current page is ${findFriendsPage} and waiting is ${waiting}`)
-					}
-				}
-			}, 1000);
-		}
-	}
-
-	// const doSearch = (e) => {
-	// 	if (e.keyCode === 13) {
-	// 		setDialogTitle("Searching...")
-	// 		let searchThing = e.target.value
-	// 		if (searchThing.trim().length !== 0) {
-	// 			setWaiting(true)
-	// 			setFindFriendsPage(1)
-	// 			setSearchTerm(searchThing)
-	// 			fetchMorePeople(searchThing, true, 1).then(() => {
-	// 				setUpdating(true)
-	// 			})
-	// 		} else {
-	// 			setFindFriends([])
-	// 			setSearchTerm("")
-	// 			setDialogTitle("Find a Friend")
-	// 		}
-	// 	}
-	// }
-
-	const dialogContentRef = React.useRef(null);
-	const descriptionElementRef = React.useRef(null);
-
 	React.useEffect(() => {
 		if (open) {
 			setFindFriends([])
-			setSearchTerm("")
+			// setSearchTerm("")
 		}
 	}, [open]);
 
-	// Browser dev tools debugging
-	// target = document.getElementsByClassName("MuiDialogContent-root")[0]
+	let timeout;
+	let page = React.useRef();
+	let fetchInProgress;
+	let noMoreToLoad = React.useRef();
+	let text = React.useRef();
+	let [findFriends, setFindFriends] = useState([]);
+	let [dialogTitle, setDialogTitle] = useState("Find a Friend") 
+
+	// Scroll function
 	const handleScroll = async (e) => {
-		let target = e.target
-		let reachedBottom = target.scrollHeight - target.offsetHeight - target.scrollTop < 1
-		if (open && reachedBottom & waiting & searchTerm !== "") {
-			if (findFriendsPage === 1) {
-				setFindFriendsPage(findFriendsPage += 1)
-			}
-			setWaiting(false)
-			setDialogTitle("Loading more...")
-			await fetchMorePeople(searchTerm, false, findFriendsPage).then(() => {
-				console.log("finished fetching")
-				setFindFriendsPage(findFriendsPage += 1)
-			})
+		// Don't interrupt fetch/search in progress, don't load more if end of list reached
+		if (fetchInProgress === true || noMoreToLoad.current === true) {
+			return
 		}
+
+		// Don't load more unless scroll position at bottom
+		let reachedBottom = e.target.scrollHeight - e.target.offsetHeight - e.target.scrollTop < 1
+		if (!reachedBottom) {
+			return
+		}
+
+		setDialogTitle("Loading...")
+		fetchInProgress = true
+		console.log(`loading more of ${text.current} at page ${page.current}`)
+
+		// Fetch next page for users matching search
+		await fetch(`${process.env.REACT_APP_MAIN_URL}/user/search?page=${page.current}&search=${escape(text.current.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))}&limit=${Math.ceil(window.innerHeight / 76)}`)
+		.then(res => res.json())
+		.then(result => {
+			if (result['results'].length === 0) {
+				setDialogTitle(`No more users found for "${text.current}"`)
+				noMoreToLoad.current = true
+			} else {
+				setDialogTitle(`More users matching "${text.current}"`)
+				setFindFriends([...findFriends, ...result['results']])
+			}
+		})
+		.then(() => {
+			fetchInProgress = false
+			page.current += 1
+		})
 	}
 
-	const fetchMorePeople = async (searchWord, newSearch, page) => {
-		// console.log(`finding page: ${page} and searching for ${searchWord}`)
-		// fetch(`http://localhost:5000/user/search?page=${page}&search=${escape(searchWord.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))}&limit=${Math.ceil(window.innerHeight / 76)}`)
-		await fetch(`${process.env.REACT_APP_MAIN_URL}/user/search?page=${page}&search=${escape(searchWord.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))}&limit=${Math.ceil(window.innerHeight / 76)}`)
-			.then(res => res.json())
-			.then(
-				(result) => {
-					if (result['results'].length === 0) {
-						console.log("no more to show")
-						setWaiting(false)
-						setDialogTitle("No more to load.")
-					} else {
-						setWaiting(true)
-						setDialogTitle(`Users matching "${searchWord}"`)
-					}
-					if (newSearch && result['results'].length === 0) {
-						setFindFriends([])
-						setDialogTitle(`No users found for "${searchWord}"`)
-					} else if (newSearch) {
-						setFindFriends(result['results'])
-					} else {
-						if (page === 1) {
-							setFindFriends(result['results'])
-						} else {
-							setFindFriends([...findFriends, ...result['results']])
-						}
-					}
-				},
-				(error) => {
-					console.error(error)
-				}
-			)
+	// Search function
+	const search = async (text) => {
+		// Don't interrupt fetch in progress
+		if (fetchInProgress === true) {
+			return
+		}
+
+		fetchInProgress = true
+		noMoreToLoad.current = false
+		page.current = 1
+		
+		// Fetch first page of users matching search
+		await fetch(`${process.env.REACT_APP_MAIN_URL}/user/search?page=1&search=${escape(text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))}&limit=${Math.ceil(window.innerHeight / 76)}`)
+		.then(res => res.json())
+		.then(result => {
+			if (result['results'].length === 0) {
+				setDialogTitle(`No users found for "${text}"`)
+				setFindFriends([])
+			} else if (text.length !== 0)  {
+				setDialogTitle(`Users matching "${text}"`)
+				setFindFriends(result['results'])
+			}
+		})
+		.then(() => {
+			page.current += 1
+			fetchInProgress = false
+		})
+	};
+
+	/**
+	 * Immediately search current input as long as cooldown timer not active
+	 * When cooldown done, if current input different then search again and refresh cooldown
+	 */
+	const handleSearch = (e) => {
+		// Don't search duplicate strings
+		let value = e.target.value.trim()
+		if (value === text.current) {
+			return
+		} else {
+			text.current = value
+		}
+
+		// Clear and reset list without searching for empty strings
+		if (e.target.value.trim().length === 0) {
+			setDialogTitle("Find a Friend")
+			setFindFriends([])
+			return
+		}
+
+		setDialogTitle("Loading...")
+
+		// Otherwise search if user has stopped typing for # ms
+		clearTimeout(timeout);
+
+    timeout = setTimeout(() => {
+			console.log(`searching for ${e.target.value.trim()} at page ${page.current}`)
+			search(e.target.value.trim())
+		}, 1000);
 	}
 
 	// React.useEffect(() => {
@@ -181,19 +171,18 @@ export default function ScrollDialog() {
 									fullWidth
 									id="dialogInput"
 									// onKeyDown={doSearch}
-									onChange={updateSearch}
+									// onChange={updateSearch}
+									onChange={handleSearch}
 								/>
 						</DialogTitle>
 					</StylesProvider>
 					<DialogContent
 						dividers={scroll === "paper"}
 						onScroll={handleScroll}
-						ref={dialogContentRef}
 					// style={{display: findFriends.length === 0 ? 'none' : 'block'}}
 					>
 						<DialogContentText
 							id="scroll-dialog-description"
-							ref={descriptionElementRef}
 						>
 							{/* <List>
 								{Array(15).fill({
