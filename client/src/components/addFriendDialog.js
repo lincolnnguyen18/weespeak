@@ -34,6 +34,7 @@ export default function ScrollDialog() {
 			setFindFriends([])
 			text.current = ""
 			// setDialogTitle("Find a Friend")
+			console.log('Find a Friend')
 		}
 	}, [open]);
 
@@ -62,8 +63,8 @@ export default function ScrollDialog() {
 			return
 		}
 
-		console.log('detected scroll. loading more...')
 		// setDialogTitle("Loading...")
+		console.log('Loading...')
 		fetchInProgress.current = true
 		page.current += 1
 
@@ -72,11 +73,13 @@ export default function ScrollDialog() {
 		.then(res => res.json())
 		.then(result => {
 			if (result['results'].length === 0) {
-				// setDialogTitle(`No more users found for "${text.current}"`)
+				// setDialogTitle(`No more users match "${text.current}"`)
+				console.log(`No more users match "${text.current}"`)
 				noMoreToLoad.current = true
 				fetchInProgress.current = false
 			} else {
-				// setDialogTitle(`More users matching "${text.current}"`)
+				// setDialogTitle(`Users matching "${text.current}"`)
+				console.log(`Users matching "${text.current}"`)
 				setFindFriends([...findFriends, ...result['results']])
 				if (result['results'].length < Math.ceil(window.innerHeight / 76)) {
 					noMoreToLoad.current = true
@@ -97,8 +100,6 @@ export default function ScrollDialog() {
 		noMoreToLoad.current = false
 		page.current = 1
 
-		console.log(`search ${text}`)
-
 		await fetch(`${process.env.REACT_APP_MAIN_URL}/user/search?page=1&search=${escape(text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))}&limit=${Math.ceil(window.innerHeight / 76)}`)
 		.then(res => res.json())
 		.then(result => {
@@ -108,40 +109,13 @@ export default function ScrollDialog() {
 			}
 			if (result.length === 0) {
 				// setDialogTitle(`No users found matching "${text}"`)
-				console.log(`No users found matching "${text}"`)
+				console.log(`No users match "${text}"`)
 			}
 			if (findFriends.length > 0) {
 				console.log(`Users matching "${text}"`)
-			} else {
-				console.log(`No users found matching "${text}"`)
 			}
-			// if (findFriends.length > 0) {
-			// 	setDialogTitle(`Users matching "${text.current}"`)
-			// } else {
-			// 	setDialogTitle(`No users found matching "${text.current}"`)
-			// }
-			console.log(result)
 			setFindFriends(result)
 		})
-		
-		// // Fetch first page of users matching search
-		// await fetch(`${procsess.env.REACT_APP_MAIN_URL}/user/search?page=1&search=${escape(text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))}&limit=${Math.ceil(window.innerHeight / 76)}`)
-		// .then(res => res.json())
-		// .then(result => {
-		// 	if (result['results'].length < Math.ceil(window.innerHeight / 76)) {
-		// 		noMoreToLoad.current = true
-		// 		fetchInProgress.current = false
-		// 	}
-		// 	if (result['results'].length === 0) {
-		// 		setDialogTitle(`No users found for "${text}"`)
-		// 		setFindFriends([])
-		// 	} else if (text.length !== 0)  {
-		// 		setDialogTitle(`Users matching "${text}"`)
-		// 		setFindFriends(result['results'])
-		// 	}
-		// })
-
-
 	};
 
 	/**
@@ -159,18 +133,18 @@ export default function ScrollDialog() {
 
 		// Clear and reset list without searching for empty strings
 		if (e.target.value.trim().length === 0) {
-			// setDialogTitle("Find a Friend")
+			console.log("Find a Friend")
 			setFindFriends([])
 			return
 		}
 
-		// setDialogTitle("Loading...")
+		console.log("Loading...")
 
 		// Otherwise search if user has stopped typing for # ms
 		clearTimeout(timeout);
 
     timeout = setTimeout(() => {
-			console.log("time out ffinished!")
+			console.log("Execute search!")
 			value = e.target.value.trim()
 			search(value)
 		}, 2000);
