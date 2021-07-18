@@ -27,9 +27,8 @@ export default function ScrollDialog() {
 	let lastSearch = React.useRef();
 	let currentSearch = React.useRef();
 	let text = React.useRef();
-	// let dialogTitle = React.useRef();
 	let [findFriends, setFindFriends] = useState([]);
-	let [dialogTitle, setDialogTitle] = useState("Find a friend") 
+	let [dialogTitle, setDialogTitle] = useState("Add a friend") 
 
 	const handleClickOpen = (scrollType) => () => {
 		setOpen(true);
@@ -45,9 +44,7 @@ export default function ScrollDialog() {
 			setFindFriends([])
 			text.current = ""
 			lastSearch.current = ""
-			// console.log('Find a friend')
-			setDialogTitle("Find a friend")
-			// dialogTitle.current = "Find a friend"
+			setDialogTitle("Add a friend")
 		}
 	}, [open]);
 
@@ -85,8 +82,7 @@ export default function ScrollDialog() {
 				setDialogTitle(`No more users found`)
 				noMoreToLoad.current = true
 			} else {
-				// console.log(`Users matching "${currentSearch.current}"`)
-				setDialogTitle("Find a friend")
+				setDialogTitle("Add a friend")
 			}
 			setFindFriends([...findFriends, ...result['results']])
 		})
@@ -94,10 +90,6 @@ export default function ScrollDialog() {
 
 	// Search function
 	const search = async () => {
-		// // Don't interrupt fetch in progress
-		// if (fetchInProgress.current === true) {
-		// 	return
-		// }
 		if (text.current.length === 0) {
 			return
 		}
@@ -119,20 +111,15 @@ export default function ScrollDialog() {
 		.then(res => res.json())
 		.then(result => {
 			result = result['results']
-			// console.log(`Last search was: ${lastSearch.current}`)
 			if (result.length < Math.ceil(window.innerHeight / 76)) {
-				setDialogTitle("Find a friend")
 				noMoreToLoad.current = true
-			} else {
-				setDialogTitle("Find a friend")
 			}
 			if (result.length > 0) {
-				// setDialogTitle(`Find a friend`)
+				setDialogTitle(`Add a friend`)
 				console.log(`Users matching "${actualSearch}"`)
 				// Search again if user typed something new
 				if (currentSearch.current !== text.current) {
 					console.log("searching again")
-					// fetchInProgress.current = false
 					search()
 				}
 			} else {
@@ -158,24 +145,19 @@ export default function ScrollDialog() {
 
 		// Clear and reset list without searching for empty strings
 		if (e.target.value.trim().length === 0) {
-			console.log("Find a friend")
-			setDialogTitle("Find a friend")
-			// dialogTitle.current = "Find a friend"
+			console.log("Add a friend")
+			setDialogTitle("Add a friend")
 			setFindFriends([])
-			// lastSearch.current = ""
 			currentSearch.current = ""
 			return
 		}
 
-		// console.log("Loading...")
-		// dialogTitle.current = "Loading..."
 		setDialogTitle("Loading...")
 
 		search()
 
 		// Otherwise search if user has stopped typing for # ms
 		// clearTimeout(timeout);
-
     // timeout = setTimeout(() => {
 		// 	// console.log("Execute search!")
 		// 	search()
@@ -185,10 +167,14 @@ export default function ScrollDialog() {
 	// React.useEffect(() => {
 	// }, [])
 
+	const handleItemClick = (person) => {
+		console.log(person)
+	}
+
 	return (
 		<div>
-			<ListItem button key='Find a friend' onClick={handleClickOpen("paper")}>
-				<ListItemText primary='Find a friend' />
+			<ListItem button key='Add a friend' onClick={handleClickOpen("paper")}>
+				<ListItemText primary='Add a friend' />
 				<ListItemIcon><AddIcon style={{ marginLeft: "28px" }} /></ListItemIcon>
 			</ListItem>
 			<StylesProvider injectFirst>
@@ -213,8 +199,6 @@ export default function ScrollDialog() {
 									autoFocus
 									fullWidth
 									id="dialogInput"
-									// onKeyDown={doSearch}
-									// onChange={updateSearch}
 									onKeyUp={handleSearch}
 								/>
 						</DialogTitle>
@@ -253,8 +237,12 @@ export default function ScrollDialog() {
 							<List>
 								{findFriends.map((person, index) => (
 									<>
-										<ListItem button key={index}>
-											<ListItemIcon><Avatar alt="Real Name" src="https://lh3.googleusercontent.com/a/AATXAJyV5x-KGJctWAnEDEmr5RwJQa0fi9TaxtxTAP2X=s96-c" /></ListItemIcon>
+										<ListItem
+											button
+											key={index}
+											onClick={() => handleItemClick(person)}
+										>
+											<ListItemIcon><Avatar alt={person['name']} src={person['picture']} /></ListItemIcon>
 											<StylesProvider injectFirst>
 												<ListItemText
 													primary={person['name']}
