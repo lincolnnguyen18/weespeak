@@ -20,6 +20,14 @@ export default function ScrollDialog() {
 	const [open, setOpen] = useState(false);
 	const [scroll, setScroll] = useState("paper");
 
+	let timeout;
+	let page = React.useRef();
+	let fetchInProgress = React.useRef();
+	let noMoreToLoad = React.useRef();
+	let text = React.useRef();
+	let [findFriends, setFindFriends] = useState([]);
+	let [dialogTitle, setDialogTitle] = useState("Find a Friend") 
+
 	const handleClickOpen = (scrollType) => () => {
 		setOpen(true);
 		setScroll(scrollType);
@@ -33,18 +41,10 @@ export default function ScrollDialog() {
 		if (open) {
 			setFindFriends([])
 			text.current = ""
-			// setDialogTitle("Find a Friend")
 			console.log('Find a Friend')
+			setDialogTitle("Find a Friend")
 		}
 	}, [open]);
-
-	let timeout;
-	let page = React.useRef();
-	let fetchInProgress = React.useRef();
-	let noMoreToLoad = React.useRef();
-	let text = React.useRef();
-	let [findFriends, setFindFriends] = useState([]);
-	// let [dialogTitle, setDialogTitle] = useState("Find a Friend") 
 
 	React.useEffect(() => {
 		fetchInProgress.current = false
@@ -63,8 +63,8 @@ export default function ScrollDialog() {
 			return
 		}
 
-		// setDialogTitle("Loading...")
 		console.log('Loading...')
+		setDialogTitle("Loading...")
 		fetchInProgress.current = true
 		page.current += 1
 
@@ -134,11 +134,13 @@ export default function ScrollDialog() {
 		// Clear and reset list without searching for empty strings
 		if (e.target.value.trim().length === 0) {
 			console.log("Find a Friend")
+			setDialogTitle("Find a Friend")
 			setFindFriends([])
 			return
 		}
 
 		console.log("Loading...")
+		setDialogTitle("Loading...")
 
 		// Otherwise search if user has stopped typing for # ms
 		clearTimeout(timeout);
@@ -173,8 +175,7 @@ export default function ScrollDialog() {
 				>
 					<StylesProvider injectFirst>
 						<DialogTitle id="scroll-dialog-title" style={{ textAlign: "center" }}>
-							{/* {dialogTitle} */}
-							Find a Friend
+							{dialogTitle}
 							<br />
 								<TextField
 									label=""
