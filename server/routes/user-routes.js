@@ -10,30 +10,11 @@ function checkSignedIn(req, res, next) {
     else next()
 }
 
-function paginatedResults(model) {
-    return async (req, res, next) => {
-        const page = parseInt(req.query.page)
-        const searchTerm = unescape(req.query.search)
-        const limit = parseInt(req.query.limit)
-        const startIndex = (page - 1) * limit
-        const results = {}
-        let search = new RegExp(searchTerm, 'i')
-
-        try {
-            // db.users.find({ $or: [{"username": /Ma/i}, { "name": /Lin/i } ]})
-            results.results = await model.find({
-                $or: [
-                    { "username": { $regex: search } },
-                    { "name": { $regex: search } },
-                ]
-            }).limit(limit).skip(startIndex).exec()
-            res.paginatedResults = results
-            next()
-        } catch (e) {
-            res.status(500).json({ message: e.message })
-        }
-    }
-}
+// function paginatedResults(model, excludeId) {
+//     return async (req, res, next) => {
+        
+//     }
+// }
 
 // API endpoints for "user" resource
 
@@ -110,15 +91,35 @@ router.get('/isSignedIn', (req, res) => {
 // For production
 // router.get('/search', checkSignedIn, paginatedResults(User), (req, res) => {
 // For development
-router.get('/search', paginatedResults(User), (req, res) => {
-    // setTimeout(() => {
-    //     res.json(res.paginatedResults)
-    // }, 1000);
-    res.json(res.paginatedResults)
+router.get('/search', async (req, res) => {
+    const page = parseInt(req.query.page)
+    const searchTerm = unescape(req.query.search)
+    const limit = parseInt(req.query.limit)
+    const startIndex = (page - 1) * limit
+    const results = {}
+    let search = new RegExp(searchTerm, 'i')
+
+    try {
+        // db.users.find({ $or: [{"username": /Ma/i}, { "name": /Lin/i } ]})
+        results.results = await User.find({
+            $and: [
+                { _id: {$ne: req.user._id} },
+                { $or: [
+                    { "username": { $regex: search } },
+                    { "name": { $regex: search } },
+                ]},
+            ]
+        },
+        {"username": 1, "name": 1, "picture": 1}
+        ).limit(limit).skip(startIndex).exec()
+        res.json(results)
+    } catch (e) {
+        res.status(500).json({ message: e.message })
+    }
 })
 
 /**
- * POST request on friends endpoint
+ * POST new friend to user and new friend request to requested friend
  * sends a friend request to another user
  * required: friend id (fid)
  */
@@ -130,54 +131,81 @@ router.post('/friends', checkSignedIn, (req, res, next) => {
     const fid = req.query.fid
     // Check if fid is valid
     User.findById(fid).then((user) => {
-        new FriendRelationship({
-            requester: req.user._id, 
-            recipient: user._id,
-            status: 1}).save()
-            res.status(200).send('Friend Request Sent')
+        console.log(user)
+        // // Updates current user document
+        // User.findByIdAndUpdate(req.user._id, {$push: {friends: req.query.fid}})
+        // new FriendRelationship({
+        //     requester: req.user._id, 
+        //     recipient: user._id,
+        //     status: 1}).save()
+        //     res.status(200).send('Friend Request Sent')
     })
     .catch((error) => {
         res.send(error)
     })
 })
 
-/**
- * GET the list of friends and friend requests
- */
-router.get('/friends', checkSignedIn, async (req, res) => {
-    const friends = await User.findById(req.user._id, 'friends').exec()
-    const friendRequests = await FriendRelationship.find({recipient: req.user._id}).exec()
+// /**
+//  * POST request on friends endpoint
+//  * sends a friend request to another user
+//  * required: friend id (fid)
+//  */
+// router.post('/friends', checkSignedIn, (req, res, next) => {
+//     if (!req.query.fid) res.status(400).send('Missing required parameters')
+//     else next()
+// },
+// (req, res) => {
+//     const fid = req.query.fid
+//     // Check if fid is valid
+//     User.findById(fid).then((user) => {
+//         new FriendRelationship({
+//             requester: req.user._id, 
+//             recipient: user._id,
+//             status: 1}).save()
+//             res.status(200).send('Friend Request Sent')
+//     })
+//     .catch((error) => {
+//         res.send(error)
+//     })
+// })
 
-    res.status(200).send({friends: friends.friends, friendRequests})
-})
+// /**
+//  * GET the list of friends and friend requests
+//  */
+// router.get('/friends', checkSignedIn, async (req, res) => {
+//     const friends = await User.findById(req.user._id, 'friends').exec()
+//     const friendRequests = await FriendRelationship.find({recipient: req.user._id}).exec()
 
-/**
- * Respond to a friend request with either decline or accept
- * REQUIRES: fid, accept (does not do anything but just set to true)
- */
-router.put('/friends', checkSignedIn, (req, res, next) => {
-    if (!req.query.fid || !req.query.accept) res.status(400).send('Missing required parameters')
-    else next()
-},
-(req, res, next) => {
-    FriendRelationship.findOneAndDelete({requester: req.query.fid, recipient: req.user._id})
-    .then(deletedDocument => {
-        if (!deletedDocument) res.status(400).send('No friend request exists')
-        else next() 
-    })
-},
-(req, res) => {
+//     res.status(200).send({friends: friends.friends, friendRequests})
+// })
 
-    // Updates current user document
-    User.findByIdAndUpdate(req.user._id, {$push: {friends: req.query.fid}})
+// /**
+//  * Respond to a friend request with either decline or accept
+//  * REQUIRES: fid, accept (does not do anything but just set to true)
+//  */
+// router.put('/friends', checkSignedIn, (req, res, next) => {
+//     if (!req.query.fid || !req.query.accept) res.status(400).send('Missing required parameters')
+//     else next()
+// },
+// (req, res, next) => {
+//     FriendRelationship.findOneAndDelete({requester: req.query.fid, recipient: req.user._id})
+//     .then(deletedDocument => {
+//         if (!deletedDocument) res.status(400).send('No friend request exists')
+//         else next() 
+//     })
+// },
+// (req, res) => {
+
+//     // Updates current user document
+//     User.findByIdAndUpdate(req.user._id, {$push: {friends: req.query.fid}})
     
-    // Updates friend user document
-    User.findByIdAndUpdate(req.query.fid, {$push: {friends: req.user._id}})
-    .then(updatedDocument => {
-        if (updatedDocument) res.send('Successfully added')
-        else res.send('Failed added')
-    })
+//     // Updates friend user document
+//     User.findByIdAndUpdate(req.query.fid, {$push: {friends: req.user._id}})
+//     .then(updatedDocument => {
+//         if (updatedDocument) res.send('Successfully added')
+//         else res.send('Failed added')
+//     })
 
-})
+// })
 
 module.exports = router
