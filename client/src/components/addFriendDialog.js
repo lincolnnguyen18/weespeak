@@ -24,7 +24,10 @@ export default function ScrollDialog() {
 	let page = React.useRef();
 	let fetchInProgress = React.useRef();
 	let noMoreToLoad = React.useRef();
+	let lastSearch = React.useRef();
+	let currentSearch = React.useRef();
 	let text = React.useRef();
+	// let dialogTitle = React.useRef();
 	let [findFriends, setFindFriends] = useState([]);
 	let [dialogTitle, setDialogTitle] = useState("Find a Friend") 
 
@@ -41,8 +44,10 @@ export default function ScrollDialog() {
 		if (open) {
 			setFindFriends([])
 			text.current = ""
-			console.log('Find a Friend')
+			lastSearch.current = ""
+			// console.log('Find a Friend')
 			setDialogTitle("Find a Friend")
+			// dialogTitle.current = "Find a Friend"
 		}
 	}, [open]);
 
@@ -53,66 +58,87 @@ export default function ScrollDialog() {
 	// Scroll function
 	const handleScroll = async (e) => {
 		// Don't interrupt fetch/search in progress, don't load more if end of list reached
-		if (fetchInProgress.current === true || noMoreToLoad.current === true) {
+		if (noMoreToLoad.current === true) {
 			return
 		}
 
 		// Don't load more unless scroll position at bottom
+		// target = document.getElementsByClassName("MuiDialogContent-root")[0]
 		let reachedBottom = e.target.scrollHeight - e.target.offsetHeight - e.target.scrollTop < 1
 		if (!reachedBottom) {
 			return
 		}
 
-		console.log('Loading...')
-		setDialogTitle("Loading...")
-		fetchInProgress.current = true
+		// fetchInProgress.current = true
 		page.current += 1
-
+		console.log(`Loading page ${page.current} for ${currentSearch.current}...`)
+		setDialogTitle(`Loading...`)
+		let limit = Math.ceil(window.innerHeight / 76)
+		let mongoEscapedSearch = escape(currentSearch.current.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+		
 		// Fetch next page for users matching search
-		await fetch(`${process.env.REACT_APP_MAIN_URL}/user/search?page=${page.current}&search=${escape(text.current.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))}&limit=${Math.ceil(window.innerHeight / 76)}`)
+		await fetch(`${process.env.REACT_APP_MAIN_URL}/user/search?page=${page.current}&search=${mongoEscapedSearch}&limit=${limit}`)
 		.then(res => res.json())
 		.then(result => {
-			if (result['results'].length === 0) {
-				// setDialogTitle(`No more users match "${text.current}"`)
-				console.log(`No more users match "${text.current}"`)
+			if (result['results'].length < Math.ceil(window.innerHeight / 76)) {
+				console.log(`No more users match "${currentSearch.current}"`)
+				setDialogTitle(`No more users to load`)
 				noMoreToLoad.current = true
-				fetchInProgress.current = false
+				// fetchInProgress.current = false
 			} else {
-				// setDialogTitle(`Users matching "${text.current}"`)
-				console.log(`Users matching "${text.current}"`)
+				console.log(`Users matching "${currentSearch.current}"`)
+				setDialogTitle("Scroll down to load more")
 				setFindFriends([...findFriends, ...result['results']])
-				if (result['results'].length < Math.ceil(window.innerHeight / 76)) {
-					noMoreToLoad.current = true
-					fetchInProgress.current = false
-				}
 			}
 		})
 	}
 
 	// Search function
-	const search = async (text) => {
-		// Don't interrupt fetch in progress
-		if (fetchInProgress.current === true) {
+	const search = async () => {
+		// // Don't interrupt fetch in progress
+		// if (fetchInProgress.current === true) {
+		// 	return
+		// }
+		if (text.current.length === 0) {
+			return
+		}
+		lastSearch.current = currentSearch.current
+		currentSearch.current = text.current
+		if (lastSearch.current === currentSearch.current) {
+			console.log(`CLIENT IS REPEATING SEARCH; current = ${currentSearch.current}; last = ${lastSearch.current}`)
 			return
 		}
 
-		fetchInProgress.current = true
+		// fetchInProgress.current = true
 		noMoreToLoad.current = false
 		page.current = 1
+		let limit = Math.ceil(window.innerHeight / 76)
+		let mongoEscapedSearch = escape(currentSearch.current.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
 
-		await fetch(`${process.env.REACT_APP_MAIN_URL}/user/search?page=1&search=${escape(text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))}&limit=${Math.ceil(window.innerHeight / 76)}`)
+		await fetch(`${process.env.REACT_APP_MAIN_URL}/user/search?page=1&search=${mongoEscapedSearch}&limit=${limit}`)
 		.then(res => res.json())
 		.then(result => {
 			result = result['results']
+			console.log(`Last search was: ${lastSearch.current}`)
 			if (result.length < Math.ceil(window.innerHeight / 76)) {
+				setDialogTitle("Find a Friend")
 				noMoreToLoad.current = true
+			} else {
+				setDialogTitle("Find a Friend")
 			}
 			if (result.length === 0) {
-				// setDialogTitle(`No users found matching "${text}"`)
-				console.log(`No users match "${text}"`)
-			}
-			if (findFriends.length > 0) {
-				console.log(`Users matching "${text}"`)
+				setDialogTitle(`No matching users found`)
+				console.log(`No users match "${currentSearch.current}"`)
+			} else {
+				// setDialogTitle(`Find a Friend`)
+				console.log(`Users matching "${currentSearch.current}"`)
+				console.log(`Last search sent was ${currentSearch.current}`)
+				// Search again if user typed something new
+				if (currentSearch.current !== text.current) {
+					console.log("searching again")
+					// fetchInProgress.current = false
+					search()
+				}
 			}
 			setFindFriends(result)
 		})
@@ -135,21 +161,26 @@ export default function ScrollDialog() {
 		if (e.target.value.trim().length === 0) {
 			console.log("Find a Friend")
 			setDialogTitle("Find a Friend")
+			// dialogTitle.current = "Find a Friend"
 			setFindFriends([])
+			// lastSearch.current = ""
+			currentSearch.current = ""
 			return
 		}
 
-		console.log("Loading...")
+		// console.log("Loading...")
+		// dialogTitle.current = "Loading..."
 		setDialogTitle("Loading...")
 
-		// Otherwise search if user has stopped typing for # ms
-		clearTimeout(timeout);
+		search()
 
-    timeout = setTimeout(() => {
-			console.log("Execute search!")
-			value = e.target.value.trim()
-			search(value)
-		}, 2000);
+		// Otherwise search if user has stopped typing for # ms
+		// clearTimeout(timeout);
+
+    // timeout = setTimeout(() => {
+		// 	// console.log("Execute search!")
+		// 	search()
+		// }, 500);
 	}
 
 	// React.useEffect(() => {
@@ -185,7 +216,7 @@ export default function ScrollDialog() {
 									id="dialogInput"
 									// onKeyDown={doSearch}
 									// onChange={updateSearch}
-									onChange={handleSearch}
+									onKeyUp={handleSearch}
 								/>
 						</DialogTitle>
 					</StylesProvider>
