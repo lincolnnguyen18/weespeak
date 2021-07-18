@@ -32,22 +32,27 @@ export default function ScrollDialog() {
 	React.useEffect(() => {
 		if (open) {
 			setFindFriends([])
-			// setSearchTerm("")
+			text.current = ""
+			setDialogTitle("Find a Friend")
 		}
 	}, [open]);
 
 	let timeout;
 	let page = React.useRef();
-	let fetchInProgress;
+	let fetchInProgress = React.useRef();
 	let noMoreToLoad = React.useRef();
 	let text = React.useRef();
 	let [findFriends, setFindFriends] = useState([]);
 	let [dialogTitle, setDialogTitle] = useState("Find a Friend") 
 
+	React.useEffect(() => {
+		fetchInProgress.current = false
+	}, [findFriends]);
+
 	// Scroll function
 	const handleScroll = async (e) => {
 		// Don't interrupt fetch/search in progress, don't load more if end of list reached
-		if (fetchInProgress === true || noMoreToLoad.current === true) {
+		if (fetchInProgress.current === true || noMoreToLoad.current === true) {
 			return
 		}
 
@@ -58,8 +63,8 @@ export default function ScrollDialog() {
 		}
 
 		setDialogTitle("Loading...")
-		fetchInProgress = true
-		console.log(`loading more of ${text.current} at page ${page.current}`)
+		fetchInProgress.current = true
+		page.current += 1
 
 		// Fetch next page for users matching search
 		await fetch(`${process.env.REACT_APP_MAIN_URL}/user/search?page=${page.current}&search=${escape(text.current.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))}&limit=${Math.ceil(window.innerHeight / 76)}`)
@@ -68,25 +73,22 @@ export default function ScrollDialog() {
 			if (result['results'].length === 0) {
 				setDialogTitle(`No more users found for "${text.current}"`)
 				noMoreToLoad.current = true
+				fetchInProgress.current = false
 			} else {
 				setDialogTitle(`More users matching "${text.current}"`)
 				setFindFriends([...findFriends, ...result['results']])
 			}
-		})
-		.then(() => {
-			fetchInProgress = false
-			page.current += 1
 		})
 	}
 
 	// Search function
 	const search = async (text) => {
 		// Don't interrupt fetch in progress
-		if (fetchInProgress === true) {
+		if (fetchInProgress.current === true) {
 			return
 		}
 
-		fetchInProgress = true
+		fetchInProgress.current = true
 		noMoreToLoad.current = false
 		page.current = 1
 		
@@ -101,10 +103,6 @@ export default function ScrollDialog() {
 				setDialogTitle(`Users matching "${text}"`)
 				setFindFriends(result['results'])
 			}
-		})
-		.then(() => {
-			page.current += 1
-			fetchInProgress = false
 		})
 	};
 
@@ -134,7 +132,6 @@ export default function ScrollDialog() {
 		clearTimeout(timeout);
 
     timeout = setTimeout(() => {
-			console.log(`searching for ${e.target.value.trim()} at page ${page.current}`)
 			search(e.target.value.trim())
 		}, 1000);
 	}
