@@ -9,6 +9,7 @@ const cookieSession = require('cookie-session');
 const passport = require('passport');
 const cors = require('cors')
 const bodyParser = require('body-parser');
+const ws = require('ws');
 require('dotenv').config()
 
 // Instantiate express
@@ -44,6 +45,25 @@ app.use('/user', userRoutes);
 // Serve the static files from the React app; use nginx for production, maybe
 app.use(express.static(path.join(__dirname, '/../client/build'), { index : false }));
 app.use('/favicon.ico', express.static('/../client/build/favicon.ico'));
+
+// ------------------------ Websocket server --------------------------------
+
+// Set up a headless websocket server that prints any
+// events that come in.
+const wsServer = new ws.Server({ noServer: true });
+wsServer.on('connection', socket => {
+  socket.on('message', message => console.log(message));
+});
+
+const server = app.listen(5001);
+console.log('Websocket server is listening on port ' + 5001);
+server.on('upgrade', (request, socket, head) => {
+  wsServer.handleUpgrade(request, socket, head, socket => {
+    wsServer.emit('connection', socket, request);
+  });
+});
+
+// ------------------------ App Routing --------------------------------
 
 // Dashboard
 app.get('/', (req, res) => {

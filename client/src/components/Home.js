@@ -146,6 +146,15 @@ export default function PersistentDrawerLeft() {
 
 	useEffect(() => {
 		// fetch('http://localhost:5000/user/info')
+		const ws = new WebSocket('wss://ws.weespeak.xyz')
+		ws.onopen = () => {
+			console.log("wss connection opened")
+			ws.send('hello')
+		}
+		ws.onerror = (err) => {
+			console.log(err)
+		}
+		
 		console.log(`fetching from ${process.env.REACT_APP_MAIN_URL}/user/info`)
 		fetch(`${process.env.REACT_APP_MAIN_URL}/user/info`)
 			.then(res => res.json())

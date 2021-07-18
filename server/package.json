@@ -19,6 +19,7 @@
     "nodemon": "^2.0.9",
     "passport": "^0.4.1",
     "passport-google-oauth20": "^2.0.0",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "ws": "^7.5.3"
   }
 }

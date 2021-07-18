@@ -119,7 +119,7 @@ router.get('/search', async (req, res) => {
 })
 
 /**
- * POST new friend to user and new friend request to requested friend
+ * POST new friend request to user and new friend request to requested friend
  * sends a friend request to another user
  * required: friend id (fid)
  */
@@ -145,17 +145,16 @@ router.post('/friends', checkSignedIn, (req, res, next) => {
 
         // Check if requested user already requested or friended
         if (requester.friendRequests.includes(requestedId)) {
-            console.log("already requested")
-            return res.json({ status: "already requested" })
+            return res.json({ status: "Friend request already sent" })
         } else if (requester.friends.includes(requestedId)) {
             console.log("already friended")
-            return res.json({ status: "already friended" })
+            return res.json({ status: "Friend request already accepted" })
         }
 
         // Otherwise add request to requester and requested
         await User.findByIdAndUpdate(requesterId, { $push: { "friendRequests": requestedId } }).exec()
         await User.findByIdAndUpdate(requested, { $push: { "friendRequests": requesterId } }).exec()
-        return res.json({ status: "request sent" })
+        return res.json({ status: "Friend request sent" })
 })
 
 // /**
