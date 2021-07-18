@@ -139,6 +139,11 @@ export default function PersistentDrawerLeft() {
 		setAnchorEl(null);
 	};
 
+	const handleLogout = () => {
+		setAnchorEl(null);
+		window.location.href = "/auth/logout";
+	}
+
 	useEffect(() => {
 		// fetch('http://localhost:5000/user/info')
 		console.log(`fetching from ${process.env.REACT_APP_MAIN_URL}/user/info`)
@@ -216,7 +221,7 @@ export default function PersistentDrawerLeft() {
 							onClose={handleClose}
 						>
 							{/* <MenuItem onClick={handleClose}>Settings</MenuItem> */}
-							<MenuItem onClick={() => { window.location.href = "/auth/logout" }}>Logout</MenuItem>
+							<MenuItem onClick={handleLogout}>Logout</MenuItem>
 							<MenuItem onClick={handleClose}>Change name</MenuItem>
 							<MenuItem onClick={handleClose}>Change username</MenuItem>
 							<MenuItem onClick={handleClose}>Change profile picture</MenuItem>

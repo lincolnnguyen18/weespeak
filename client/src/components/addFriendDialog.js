@@ -29,7 +29,7 @@ export default function ScrollDialog() {
 	let text = React.useRef();
 	// let dialogTitle = React.useRef();
 	let [findFriends, setFindFriends] = useState([]);
-	let [dialogTitle, setDialogTitle] = useState("Find a Friend") 
+	let [dialogTitle, setDialogTitle] = useState("Find a friend") 
 
 	const handleClickOpen = (scrollType) => () => {
 		setOpen(true);
@@ -45,9 +45,9 @@ export default function ScrollDialog() {
 			setFindFriends([])
 			text.current = ""
 			lastSearch.current = ""
-			// console.log('Find a Friend')
-			setDialogTitle("Find a Friend")
-			// dialogTitle.current = "Find a Friend"
+			// console.log('Find a friend')
+			setDialogTitle("Find a friend")
+			// dialogTitle.current = "Find a friend"
 		}
 	}, [open]);
 
@@ -58,7 +58,7 @@ export default function ScrollDialog() {
 	// Scroll function
 	const handleScroll = async (e) => {
 		// Don't interrupt fetch/search in progress, don't load more if end of list reached
-		if (noMoreToLoad.current === true) {
+		if (noMoreToLoad.current === true || fetchInProgress.current === true) {
 			return
 		}
 
@@ -69,7 +69,7 @@ export default function ScrollDialog() {
 			return
 		}
 
-		// fetchInProgress.current = true
+		fetchInProgress.current = true
 		page.current += 1
 		console.log(`Loading page ${page.current} for ${currentSearch.current}...`)
 		setDialogTitle(`Loading...`)
@@ -82,14 +82,13 @@ export default function ScrollDialog() {
 		.then(result => {
 			if (result['results'].length < Math.ceil(window.innerHeight / 76)) {
 				console.log(`No more users match "${currentSearch.current}"`)
-				setDialogTitle(`No more users to load`)
+				setDialogTitle(`No more users found`)
 				noMoreToLoad.current = true
-				// fetchInProgress.current = false
 			} else {
-				console.log(`Users matching "${currentSearch.current}"`)
-				// setDialogTitle("Scroll down to load more")
-				setFindFriends([...findFriends, ...result['results']])
+				// console.log(`Users matching "${currentSearch.current}"`)
+				setDialogTitle("Find a friend")
 			}
+			setFindFriends([...findFriends, ...result['results']])
 		})
 	}
 
@@ -114,31 +113,31 @@ export default function ScrollDialog() {
 		page.current = 1
 		let limit = Math.ceil(window.innerHeight / 76)
 		let mongoEscapedSearch = escape(currentSearch.current.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+		let actualSearch = currentSearch.current
 
 		await fetch(`${process.env.REACT_APP_MAIN_URL}/user/search?page=1&search=${mongoEscapedSearch}&limit=${limit}`)
 		.then(res => res.json())
 		.then(result => {
 			result = result['results']
-			console.log(`Last search was: ${lastSearch.current}`)
+			// console.log(`Last search was: ${lastSearch.current}`)
 			if (result.length < Math.ceil(window.innerHeight / 76)) {
-				setDialogTitle("Find a Friend")
+				setDialogTitle("Find a friend")
 				noMoreToLoad.current = true
 			} else {
-				setDialogTitle("Find a Friend")
+				setDialogTitle("Find a friend")
 			}
-			if (result.length === 0) {
-				setDialogTitle(`No matching users found`)
-				console.log(`No users match "${currentSearch.current}"`)
-			} else {
-				// setDialogTitle(`Find a Friend`)
-				console.log(`Users matching "${currentSearch.current}"`)
-				console.log(`Last search sent was ${currentSearch.current}`)
+			if (result.length > 0) {
+				// setDialogTitle(`Find a friend`)
+				console.log(`Users matching "${actualSearch}"`)
 				// Search again if user typed something new
 				if (currentSearch.current !== text.current) {
 					console.log("searching again")
 					// fetchInProgress.current = false
 					search()
 				}
+			} else {
+				setDialogTitle(`No users found`)
+				console.log(`No users match "${actualSearch}"`)
 			}
 			setFindFriends(result)
 		})
@@ -159,9 +158,9 @@ export default function ScrollDialog() {
 
 		// Clear and reset list without searching for empty strings
 		if (e.target.value.trim().length === 0) {
-			console.log("Find a Friend")
-			setDialogTitle("Find a Friend")
-			// dialogTitle.current = "Find a Friend"
+			console.log("Find a friend")
+			setDialogTitle("Find a friend")
+			// dialogTitle.current = "Find a friend"
 			setFindFriends([])
 			// lastSearch.current = ""
 			currentSearch.current = ""
@@ -172,15 +171,15 @@ export default function ScrollDialog() {
 		// dialogTitle.current = "Loading..."
 		setDialogTitle("Loading...")
 
-		// search()
+		search()
 
 		// Otherwise search if user has stopped typing for # ms
-		clearTimeout(timeout);
+		// clearTimeout(timeout);
 
-    timeout = setTimeout(() => {
-			// console.log("Execute search!")
-			search()
-		}, 3000);
+    // timeout = setTimeout(() => {
+		// 	// console.log("Execute search!")
+		// 	search()
+		// }, 0);
 	}
 
 	// React.useEffect(() => {
@@ -188,8 +187,8 @@ export default function ScrollDialog() {
 
 	return (
 		<div>
-			<ListItem button key='Find a Friend' onClick={handleClickOpen("paper")}>
-				<ListItemText primary='Find a Friend' />
+			<ListItem button key='Find a friend' onClick={handleClickOpen("paper")}>
+				<ListItemText primary='Find a friend' />
 				<ListItemIcon><AddIcon style={{ marginLeft: "28px" }} /></ListItemIcon>
 			</ListItem>
 			<StylesProvider injectFirst>
