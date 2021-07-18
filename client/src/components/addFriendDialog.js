@@ -33,7 +33,7 @@ export default function ScrollDialog() {
 		if (open) {
 			setFindFriends([])
 			text.current = ""
-			setDialogTitle("Find a Friend")
+			// setDialogTitle("Find a Friend")
 		}
 	}, [open]);
 
@@ -43,7 +43,7 @@ export default function ScrollDialog() {
 	let noMoreToLoad = React.useRef();
 	let text = React.useRef();
 	let [findFriends, setFindFriends] = useState([]);
-	let [dialogTitle, setDialogTitle] = useState("Find a Friend") 
+	// let [dialogTitle, setDialogTitle] = useState("Find a Friend") 
 
 	React.useEffect(() => {
 		fetchInProgress.current = false
@@ -62,7 +62,8 @@ export default function ScrollDialog() {
 			return
 		}
 
-		setDialogTitle("Loading...")
+		console.log('detected scroll. loading more...')
+		// setDialogTitle("Loading...")
 		fetchInProgress.current = true
 		page.current += 1
 
@@ -71,11 +72,11 @@ export default function ScrollDialog() {
 		.then(res => res.json())
 		.then(result => {
 			if (result['results'].length === 0) {
-				setDialogTitle(`No more users found for "${text.current}"`)
+				// setDialogTitle(`No more users found for "${text.current}"`)
 				noMoreToLoad.current = true
 				fetchInProgress.current = false
 			} else {
-				setDialogTitle(`More users matching "${text.current}"`)
+				// setDialogTitle(`More users matching "${text.current}"`)
 				setFindFriends([...findFriends, ...result['results']])
 				if (result['results'].length < Math.ceil(window.innerHeight / 76)) {
 					noMoreToLoad.current = true
@@ -86,7 +87,7 @@ export default function ScrollDialog() {
 	}
 
 	// Search function
-	const search = (text) => {
+	const search = async (text) => {
 		// Don't interrupt fetch in progress
 		if (fetchInProgress.current === true) {
 			return
@@ -98,7 +99,7 @@ export default function ScrollDialog() {
 
 		console.log(`search ${text}`)
 
-		fetch(`${process.env.REACT_APP_MAIN_URL}/user/search?page=1&search=${escape(text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))}&limit=${Math.ceil(window.innerHeight / 76)}`)
+		await fetch(`${process.env.REACT_APP_MAIN_URL}/user/search?page=1&search=${escape(text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))}&limit=${Math.ceil(window.innerHeight / 76)}`)
 		.then(res => res.json())
 		.then(result => {
 			result = result['results']
@@ -124,7 +125,7 @@ export default function ScrollDialog() {
 		})
 		
 		// // Fetch first page of users matching search
-		// await fetch(`${process.env.REACT_APP_MAIN_URL}/user/search?page=1&search=${escape(text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))}&limit=${Math.ceil(window.innerHeight / 76)}`)
+		// await fetch(`${procsess.env.REACT_APP_MAIN_URL}/user/search?page=1&search=${escape(text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))}&limit=${Math.ceil(window.innerHeight / 76)}`)
 		// .then(res => res.json())
 		// .then(result => {
 		// 	if (result['results'].length < Math.ceil(window.innerHeight / 76)) {
@@ -158,17 +159,18 @@ export default function ScrollDialog() {
 
 		// Clear and reset list without searching for empty strings
 		if (e.target.value.trim().length === 0) {
-			setDialogTitle("Find a Friend")
+			// setDialogTitle("Find a Friend")
 			setFindFriends([])
 			return
 		}
 
-		setDialogTitle("Loading...")
+		// setDialogTitle("Loading...")
 
 		// Otherwise search if user has stopped typing for # ms
 		clearTimeout(timeout);
 
     timeout = setTimeout(() => {
+			console.log("time out ffinished!")
 			value = e.target.value.trim()
 			search(value)
 		}, 2000);
@@ -197,7 +199,8 @@ export default function ScrollDialog() {
 				>
 					<StylesProvider injectFirst>
 						<DialogTitle id="scroll-dialog-title" style={{ textAlign: "center" }}>
-							{dialogTitle}
+							{/* {dialogTitle} */}
+							Find a Friend
 							<br />
 								<TextField
 									label=""
