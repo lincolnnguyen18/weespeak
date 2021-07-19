@@ -50,18 +50,41 @@ app.use('/favicon.ico', express.static('/../client/build/favicon.ico'));
 
 // Set up a headless websocket server that prints any
 // events that come in.
-const wsServer = new ws.Server({ noServer: true });
-wsServer.on('connection', socket => {
-  socket.on('message', message => console.log(message));
-});
-
-const server = app.listen(5001);
+const socketServer = new ws.Server({ port: 5001 });
 console.log('Websocket server is listening on port ' + 5001);
-server.on('upgrade', (request, socket, head) => {
-  wsServer.handleUpgrade(request, socket, head, socket => {
-    wsServer.emit('connection', socket, request);
+
+socketServer.on('connection', socket => {
+  socket.on('message', data => {
+		console.log(`Received ${data}`)
+		socketServer.clients.forEach(function each(client) {
+			console.log(client.readyState)
+			console.log(ws.OPEN)
+      if (client.readyState === ws.OPEN) {
+				console.log("sending?")
+				client.send("FUJCI")
+        client.send(data);
+      }
+    });
+    // socketServer.clients.forEach(client => {
+		// 	console.log(client)
+    //   // if (client.readyState === ws.OPEN) {
+    //   //   client.send(data);
+    //   // }
+    // });
   });
 });
+
+// wsServer.on('connection', socket => {
+//   socket.on('message', message => console.log(message));
+// });
+
+// const server = app.listen(5001);
+// console.log('Websocket server is listening on port ' + 5001);
+// server.on('upgrade', (request, socket, head) => {
+//   wsServer.handleUpgrade(request, socket, head, socket => {
+//     wsServer.emit('connection', socket, request);
+//   });
+// });
 
 // ------------------------ App Routing --------------------------------
 

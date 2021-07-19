@@ -36,7 +36,9 @@ router.get('/isUsernameAvailable', async (req, res) => {
  * Example: http://localhost:5000/user/info
  */
 router.get('/info', checkSignedIn, (req, res) => {
-    res.json({ name: req.user.name, email: req.user.email, username: req.user.username })
+    // console.log(req.user)
+    // res.json({ _id: name: req.user.name, email: req.user.email, username: req.user.username, picture: req.user.picture })
+    res.status(200).send(req.user)
 })
 
 /**
@@ -154,6 +156,9 @@ router.post('/friends', checkSignedIn, (req, res, next) => {
         // Otherwise add request to requester and requested
         await User.findByIdAndUpdate(requesterId, { $push: { "friendRequests": requestedId } }).exec()
         await User.findByIdAndUpdate(requested, { $push: { "friendRequests": requesterId } }).exec()
+
+        // Notify 
+
         return res.json({ status: "Friend request sent" })
 })
 
@@ -186,10 +191,7 @@ router.post('/friends', checkSignedIn, (req, res, next) => {
  */
 router.get('/friends', checkSignedIn, async (req, res) => {
     const friends = await User.findById(req.user._id, 'friends').populate('friends', {"username": 1, "name": 1, "picture": 1}).exec()
-    // {"username": 1, "name": 1, "picture": 1}
     const friendRequests = await User.findById(req.user._id, 'friendRequests').populate('friendRequests', {"username": 1, "name": 1, "picture": 1}).exec()
-    // const friendRequests = await FriendRelationship.find({recipient: req.user._id}).exec()
-
     res.status(200).send({friendRequests: friendRequests.friendRequests, friends: friends.friends})
 })
 

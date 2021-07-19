@@ -6,6 +6,7 @@
   margin-bottom: -3px;
   word-break: break-all;
   white-space: nowrap;
+  min-width: 100%;
 }
 
 .textOverflow p {
@@ -13,4 +14,5 @@
   display: inline-block;
   overflow: hidden;
   text-overflow: ellipsis;
+  min-width: 100%;
 }

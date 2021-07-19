@@ -120,7 +120,9 @@ export default function PersistentDrawerLeft() {
 	const theme = useTheme();
 	const [open, setOpen] = React.useState(true);
 	const [anchorEl, setAnchorEl] = React.useState(null);
-	const [userInfo, setUserInfo] = React.useState({name: "", username: "", email: ""});
+	let [userInfo, setUserInfo] = React.useState({name: "", username: "", email: "", picture: ""});
+	let [friendRequests, setFriendRequests] = React.useState([])
+	let [friends, setFriends] = React.useState([])
 	const openProfile = Boolean(anchorEl);
 
 	const handleDrawerOpen = () => {
@@ -144,24 +146,49 @@ export default function PersistentDrawerLeft() {
 		window.location.href = "/auth/logout";
 	}
 
+	// React.useEffect(() => {
+	// 	console.log('new!')
+	// 	// console.log(userInfo)
+	// 	// console.log(friends)
+	// 	console.log(friendRequests)
+	// }, [userInfo, friends, friendRequests]);
+
 	useEffect(() => {
-		// fetch('http://localhost:5000/user/info')
-		const ws = new WebSocket('wss://ws.weespeak.xyz')
-		ws.onopen = () => {
-			console.log("wss connection opened")
-			ws.send('hello')
-		}
-		ws.onerror = (err) => {
-			console.log(err)
-		}
+		// const ws = new WebSocket('wss://ws.weespeak.xyz')
+		// ws.onopen = () => {
+		// 	console.log("wss connection opened")
+		// 	ws.send('hello')
+		// }
+		// ws.onclose = () => {
+		// 	console.log("wss connection closed")
+		// 	ws.send('hello')
+		// }
+		// ws.onmessage = (event) => {
+		// 	console.log(`wss received ${event}`)
+		// }
+		// ws.onerror = (err) => {
+		// 	console.log(err)
+		// }
 		
 		console.log(`fetching from ${process.env.REACT_APP_MAIN_URL}/user/info`)
 		fetch(`${process.env.REACT_APP_MAIN_URL}/user/info`)
 			.then(res => res.json())
 			.then(
 				(result) => {
-					// console.log(result);
-					setUserInfo({name: result.name, username: result.username, email: result.email});
+					setUserInfo({ name: result.name, username: result.username, email: result.email, picture: result.picture });
+				},
+				(error) => {
+					console.error(error)
+				}
+			)
+		
+		console.log(`fetching from ${process.env.REACT_APP_MAIN_URL}/user/friends`)
+		fetch(`${process.env.REACT_APP_MAIN_URL}/user/friends`)
+			.then(res => res.json())
+			.then(
+				(result) => {
+					setFriendRequests(result.friendRequests)
+					setFriends(result.friends)
 				},
 				(error) => {
 					console.error(error)
@@ -260,7 +287,7 @@ export default function PersistentDrawerLeft() {
 				</List>
 				<Divider />
 				<List>
-					{['FJIAOJFEIO FEWJIOWEFJ', 'Real Name 2', 'Real Name 3'].map((text, index) => (
+					{/* {['FJIAOJFEIO FEWJIOWEFJ', 'Real Name 2', 'Real Name 3'].map((text, index) => (
 						<StylesProvider injectFirst>
 							<ListItem button key={text}>
 								<ListItemIcon><Avatar alt="Remy Sharp" src="https://lh3.googleusercontent.com/a/AATXAJyV5x-KGJctWAnEDEmr5RwJQa0fi9TaxtxTAP2X=s96-c" /></ListItemIcon>
@@ -268,6 +295,17 @@ export default function PersistentDrawerLeft() {
 								<ListItemIcon><FiberManualRecordIcon style={{ width: "20px", marginLeft: "31px"}} /></ListItemIcon>
 							</ListItem>
 						</StylesProvider>
+					))} */}
+					{friendRequests.map((user, index) => (
+						<>
+							<StylesProvider injectFirst>
+								<ListItem button key={index}>
+									<ListItemIcon><Avatar alt={user.name} src={user.picture} /></ListItemIcon>
+									<ListItemText className="textOverflow" primary={user.name} secondary={user.username}/>
+									<ListItemIcon><FiberManualRecordIcon style={{ width: "20px", marginLeft: "31px"}} /></ListItemIcon>
+								</ListItem>
+							</StylesProvider>
+						</>
 					))}
 				</List>
 			</Drawer>
