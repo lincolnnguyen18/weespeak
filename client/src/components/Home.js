@@ -121,7 +121,7 @@ export default function PersistentDrawerLeft() {
 	const [open, setOpen] = React.useState(true);
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const ws = global.ws
-	let [userInfo, setUserInfo] = React.useState({name: "", username: "", email: "", picture: ""});
+	let [userInfo, setUserInfo] = React.useState({_id: "", name: "", username: "", email: "", picture: ""});
 	let [friendRequests, setFriendRequests] = React.useState([])
 	let [friends, setFriends] = React.useState([])
 	const openProfile = Boolean(anchorEl);
@@ -147,18 +147,18 @@ export default function PersistentDrawerLeft() {
 		window.location.href = "/auth/logout";
 	}
 
-	// React.useEffect(() => {
-	// 	console.log('new!')
-	// 	// console.log(userInfo)
-	// 	// console.log(friends)
-	// 	console.log(friendRequests)
-	// }, [userInfo, friends, friendRequests]);
+	React.useEffect(() => {
+		if (userInfo.username !== "") {
+			ws.send(`client ${userInfo.username} with _id ${userInfo._id} has connected`)
+		}
+	}, [userInfo]);
 
 	useEffect(() => {
+		// Initialize ws client
 		ws.onopen = () => {
 			console.log("wss connection opened")
-			ws.send('こんにちは')
 		}
+
 		ws.onclose = () => {
 			console.log("wss connection closed")
 		}
@@ -168,13 +168,13 @@ export default function PersistentDrawerLeft() {
 		ws.onerror = (err) => {
 			console.log(err)
 		}
-		
+
 		// console.log(`fetching from ${process.env.REACT_APP_MAIN_URL}/user/info`)
 		fetch(`${process.env.REACT_APP_MAIN_URL}/user/info`)
 			.then(res => res.json())
 			.then(
 				(result) => {
-					setUserInfo({ name: result.name, username: result.username, email: result.email, picture: result.picture });
+					setUserInfo({ _id: result._id, name: result.name, username: result.username, email: result.email, picture: result.picture });
 				},
 				(error) => {
 					console.error(error)

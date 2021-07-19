@@ -36,7 +36,7 @@ app.use(passport.session());
 // Connect to mongodb
 mongoose.connect(keys.mongodb.dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
 	.catch( error => console.log(error));
-console.log('connected!');
+console.log('MongoDB connected!');
 
 // Set up routes
 app.use('/auth', authRoutes);
@@ -54,11 +54,11 @@ console.log('Websocket server is listening on port ' + 5001);
 socketServer.on('connection', socket => {
   socket.on('message', data => {
 		console.log(`Received ${data}`)
-		socketServer.clients.forEach(client => {
-      if (client.readyState === ws.OPEN) {
-        client.send(data);
-      }
-    });
+		// socketServer.clients.forEach(client => {
+    //   if (client.readyState === ws.OPEN) {
+    //     client.send(data);
+    //   }
+    // });
   });
 });
 
