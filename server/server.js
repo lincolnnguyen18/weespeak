@@ -59,15 +59,20 @@ socketServer.on('connection', client => {
 		switch (data.req) {
 			case 'message':
 				console.log(`Received message: ${data.body}`)
-				client.send("Message received")
+				client.send(JSON.stringify({
+					req: "message",
+					body: "Message received"
+				}))
 				break;
 			case 'identification':
 				clients.push({
 					id: data.body,
 					client: client,
 				})
-				console.log(`Pushed client with _id ${data.body} onto clients array`)
-				client.send("Server received client connection")
+				client.send(JSON.stringify({
+					req: "message",
+					body: "Client connection received"
+				}))
 				break;
 			default:
 				client.send("Invalid request")

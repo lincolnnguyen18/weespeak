@@ -158,10 +158,6 @@ export default function PersistentDrawerLeft() {
 				req: "identification",
 				body: userInfo._id,
 			}))
-			ws.send(JSON.stringify({
-				req: "invalidTest",
-				body: "this should fail",
-			}))
 		}
 	}, [userInfo]);
 
@@ -174,8 +170,14 @@ export default function PersistentDrawerLeft() {
 		ws.onclose = () => {
 			console.log("wss connection closed")
 		}
-		ws.onmessage = (message) => {
-			console.log(`wss received: ${message.data}`)
+		ws.onmessage = (event) => {
+			// console.log(`wss received: ${message.data}`)
+			let data = JSON.parse(event.data)
+			switch (data.req) {
+				case 'message':
+					console.log(`Received message: ${data.body}`)
+					break;
+			}
 		}
 		ws.onerror = (err) => {
 			console.log(err)
