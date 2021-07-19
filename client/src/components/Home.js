@@ -171,11 +171,22 @@ export default function PersistentDrawerLeft() {
 			console.log("wss connection closed")
 		}
 		ws.onmessage = (event) => {
-			// console.log(`wss received: ${message.data}`)
 			let data = JSON.parse(event.data)
 			switch (data.req) {
 				case 'message':
 					console.log(`Received message: ${data.body}`)
+					break;
+				case 'updateFriendRequests':
+					fetch(`${process.env.REACT_APP_MAIN_URL}/user/friends`)
+						.then(res => res.json())
+						.then(
+							(result) => {
+								setFriendRequests(result.friendRequests)
+							},
+							(error) => {
+								console.error(error)
+							}
+						)
 					break;
 			}
 		}

@@ -49,13 +49,13 @@ router.post('/username', checkSignedIn, async (req, res) => {
     reqUsername = req.body.username
     const usernameExists = await User.exists({ username: '@' + reqUsername.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') });
     if (/^[a-zA-Z0-9_]{1,15}$/.test(reqUsername) && !usernameExists) {
-        console.log(`Username ${'@' + reqUsername} is available so updating username of user with id: '${req.user._id}' with new username: '${req.body.username}'`)
+        // console.log(`Username ${'@' + reqUsername} is available so updating username of user with id: '${req.user._id}' with new username: '${req.body.username}'`)
         const filter = { _id: req.user._id }
         const update = { username: '@' + reqUsername }
         await User.findOneAndUpdate(filter, update)
         res.json({status: "success"})
     } else {
-        console.log(`Username '${'@' + reqUsername}' is not available. Please pick a different username.`)
+        // console.log(`Username '${'@' + reqUsername}' is not available. Please pick a different username.`)
         res.json({status: "failure"})
     }
 })
@@ -103,7 +103,6 @@ router.get('/search', async (req, res) => {
 
     try {
         // db.users.find({ $or: [{"username": /Ma/i}, { "name": /Lin/i } ]})
-        console.log(req.user.friendRequests)
         results.results = await User.find({
             $and: [
                 { _id: {$nin: [req.user._id, ...req.user.friendRequests, ...req.user.friends]} },
@@ -143,22 +142,25 @@ router.post('/friends', checkSignedIn, (req, res, next) => {
         await User.findById(requestedId).then((result) => {
             requested = result
         })
-        console.log(requester)
-        console.log(requested)
 
         // Check if requested user already requested or friended
         if (requester.friendRequests.includes(requestedId)) {
             return res.json({ status: "Friend request already sent" })
         } else if (requester.friends.includes(requestedId)) {
-            console.log("already friended")
             return res.json({ status: "Friend request already accepted" })
         }
 
         // Otherwise add request to requester and requested
         await User.findByIdAndUpdate(requesterId, { $push: { "friendRequests": requestedId } }).exec()
-        await User.findByIdAndUpdate(requested, { $push: { "friendRequests": requesterId } }).exec()
+        await User.findByIdAndUpdate(requestedId, { $push: { "friendRequests": requesterId } }).exec()
 
-        // Notify 
+        // Notify users to update drawer
+        global.clients[requesterId].send(JSON.stringify({
+            req: 'updateFriendRequests'
+        }))
+        global.clients[requestedId].send(JSON.stringify({
+            req: 'updateFriendRequests'
+        }))
 
         return res.json({ status: "Friend request sent" })
 })
