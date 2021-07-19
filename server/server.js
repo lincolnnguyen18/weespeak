@@ -49,11 +49,30 @@ app.use('/favicon.ico', express.static('/../client/build/favicon.ico'));
 // ------------------------ Websocket server --------------------------------
 
 const socketServer = new ws.Server({ port: 5001 });
+let clients = [];
+
 console.log('Websocket server is listening on port ' + 5001);
 
-socketServer.on('connection', socket => {
-  socket.on('message', data => {
-		console.log(`Received ${data}`)
+socketServer.on('connection', client => {
+  client.on('message', data => {
+		data = JSON.parse(data)
+		switch (data.req) {
+			case 'message':
+				console.log(`Received message: ${data.body}`)
+				client.send("Message received")
+				break;
+			case 'identification':
+				clients.push({
+					id: data.body,
+					client: client,
+				})
+				console.log(`Pushed client with _id ${data.body} onto clients array`)
+				client.send("Server received client connection")
+				break;
+			default:
+				client.send("Invalid request")
+		}
+		// console.log(`Received ${data}`)
 		// socketServer.clients.forEach(client => {
     //   if (client.readyState === ws.OPEN) {
     //     client.send(data);

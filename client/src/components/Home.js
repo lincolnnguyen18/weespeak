@@ -149,7 +149,19 @@ export default function PersistentDrawerLeft() {
 
 	React.useEffect(() => {
 		if (userInfo.username !== "") {
-			ws.send(`client ${userInfo.username} with _id ${userInfo._id} has connected`)
+			// ws.send(`client ${userInfo.username} with _id ${userInfo._id} has connected`)
+			ws.send(JSON.stringify({
+				req: "message",
+				body: `client ${userInfo.username} has connected`,
+			}))
+			ws.send(JSON.stringify({
+				req: "identification",
+				body: userInfo._id,
+			}))
+			ws.send(JSON.stringify({
+				req: "invalidTest",
+				body: "this should fail",
+			}))
 		}
 	}, [userInfo]);
 
@@ -163,7 +175,7 @@ export default function PersistentDrawerLeft() {
 			console.log("wss connection closed")
 		}
 		ws.onmessage = (message) => {
-			console.log(`wss received ${message.data}`)
+			console.log(`wss received: ${message.data}`)
 		}
 		ws.onerror = (err) => {
 			console.log(err)
