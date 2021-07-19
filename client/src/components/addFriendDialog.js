@@ -41,9 +41,11 @@ export default function ScrollDialog() {
 
 	React.useEffect(() => {
 		if (open) {
+			console.log(`reset!`)
 			setFindFriends([])
 			text.current = ""
-			lastSearch.current = ""
+			currentSearch.current = ""
+			lastSearch.current = undefined
 			setDialogTitle("Add a friend")
 		}
 	}, [open]);
