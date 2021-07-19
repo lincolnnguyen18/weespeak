@@ -181,15 +181,17 @@ router.post('/friends', checkSignedIn, (req, res, next) => {
 //     })
 // })
 
-// /**
-//  * GET the list of friends and friend requests
-//  */
-// router.get('/friends', checkSignedIn, async (req, res) => {
-//     const friends = await User.findById(req.user._id, 'friends').exec()
-//     const friendRequests = await FriendRelationship.find({recipient: req.user._id}).exec()
+/**
+ * GET the list of friends and friend requests
+ */
+router.get('/friends', checkSignedIn, async (req, res) => {
+    const friends = await User.findById(req.user._id, 'friends').populate('friends', {"username": 1, "name": 1, "picture": 1}).exec()
+    // {"username": 1, "name": 1, "picture": 1}
+    const friendRequests = await User.findById(req.user._id, 'friendRequests').populate('friendRequests', {"username": 1, "name": 1, "picture": 1}).exec()
+    // const friendRequests = await FriendRelationship.find({recipient: req.user._id}).exec()
 
-//     res.status(200).send({friends: friends.friends, friendRequests})
-// })
+    res.status(200).send({friendRequests: friendRequests.friendRequests, friends: friends.friends})
+})
 
 // /**
 //  * Respond to a friend request with either decline or accept
