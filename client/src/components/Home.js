@@ -170,7 +170,7 @@ export default function PersistentDrawerLeft() {
 		// 	console.log(err)
 		// }
 		
-		console.log(`fetching from ${process.env.REACT_APP_MAIN_URL}/user/info`)
+		// console.log(`fetching from ${process.env.REACT_APP_MAIN_URL}/user/info`)
 		fetch(`${process.env.REACT_APP_MAIN_URL}/user/info`)
 			.then(res => res.json())
 			.then(
@@ -182,7 +182,7 @@ export default function PersistentDrawerLeft() {
 				}
 			)
 		
-		console.log(`fetching from ${process.env.REACT_APP_MAIN_URL}/user/friends`)
+		// console.log(`fetching from ${process.env.REACT_APP_MAIN_URL}/user/friends`)
 		fetch(`${process.env.REACT_APP_MAIN_URL}/user/friends`)
 			.then(res => res.json())
 			.then(

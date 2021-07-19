@@ -103,9 +103,10 @@ router.get('/search', async (req, res) => {
 
     try {
         // db.users.find({ $or: [{"username": /Ma/i}, { "name": /Lin/i } ]})
+        console.log(req.user.friendRequests)
         results.results = await User.find({
             $and: [
-                { _id: {$ne: req.user._id} },
+                { _id: {$nin: [req.user._id, ...req.user.friendRequests, ...req.user.friends]} },
                 { $or: [
                     { "username": { $regex: search } },
                     { "name": { $regex: search } },
