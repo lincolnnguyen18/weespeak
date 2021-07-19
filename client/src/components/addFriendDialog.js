@@ -41,7 +41,7 @@ export default function ScrollDialog() {
 
 	React.useEffect(() => {
 		if (open) {
-			console.log(`reset!`)
+			// console.log(`reset!`)
 			setFindFriends([])
 			text.current = ""
 			currentSearch.current = ""
@@ -147,7 +147,7 @@ export default function ScrollDialog() {
 
 		// Clear and reset list without searching for empty strings
 		if (e.target.value.trim().length === 0) {
-			console.log("Add a friend")
+			// console.log("Add a friend")
 			setDialogTitle("Add a friend")
 			setFindFriends([])
 			currentSearch.current = ""
@@ -188,7 +188,7 @@ export default function ScrollDialog() {
 
 	const handleItemClick = (person) => {
 		postData(`/user/friends?fid=${person._id}`, {}).then(result => {
-			console.log(result)
+			// console.log(result)
 			handleClose()
 		})
 	}
@@ -233,29 +233,6 @@ export default function ScrollDialog() {
 						<DialogContentText
 							id="scroll-dialog-description"
 						>
-							{/* <List>
-								{Array(15).fill({
-										"friends": [],
-									"_id": "77777",
-									"name": "THIS IS A TESTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
-									"username": "@TEST_TEST_EST_TEST_123",
-									"__v": 0
-									}).map((person, index) => (
-									<>
-										<ListItem button key={index}>
-											<ListItemIcon><Avatar alt="Real Name" src="https://lh3.googleusercontent.com/a/AATXAJyV5x-KGJctWAnEDEmr5RwJQa0fi9TaxtxTAP2X=s96-c" /></ListItemIcon>
-											<StylesProvider injectFirst>
-												<ListItemText
-													primary={person['name']}
-													secondary={person['username']}
-													className="textOverflow2"
-												/>
-											</StylesProvider>
-										</ListItem>
-										<Divider />
-									</>
-								))}
-							</List> */}
 							<List>
 								{findFriends.map((person, index) => (
 									<>

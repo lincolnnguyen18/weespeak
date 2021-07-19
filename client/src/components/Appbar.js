@@ -49,10 +49,15 @@ export default function ButtonAppbar() {
 						href="/"
 						className={classes.homeButton}
 					>
-						<img src={logo} alt="logo" className={classes.logo} />
+						<span alt="logo" className={classes.logo} style={{
+							backgroundImage: `url(${logo})`,
+							backgroundSize: "cover",
+							backgroundRepeat: "no-repeat",
+							width: "40px",
+							height: "40px",
+						}}></span>
 						<Typography
 							style={{
-								cursor: "pointer",
 								userSelect: "none",
 								color: "#FFFFFF",
 								fontSize: "1.4rem",

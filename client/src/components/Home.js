@@ -120,6 +120,7 @@ export default function PersistentDrawerLeft() {
 	const theme = useTheme();
 	const [open, setOpen] = React.useState(true);
 	const [anchorEl, setAnchorEl] = React.useState(null);
+	const ws = global.ws
 	let [userInfo, setUserInfo] = React.useState({name: "", username: "", email: "", picture: ""});
 	let [friendRequests, setFriendRequests] = React.useState([])
 	let [friends, setFriends] = React.useState([])
@@ -154,21 +155,19 @@ export default function PersistentDrawerLeft() {
 	// }, [userInfo, friends, friendRequests]);
 
 	useEffect(() => {
-		// const ws = new WebSocket('wss://ws.weespeak.xyz')
-		// ws.onopen = () => {
-		// 	console.log("wss connection opened")
-		// 	ws.send('hello')
-		// }
-		// ws.onclose = () => {
-		// 	console.log("wss connection closed")
-		// 	ws.send('hello')
-		// }
-		// ws.onmessage = (event) => {
-		// 	console.log(`wss received ${event}`)
-		// }
-		// ws.onerror = (err) => {
-		// 	console.log(err)
-		// }
+		ws.onopen = () => {
+			console.log("wss connection opened")
+			ws.send('こんにちは')
+		}
+		ws.onclose = () => {
+			console.log("wss connection closed")
+		}
+		ws.onmessage = (message) => {
+			console.log(`wss received ${message.data}`)
+		}
+		ws.onerror = (err) => {
+			console.log(err)
+		}
 		
 		// console.log(`fetching from ${process.env.REACT_APP_MAIN_URL}/user/info`)
 		fetch(`${process.env.REACT_APP_MAIN_URL}/user/info`)
@@ -216,7 +215,13 @@ export default function PersistentDrawerLeft() {
 						<MenuIcon />
 					</IconButton>
 					<div className={classes.title}>
-						<img src={logo} alt="logo" className={classes.logo} />
+						<span alt="logo" className={classes.logo} style={{
+							backgroundImage: `url(${logo})`,
+							backgroundSize: "cover",
+							backgroundRepeat: "no-repeat",
+							width: "40px",
+							height: "40px",
+						}}></span>
 						<Typography
 							noWrap
 							style={{
@@ -287,15 +292,6 @@ export default function PersistentDrawerLeft() {
 				</List>
 				<Divider />
 				<List>
-					{/* {['FJIAOJFEIO FEWJIOWEFJ', 'Real Name 2', 'Real Name 3'].map((text, index) => (
-						<StylesProvider injectFirst>
-							<ListItem button key={text}>
-								<ListItemIcon><Avatar alt="Remy Sharp" src="https://lh3.googleusercontent.com/a/AATXAJyV5x-KGJctWAnEDEmr5RwJQa0fi9TaxtxTAP2X=s96-c" /></ListItemIcon>
-								<ListItemText className="textOverflow" primary={text} secondary="@user421nam_e__usernameusernameusernameusernameusername"/>
-								<ListItemIcon><FiberManualRecordIcon style={{ width: "20px", marginLeft: "31px"}} /></ListItemIcon>
-							</ListItem>
-						</StylesProvider>
-					))} */}
 					{friendRequests.map((user, index) => (
 						<>
 							<StylesProvider injectFirst>
@@ -315,21 +311,6 @@ export default function PersistentDrawerLeft() {
 				})}
 			>
 				<div className={classes.drawerHeader} />
-				{/* <Typography paragraph>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-					ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
-					facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit
-					gravida rutrum quisque non tellus. Convallis convallis tellus id interdum velit laoreet id
-					donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-					adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra nibh cras.
-					Metus vulputate eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo quis
-					imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus at augue. At augue eget
-					arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
-					donec massa sapien faucibus et molestie ac.
-				</Typography> */}
-				{/* <Typography className={classes.greeting} style={{ marginLeft: open ? '-1em' : '.1em' }}>
-					Hello.
-				</Typography> */}
 				<div className={classes.greetingBox}>
 					<Typography className={classes.greeting}>
 						Hello <b>{userInfo.name}</b>
