@@ -28,6 +28,12 @@ import Avatar from '@material-ui/core/Avatar';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { StylesProvider } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import "./homeOverride.css";
 
 function Alert(props) {
@@ -131,6 +137,9 @@ export default function PersistentDrawerLeft() {
 	const [openToast, setOpenToast] = React.useState(false);
 	const [toastMessage, setToastMessage] = React.useState("A toast test.");
 	const [toastSeverity, setToastSeverity] = React.useState("success");
+	const [openConfirm, setOpenConfirm] = React.useState(false);
+	const [confirmTitle, setConfirmTitle] = React.useState("Confirm title.");
+	const [confirmBody, setConfirmBody] = React.useState("Confirm body.");
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	let ws = null
 	let [userInfo, setUserInfo] = React.useState({_id: "", name: "", username: "", email: "", picture: ""});
@@ -168,15 +177,31 @@ export default function PersistentDrawerLeft() {
 	}
 
 	const handleUserClick = (type, relationship) => {
+		setOpenConfirm(true)
 		switch (type) {
 			case 'receivedRequest':
+				console.log(relationship)
 				console.log('received')
+				setOpenConfirm(false)
+				setConfirmTitle(`${relationship.requester.name} wants to be your friend`)
+				setConfirmBody("Do you agree?")
+				setOpenConfirm(true)
 				break
 			case 'sentRequest':
+				console.log(relationship)
 				console.log('sent')
+				setOpenConfirm(false)
+				setConfirmTitle(`${relationship.recipient.name} hasn't accepted your friend request yet`)
+				setConfirmBody(`Do you want to cancel your friend request?`)
+				setOpenConfirm(true)
 				break
 			default:
+				console.log(relationship)
 				console.log('friend')
+				setOpenConfirm(false)
+				setConfirmTitle(`${relationship.requester ? relationship.requester.name : relationship.recipient.name} is online.`)
+				setConfirmBody(`Do you want to call them?`)
+				setOpenConfirm(true)
 		}
 	}
 
@@ -272,6 +297,33 @@ export default function PersistentDrawerLeft() {
 
 	return (
 		<div className={classes.root}>
+			<Snackbar open={openToast} autoHideDuration={6000} onClose={handleToastClose}>
+        <Alert onClose={handleToastClose} severity={toastSeverity}>
+					{toastMessage}
+        </Alert>
+      </Snackbar>
+			<Dialog
+        open={openConfirm}
+        onClose={() => setOpenConfirm(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+				id="confirmRequestDialog"
+      >
+        <DialogTitle id="alert-dialog-title">{confirmTitle}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+						{confirmBody}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenConfirm(false)} color="none">
+            No
+          </Button>
+          <Button onClick={() => setOpenConfirm(false)} color="none" autoFocus>
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
 			<CssBaseline />
 			<AppBar
 				position="fixed"
@@ -440,11 +492,6 @@ export default function PersistentDrawerLeft() {
 					</Typography>
 				</div>
 			</main>
-			<Snackbar open={openToast} autoHideDuration={6000} onClose={handleToastClose}>
-        <Alert onClose={handleToastClose} severity={toastSeverity}>
-					{toastMessage}
-        </Alert>
-      </Snackbar>
 		</div>
 	);
 }

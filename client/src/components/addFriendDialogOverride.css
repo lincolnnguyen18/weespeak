@@ -10,7 +10,8 @@ body > div.MuiDialog-root > div.MuiDialog-container.MuiDialog-scrollPaper {
   align-items: center;
 }
 
-body > div.MuiDialog-root > div.MuiDialog-container.MuiDialog-scrollPaper > div {
+/* body > div.MuiDialog-root > div.MuiDialog-container.MuiDialog-scrollPaper > div { */
+#addFriendDialog > div.MuiDialog-container.MuiDialog-scrollPaper > div {
   height: 80%;
 }
 
@@ -51,4 +52,8 @@ body > div.MuiDialog-root > div.MuiDialog-container.MuiDialog-scrollPaper > div 
 
 #dialogInput {
   margin-top: 0.1em;
+}
+
+#confirmRequestDialog > div.MuiDialog-container.MuiDialog-scrollPaper > div {
+  max-width: 400px;
 }

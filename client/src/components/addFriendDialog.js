@@ -209,6 +209,7 @@ export default function ScrollDialog() {
 					aria-describedby="scroll-dialog-description"
 					fullWidth
 					// maxWidth="sm"
+					id="addFriendDialog"
 					style={{ maxWidth: "500px", margin: "auto" }}
 				>
 					<StylesProvider injectFirst>
@@ -230,9 +231,7 @@ export default function ScrollDialog() {
 						onScroll={handleScroll}
 					// style={{display: findFriends.length === 0 ? 'none' : 'block'}}
 					>
-						<DialogContentText
-							id="scroll-dialog-description"
-						>
+						<DialogContentText id="scroll-dialog-description">
 							<List>
 								{findFriends.map((person, index) => (
 									<>
