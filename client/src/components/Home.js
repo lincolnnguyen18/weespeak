@@ -211,6 +211,7 @@ export default function PersistentDrawerLeft() {
 						break;
 					case 'toast':
 						console.log('Received toast.')
+						setOpenToast(false)
 						setToastSeverity(data.severity)
 						setToastMessage(data.body)
 						setOpenToast(true)

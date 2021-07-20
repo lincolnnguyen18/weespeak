@@ -141,8 +141,10 @@ router.post('/friends', checkSignedIn, (req, res, next) => {
     // Check if fid is valid
     User.findById(fid).then(async (user) => {
         // Check if request already exists
-        const alreadyExists = await FriendRelationship.findOne({requester: req.user._id, recipient: user._id}).exec()
-        if (alreadyExists === null) {
+        const alreadySent = await FriendRelationship.findOne({requester: req.user._id, recipient: user._id}).exec()
+        const alreadyReceived = await FriendRelationship.findOne({requester: user._id, recipient: req.user._id}).exec()
+
+        if (alreadySent === null && alreadyReceived == null) {
             // If not make a new relationship
             new FriendRelationship({
                 requester: req.user._id, 
@@ -173,18 +175,29 @@ router.post('/friends', checkSignedIn, (req, res, next) => {
                     severity: 'info',
                     body: 'Friend received',
                 }))
+                res.status(200)
             })
         } else {
             // res.send('Error: Friend request already sent or accepted')
-            global.clients[req.user._id].send(JSON.stringify({
-                req: 'toast',
-                severity: 'error',
-                body: 'Friend request already sent or accepted',
-            }))
+            if (alreadySent) {
+                global.clients[req.user._id].send(JSON.stringify({
+                    req: 'toast',
+                    severity: 'error',
+                    body: 'Friend request already sent',
+                }))
+            } else {
+                global.clients[req.user._id].send(JSON.stringify({
+                    req: 'toast',
+                    severity: 'error',
+                    body: 'Friend request already received',
+                }))
+            }
+            res.status(400).send('Friend request already exists')
         }
     })
     .catch((error) => {
         res.send(error)
+        res.status(400).send('Missing required parameters')
     })
 })
 
