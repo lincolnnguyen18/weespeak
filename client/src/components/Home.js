@@ -151,6 +151,19 @@ export default function PersistentDrawerLeft() {
 		window.location.href = "/auth/logout";
 	}
 
+	const handleUserClick = (type, relationship) => {
+		switch (type) {
+			case 'receivedRequest':
+				console.log('received')
+				break
+			case 'sentRequest':
+				console.log('sent')
+				break
+			default:
+				console.log('friend')
+		}
+	}
+
 	React.useEffect(() => {
 		if (userInfo.username !== "") {
 			// ws.send(`client ${userInfo.username} with _id ${userInfo._id} has connected`)
@@ -292,13 +305,8 @@ export default function PersistentDrawerLeft() {
 							open={openProfile}
 							onClose={handleClose}
 						>
-							{/* <MenuItem onClick={handleClose}>Settings</MenuItem> */}
 							<MenuItem onClick={handleLogout}>Logout</MenuItem>
-							<MenuItem onClick={handleClose}>Change name</MenuItem>
-							<MenuItem onClick={handleClose}>Change username</MenuItem>
-							<MenuItem onClick={handleClose}>Change profile picture</MenuItem>
-							{/* <MenuItem onClick={handleClose}>Change profile description</MenuItem> */}
-							<MenuItem onClick={handleClose}>Delete account</MenuItem>
+							<MenuItem onClick={handleClose}>Settings</MenuItem>
 						</Menu>
 					</div>
 				</Toolbar>
@@ -339,7 +347,11 @@ export default function PersistentDrawerLeft() {
 					{receivedFriendRequests.map(({requester} , index) => (
 						<>
 							<StylesProvider injectFirst>
-								<ListItem button key={index}>
+								<ListItem
+									button
+									key={index}
+									onClick={() => handleUserClick('receivedRequest', receivedFriendRequests.find(request => request.requester === requester))}
+								>
 									<ListItemIcon><Avatar alt={requester.name} src={requester.picture} /></ListItemIcon>
 									<ListItemText className="textOverflow" primary={requester.name} secondary={requester.username}/>
 									<ListItemIcon><ErrorOutlineIcon style={{ width: "30px", height: "30px", marginLeft: "26px"}} /></ListItemIcon>
@@ -350,7 +362,11 @@ export default function PersistentDrawerLeft() {
 					{sentFriendRequests.map(({recipient}, index) => (
 						<>
 							<StylesProvider injectFirst>
-								<ListItem button key={index}>
+								<ListItem
+									button
+									key={index}
+									onClick={() => handleUserClick('sentRequest', sentFriendRequests.find(request => request.recipient === recipient))}
+								>
 									<ListItemIcon><Avatar alt={recipient.name} src={recipient.picture} /></ListItemIcon>
 									<ListItemText className="textOverflow" primary={recipient.name} secondary={recipient.username}/>
 									<ListItemIcon><QueryBuilderIcon style={{ width: "30px", height: "30px", marginLeft: "26px"}} /></ListItemIcon>
@@ -361,7 +377,11 @@ export default function PersistentDrawerLeft() {
 					{friends.map(({requester, recipient}, index) => (
 						<>
 							<StylesProvider injectFirst>
-								<ListItem button key={index}>
+								<ListItem
+									button
+									key={index}
+									onClick={() => handleUserClick('friend', friends.find(relationship => relationship.requester === requester || relationship.recipient === recipient))}
+								>
 									<ListItemIcon><Avatar alt={requester ? requester.name : recipient.name} src={requester ? requester.picture : recipient.picture} /></ListItemIcon>
 									<ListItemText className="textOverflow" primary={requester ? requester.name : recipient.name} secondary={requester ? requester.username : recipient.username}/>
 									<ListItemIcon><FiberManualRecordIcon style={{ width: "20px", marginLeft: "31px"}} /></ListItemIcon>

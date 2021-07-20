@@ -15,9 +15,18 @@ import Avatar from '@material-ui/core/Avatar';
 import { StylesProvider } from "@material-ui/core/styles";
 import "./addFriendDialogOverride.css";
 import TextField from '@material-ui/core/TextField';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+
+function Alert(props) {
+  return <MuiAlert elevation={6} {...props} />;
+}
 
 export default function ScrollDialog() {
-	const [open, setOpen] = useState(false);
+	const [openDialog, setOpenDialog] = useState(false);
+	const [openToast, setOpenToast] = React.useState(false);
+	const [toastMessage, setToastMessage] = React.useState("A toast test.");
+	const [toastSeverity, setToastSeverity] = React.useState("success");
 	const [scroll, setScroll] = useState("paper");
 
 	let timeout;
@@ -28,19 +37,26 @@ export default function ScrollDialog() {
 	let currentSearch = React.useRef();
 	let text = React.useRef();
 	let [findFriends, setFindFriends] = useState([]);
-	let [dialogTitle, setDialogTitle] = useState("Add a friend") 
+	let [dialogTitle, setDialogTitle] = useState("Add a friend")
+
+	const handleToastClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenToast(false);
+  };
 
 	const handleClickOpen = (scrollType) => () => {
-		setOpen(true);
+		setOpenDialog(true);
 		setScroll(scrollType);
 	};
 
 	const handleClose = () => {
-		setOpen(false);
+		setOpenDialog(false);
 	};
 
 	React.useEffect(() => {
-		if (open) {
+		if (openDialog) {
 			// console.log(`reset!`)
 			setFindFriends([])
 			text.current = ""
@@ -48,7 +64,7 @@ export default function ScrollDialog() {
 			lastSearch.current = undefined
 			setDialogTitle("Add a friend")
 		}
-	}, [open]);
+	}, [openDialog]);
 
 	React.useEffect(() => {
 		fetchInProgress.current = false
@@ -187,16 +203,19 @@ export default function ScrollDialog() {
 	// }
 
 	const handleItemClick = (person) => {
-		// postData(`/user/friends?fid=${person._id}`, {}).then(result => {
-		// 	console.log(result)
-		// 	handleClose()
-		// })
 		fetch(`/user/friends?fid=${person._id}`, {
 			method: 'POST'
 		}).then((res) => {
 			return res.text()
 		}).then((result => {
-			console.log(result)
+			if (result.includes('Error')) {
+				setToastSeverity("error")
+			} else {
+				setToastSeverity("success")
+			}
+			setToastMessage(result)
+			setOpenToast(true)
+			setOpenDialog(false);
 		}))
 	}
 
@@ -209,7 +228,7 @@ export default function ScrollDialog() {
 			<StylesProvider injectFirst>
 			<form noValidate autoComplete="off">
 				<Dialog
-					open={open}
+					open={openDialog}
 					onClose={handleClose}
 					scroll={scroll}
 					aria-labelledby="scroll-dialog-title"
@@ -272,6 +291,11 @@ export default function ScrollDialog() {
 				</Dialog>
 				</form>
 			</StylesProvider>
+			<Snackbar open={openToast} autoHideDuration={6000} onClose={handleToastClose}>
+        <Alert onClose={handleToastClose} severity={toastSeverity}>
+					{toastMessage}
+        </Alert>
+      </Snackbar>
 		</div>
 	);
 }

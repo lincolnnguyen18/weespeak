@@ -157,7 +157,7 @@ router.post('/friends', checkSignedIn, (req, res, next) => {
                 res.send('Friend request sent')
             })
         } else {
-            res.send('Friend request already sent')
+            res.send('Error: Friend request already sent or accepted')
         }
     })
     .catch((error) => {
