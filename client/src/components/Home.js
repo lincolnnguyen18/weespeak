@@ -17,9 +17,11 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import logo from '../whiteBadge/512x512.svg';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import PriorityHighIcon from '@material-ui/icons/PriorityHigh';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import AddFriendDialog from './addFriendDialog';
 import Avatar from '@material-ui/core/Avatar';
 import { StylesProvider } from "@material-ui/core/styles";
@@ -211,8 +213,9 @@ export default function PersistentDrawerLeft() {
 			.then(res => res.json())
 			.then(
 				(result) => {
-					setFriendRequests(result.friendRequests)
-					setFriends(result.friends)
+					console.log(result)
+					// setFriendRequests(result.friendRequests)
+					// setFriends(result.friends)
 				},
 				(error) => {
 					console.error(error)
@@ -318,6 +321,17 @@ export default function PersistentDrawerLeft() {
 				<Divider />
 				<List>
 					{friendRequests.map((user, index) => (
+						<>
+							<StylesProvider injectFirst>
+								<ListItem button key={index}>
+									<ListItemIcon><Avatar alt={user.name} src={user.picture} /></ListItemIcon>
+									<ListItemText className="textOverflow" primary={user.name} secondary={user.username}/>
+									<ListItemIcon><ErrorOutlineIcon style={{ width: "30px", height: "30px", marginLeft: "26px"}} /></ListItemIcon>
+								</ListItem>
+							</StylesProvider>
+						</>
+					))}
+					{friends.map((user, index) => (
 						<>
 							<StylesProvider injectFirst>
 								<ListItem button key={index}>

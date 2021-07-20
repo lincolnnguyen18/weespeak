@@ -10,12 +10,6 @@ function checkSignedIn(req, res, next) {
     else next()
 }
 
-// function paginatedResults(model, excludeId) {
-//     return async (req, res, next) => {
-        
-//     }
-// }
-
 // API endpoints for "user" resource
 
 /**
@@ -105,7 +99,8 @@ router.get('/search', async (req, res) => {
         // db.users.find({ $or: [{"username": /Ma/i}, { "name": /Lin/i } ]})
         results.results = await User.find({
             $and: [
-                { _id: {$nin: [req.user._id, ...req.user.friendRequests, ...req.user.friends]} },
+                // { _id: {$nin: [req.user._id, ...req.user.friendRequests, ...req.user.friends]} },
+                { _id: {$nin: [req.user._id]} },
                 { $or: [
                     { "username": { $regex: search } },
                     { "name": { $regex: search } },
@@ -120,111 +115,114 @@ router.get('/search', async (req, res) => {
     }
 })
 
+String.prototype.toObjectId = function() {
+    var ObjectId = (require('mongoose').Types.ObjectId);
+    return new ObjectId(this.toString());
+  };
+
 /**
- * POST new friend request to user and new friend request to requested friend
+ * POST request on friends endpoint
  * sends a friend request to another user
  * required: friend id (fid)
  */
 router.post('/friends', checkSignedIn, (req, res, next) => {
-        if (!req.query.fid) res.status(400).send('Missing required parameters')
-        else next()
-    },
-    async (req, res) => {
-        const requesterId = req.user.id
-        const requestedId = req.query.fid
-        let requester = null
-        let requested = null
-        
-        // Load requester and requested users' data
-        await User.findById(requesterId).then((result) => {
-            requester = result
-        })
-        await User.findById(requestedId).then((result) => {
-            requested = result
-        })
+    if (!req.query.fid) res.status(400).send('Missing required parameters')
+    else next()
+},
+(req, res) => {
+    const fid = req.query.fid
+    // Check if fid is valid
+    User.findById(fid).then(async (user) => {
+        // Check if request already exists
+        const alreadyExists = await FriendRelationship.findOne({requester: req.user._id, recipient: user._id}).exec()
+        if (alreadyExists === null) {
+            // If not make a new relationship
+            new FriendRelationship({
+                requester: req.user._id, 
+                recipient: user._id,
+                status: 0
+            }).save().then(async (newRelationship) => {
+            // Add relationship to both users
+                await User.findByIdAndUpdate(req.user._id, { $push: { "friends": newRelationship } }).exec()
+                await User.findByIdAndUpdate(fid, { $push: { "friends": newRelationship } }).exec()
 
-        // Check if requested user already requested or friended
-        if (requester.friendRequests.includes(requestedId)) {
-            return res.json({ status: "Friend request already sent" })
-        } else if (requester.friends.includes(requestedId)) {
-            return res.json({ status: "Friend request already accepted" })
+                // Update drawers of both users
+                await global.clients[req.user._id].send(JSON.stringify({
+                    req: 'updateFriends'
+                }))
+                await global.clients[fid].send(JSON.stringify({
+                    req: 'updateFriends'
+                }))
+
+                res.send('Friend request sent')
+            })
+        } else {
+            res.send('Friend request already sent')
         }
-
-        // Otherwise add request to requester and requested
-        await User.findByIdAndUpdate(requesterId, { $push: { "friendRequests": requestedId } }).exec()
-        await User.findByIdAndUpdate(requestedId, { $push: { "friendRequests": requesterId } }).exec()
-
-        // Notify users to update drawer
-        global.clients[requesterId].send(JSON.stringify({
-            req: 'updateFriendRequests'
-        }))
-        global.clients[requestedId].send(JSON.stringify({
-            req: 'updateFriendRequests'
-        }))
-
-        return res.json({ status: "Friend request sent" })
+    })
+    .catch((error) => {
+        res.send(error)
+    })
 })
-
-// /**
-//  * POST request on friends endpoint
-//  * sends a friend request to another user
-//  * required: friend id (fid)
-//  */
-// router.post('/friends', checkSignedIn, (req, res, next) => {
-//     if (!req.query.fid) res.status(400).send('Missing required parameters')
-//     else next()
-// },
-// (req, res) => {
-//     const fid = req.query.fid
-//     // Check if fid is valid
-//     User.findById(fid).then((user) => {
-//         new FriendRelationship({
-//             requester: req.user._id, 
-//             recipient: user._id,
-//             status: 1}).save()
-//             res.status(200).send('Friend Request Sent')
-//     })
-//     .catch((error) => {
-//         res.send(error)
-//     })
-// })
 
 /**
  * GET the list of friends and friend requests
  */
-router.get('/friends', checkSignedIn, async (req, res) => {
-    const friends = await User.findById(req.user._id, 'friends').populate('friends', {"username": 1, "name": 1, "picture": 1}).exec()
-    const friendRequests = await User.findById(req.user._id, 'friendRequests').populate('friendRequests', {"username": 1, "name": 1, "picture": 1}).exec()
-    res.status(200).send({friendRequests: friendRequests.friendRequests, friends: friends.friends})
+ router.get('/friends', checkSignedIn, async (req, res) => {
+    let requestsReceived = await FriendRelationship.find({
+        $and: [
+            { recipient: req.user._id },
+            { status: 0 }
+        ]
+    })
+
+    let requestsSent = await FriendRelationship.find({
+        $and: [
+            { requester: req.user._id },
+            { status: 0 }
+        ]
+    })
+
+    let friends = await FriendRelationship.find({
+        $and: [
+            { status: 1 },
+            { $or: [
+                { recipient: req.user._id },
+                { recipient: req.user._id },
+            ]},
+        ]
+    })
+
+    res.status(200).send({requestsReceived, requestsSent, friends})
 })
 
-// /**
-//  * Respond to a friend request with either decline or accept
-//  * REQUIRES: fid, accept (does not do anything but just set to true)
-//  */
-// router.put('/friends', checkSignedIn, (req, res, next) => {
-//     if (!req.query.fid || !req.query.accept) res.status(400).send('Missing required parameters')
-//     else next()
-// },
-// (req, res, next) => {
-//     FriendRelationship.findOneAndDelete({requester: req.query.fid, recipient: req.user._id})
-//     .then(deletedDocument => {
-//         if (!deletedDocument) res.status(400).send('No friend request exists')
-//         else next() 
-//     })
-// },
-// (req, res) => {
+/**
+ * Respond to a friend request with either decline or accept
+ * REQUIRES: fid, accept (does not do anything but just set to true)
+ */
+router.put('/friends', checkSignedIn, (req, res, next) => {
+    if (!req.query.fid || !req.query.accept) res.status(400).send('Missing required parameters')
+    else next()
+},
+(req, res, next) => {
+    FriendRelationship.findOneAndDelete({requester: req.query.fid, recipient: req.user._id})
+    .then(deletedDocument => {
+        if (!deletedDocument) res.status(400).send('No friend request exists')
+        else next() 
+    })
+},
+(req, res) => {
 
-//     // Updates current user document
-//     User.findByIdAndUpdate(req.user._id, {$push: {friends: req.query.fid}})
+    // Updates current user document
+    User.findByIdAndUpdate(req.user._id, {$push: {friends: req.query.fid}})
     
-//     // Updates friend user document
-//     User.findByIdAndUpdate(req.query.fid, {$push: {friends: req.user._id}})
-//     .then(updatedDocument => {
-//         if (updatedDocument) res.send('Successfully added')
-//         else res.send('Failed added')
-//     })
+    // Updates friend user document
+    User.findByIdAndUpdate(req.query.fid, {$push: {friends: req.user._id}})
+    .then(updatedDocument => {
+        if (updatedDocument) res.send('Successfully added')
+        else res.send('Failed added')
+    })
 
-// })
+})
 
 module.exports = router

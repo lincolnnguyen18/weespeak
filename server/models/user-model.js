@@ -9,8 +9,8 @@ const userSchema = new Schema({
 	emailVerified: Boolean,
 	picture: String,
 	locale: String,
-	friends: [{type: Schema.ObjectId, ref: 'user'}],
-	friendRequests: [{type: Schema.ObjectId, ref: 'user'}],
+	friends: [{type: Schema.ObjectId, ref: 'friendRelationship'}],
+	// friendRequests: [{type: Schema.ObjectId, ref: 'user'}],
 });
 
 const User = mongoose.model('user', userSchema);
