@@ -174,26 +174,34 @@ router.post('/friends', checkSignedIn, (req, res, next) => {
             { recipient: req.user._id },
             { status: 0 }
         ]
-    })
+    }, {recipient: 0, status: 0})
+    .populate('requester', {_id: 1, name: 1, username: 1, picture: 1})
 
     let requestsSent = await FriendRelationship.find({
         $and: [
             { requester: req.user._id },
             { status: 0 }
         ]
-    })
+    }, {requester: 0, status: 0})
+    .populate('recipient', {_id: 1, name: 1, username: 1, picture: 1})
 
-    let friends = await FriendRelationship.find({
+    let friends1 = await FriendRelationship.find({
         $and: [
             { status: 1 },
-            { $or: [
-                { recipient: req.user._id },
-                { recipient: req.user._id },
-            ]},
+            { requester: req.user._id },
         ]
-    })
+    }, {requester: 0, status: 0})
+    .populate('recipient', {_id: 1, name: 1, username: 1, picture: 1})
 
-    res.status(200).send({requestsReceived, requestsSent, friends})
+    let friends2 = await FriendRelationship.find({
+        $and: [
+            { status: 1 },
+            { recipient: req.user._id },
+        ]
+    }, {recipient: 0, status: 0})
+    .populate('requester', {_id: 1, name: 1, username: 1, picture: 1})
+
+    res.status(200).send({requestsReceived, requestsSent, friends: [...friends1, ...friends2]})
 })
 
 /**

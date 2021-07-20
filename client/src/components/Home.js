@@ -22,6 +22,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
+import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
 import AddFriendDialog from './addFriendDialog';
 import Avatar from '@material-ui/core/Avatar';
 import { StylesProvider } from "@material-ui/core/styles";
@@ -124,7 +125,8 @@ export default function PersistentDrawerLeft() {
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const ws = global.ws
 	let [userInfo, setUserInfo] = React.useState({_id: "", name: "", username: "", email: "", picture: ""});
-	let [friendRequests, setFriendRequests] = React.useState([])
+	let [receivedFriendRequests, setReceivedFriendRequests] = React.useState([])
+	let [sentFriendRequests, setSentFriendRequests] = React.useState([])
 	let [friends, setFriends] = React.useState([])
 	const openProfile = Boolean(anchorEl);
 
@@ -179,16 +181,17 @@ export default function PersistentDrawerLeft() {
 					console.log(`Received message: ${data.body}`)
 					break;
 				case 'updateFriendRequests':
-					fetch(`${process.env.REACT_APP_MAIN_URL}/user/friends`)
-						.then(res => res.json())
-						.then(
-							(result) => {
-								setFriendRequests(result.friendRequests)
-							},
-							(error) => {
-								console.error(error)
-							}
-						)
+					console.log('YUP!')
+					// fetch(`${process.env.REACT_APP_MAIN_URL}/user/friends`)
+					// 	.then(res => res.json())
+					// 	.then(
+					// 		(result) => {
+					// 			setFriendRequests(result.friendRequests)
+					// 		},
+					// 		(error) => {
+					// 			console.error(error)
+					// 		}
+					// 	)
 					break;
 			}
 		}
@@ -213,9 +216,9 @@ export default function PersistentDrawerLeft() {
 			.then(res => res.json())
 			.then(
 				(result) => {
-					console.log(result)
-					// setFriendRequests(result.friendRequests)
-					// setFriends(result.friends)
+					setReceivedFriendRequests(result.requestsReceived)
+					setSentFriendRequests(result.requestsSent)
+					setFriends(result.friends)
 				},
 				(error) => {
 					console.error(error)
@@ -319,24 +322,48 @@ export default function PersistentDrawerLeft() {
 					<AddFriendDialog />
 				</List>
 				<Divider />
+				{/* receivedFriendRequests.forEach(requestReceived => {
+						console.log(requestReceived.requester)
+					})
+					sentFriendRequests.forEach(requestSent => {
+						console.log(requestSent.recipient)
+					})
+					friends.forEach(relationship => {
+						if (relationship.requester) {
+							console.log(relationship.requester)
+						} else {
+							console.log(relationship.recipient)
+						}
+					}) */}
 				<List>
-					{friendRequests.map((user, index) => (
+					{receivedFriendRequests.map(({requester} , index) => (
 						<>
 							<StylesProvider injectFirst>
 								<ListItem button key={index}>
-									<ListItemIcon><Avatar alt={user.name} src={user.picture} /></ListItemIcon>
-									<ListItemText className="textOverflow" primary={user.name} secondary={user.username}/>
+									<ListItemIcon><Avatar alt={requester.name} src={requester.picture} /></ListItemIcon>
+									<ListItemText className="textOverflow" primary={requester.name} secondary={requester.username}/>
 									<ListItemIcon><ErrorOutlineIcon style={{ width: "30px", height: "30px", marginLeft: "26px"}} /></ListItemIcon>
 								</ListItem>
 							</StylesProvider>
 						</>
 					))}
-					{friends.map((user, index) => (
+					{sentFriendRequests.map(({recipient}, index) => (
 						<>
 							<StylesProvider injectFirst>
 								<ListItem button key={index}>
-									<ListItemIcon><Avatar alt={user.name} src={user.picture} /></ListItemIcon>
-									<ListItemText className="textOverflow" primary={user.name} secondary={user.username}/>
+									<ListItemIcon><Avatar alt={recipient.name} src={recipient.picture} /></ListItemIcon>
+									<ListItemText className="textOverflow" primary={recipient.name} secondary={recipient.username}/>
+									<ListItemIcon><QueryBuilderIcon style={{ width: "30px", height: "30px", marginLeft: "26px"}} /></ListItemIcon>
+								</ListItem>
+							</StylesProvider>
+						</>
+					))}
+					{friends.map(({requester, recipient}, index) => (
+						<>
+							<StylesProvider injectFirst>
+								<ListItem button key={index}>
+									<ListItemIcon><Avatar alt={requester ? requester.name : recipient.name} src={requester ? requester.picture : recipient.picture} /></ListItemIcon>
+									<ListItemText className="textOverflow" primary={requester ? requester.name : recipient.name} secondary={requester ? requester.username : recipient.username}/>
 									<ListItemIcon><FiberManualRecordIcon style={{ width: "20px", marginLeft: "31px"}} /></ListItemIcon>
 								</ListItem>
 							</StylesProvider>
