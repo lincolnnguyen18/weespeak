@@ -7,6 +7,7 @@ const userSchema = new Schema({
 	googleId: String,
 	email: String,
 	emailVerified: Boolean,
+	loggedIn: Boolean,
 	picture: String,
 	locale: String,
 	friends: [{type: Schema.ObjectId, ref: 'friendRelationship'}],

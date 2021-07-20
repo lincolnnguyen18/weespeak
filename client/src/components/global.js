@@ -1,1 +1,1 @@
-global.ws = new WebSocket('wss://ws.weespeak.xyz')
+global.wsAuth = null

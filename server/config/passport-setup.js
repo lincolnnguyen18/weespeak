@@ -37,6 +37,7 @@ passport.use(
 					googleId: profile._json.sub,
 					email: profile._json.email,
 					emailVerified: profile._json.email_verified,
+					loggedIn: false,
 					picture: profile._json.picture,
 					locale: profile._json.locale,
 					friends: [],

@@ -123,7 +123,7 @@ export default function PersistentDrawerLeft() {
 	const theme = useTheme();
 	const [open, setOpen] = React.useState(true);
 	const [anchorEl, setAnchorEl] = React.useState(null);
-	const ws = global.ws
+	let ws = null
 	let [userInfo, setUserInfo] = React.useState({_id: "", name: "", username: "", email: "", picture: ""});
 	let [receivedFriendRequests, setReceivedFriendRequests] = React.useState([])
 	let [sentFriendRequests, setSentFriendRequests] = React.useState([])
@@ -166,52 +166,54 @@ export default function PersistentDrawerLeft() {
 
 	React.useEffect(() => {
 		if (userInfo.username !== "") {
-			// ws.send(`client ${userInfo.username} with _id ${userInfo._id} has connected`)
-			ws.send(JSON.stringify({
-				req: "message",
-				body: `client ${userInfo.username} has connected`,
-			}))
-			ws.send(JSON.stringify({
-				req: "identification",
-				body: userInfo._id,
-			}))
+			// Initialize ws client
+			ws = new WebSocket('wss://ws.weespeak.xyz')
+			
+			ws.onopen = () => {
+				console.log("wss connection opened")
+				ws.send(JSON.stringify({
+					req: "identification",
+					body: userInfo._id,
+				}))
+			}
+			ws.onclose = () => {
+				console.log("wss connection closed")
+			}
+			ws.onmessage = (event) => {
+				let data = JSON.parse(event.data)
+				switch (data.req) {
+					case 'verified':
+						ws.send(JSON.stringify({
+							req: "message",
+							body: `client ${userInfo.username} has connected`,
+						}))
+						console.log(`Successfully verified and sent greet message to server`)
+						break;
+					case 'message':
+						console.log(`Received message: ${data.body}`)
+						break;
+					case 'updateFriendRequests':
+						console.log('YUP!')
+						// fetch(`${process.env.REACT_APP_MAIN_URL}/user/friends`)
+						// 	.then(res => res.json())
+						// 	.then(
+						// 		(result) => {
+						// 			setFriendRequests(result.friendRequests)
+						// 		},
+						// 		(error) => {
+						// 			console.error(error)
+						// 		}
+						// 	)
+						break;
+				}
+			}
+			ws.onerror = (err) => {
+				console.log(err)
+			}
 		}
 	}, [userInfo]);
 
 	useEffect(() => {
-		// Initialize ws client
-		ws.onopen = () => {
-			console.log("wss connection opened")
-		}
-
-		ws.onclose = () => {
-			console.log("wss connection closed")
-		}
-		ws.onmessage = (event) => {
-			let data = JSON.parse(event.data)
-			switch (data.req) {
-				case 'message':
-					console.log(`Received message: ${data.body}`)
-					break;
-				case 'updateFriendRequests':
-					console.log('YUP!')
-					// fetch(`${process.env.REACT_APP_MAIN_URL}/user/friends`)
-					// 	.then(res => res.json())
-					// 	.then(
-					// 		(result) => {
-					// 			setFriendRequests(result.friendRequests)
-					// 		},
-					// 		(error) => {
-					// 			console.error(error)
-					// 		}
-					// 	)
-					break;
-			}
-		}
-		ws.onerror = (err) => {
-			console.log(err)
-		}
-
 		// console.log(`fetching from ${process.env.REACT_APP_MAIN_URL}/user/info`)
 		fetch(`${process.env.REACT_APP_MAIN_URL}/user/info`)
 			.then(res => res.json())

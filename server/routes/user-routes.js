@@ -42,7 +42,10 @@ router.get('/info', checkSignedIn, (req, res) => {
  * POST new username for user
  * Example: http://localhost:5000/user/username
  */
-router.post('/username', checkSignedIn, async (req, res) => {
+router.post('/username', async (req, res) => {
+    if (req.user === undefined) {
+		res.redirect("/login")
+	}
     reqUsername = req.body.username
     const usernameExists = await User.exists({ username: '@' + reqUsername.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') });
     if (/^[a-zA-Z0-9_]{1,15}$/.test(reqUsername) && !usernameExists) {
@@ -61,12 +64,13 @@ router.post('/username', checkSignedIn, async (req, res) => {
  * GET registration status of user and redirect them to appropriate route
  * Example: http://localhost:5000/user/registrationStatus
  */
-router.get('/registrationStatus', (req, res) => {
+router.get('/registrationStatus', async (req, res) => {
     if (req.user === undefined) {
         res.redirect('/auth/google');
     } else if (req.user.username === "") {
         res.redirect('/register');
     } else {
+        await User.findByIdAndUpdate(req.user._id, { $set: { loggedIn: true } } )
         res.redirect('/');
     }
 })

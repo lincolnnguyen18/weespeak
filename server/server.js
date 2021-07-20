@@ -9,6 +9,7 @@ const cookieSession = require('cookie-session');
 const passport = require('passport');
 const cors = require('cors')
 const bodyParser = require('body-parser');
+const User = require('./models/user-model')
 const ws = require('ws');
 require('dotenv').config()
 
@@ -54,8 +55,34 @@ global.clients = {};
 console.log('Websocket server is listening on port ' + 5001);
 
 socketServer.on('connection', client => {
-  client.on('message', data => {
-		data = JSON.parse(data)
+	// client must be verified within 5 seconds
+	let verified = false
+
+	setTimeout(() => {
+		if (!verified) {
+			client.close()
+		}
+	}, 5000);
+
+  client.on('message', async (data) => {
+		try {
+			data = JSON.parse(data)
+		} catch (e) {}
+		if (data.req === 'identification') {
+			let id = data.body
+			let user = await User.findById(id)
+			if (user.loggedIn === true) {
+				verified = true
+				global.clients[id] = client
+				client.send(JSON.stringify({
+					req: "verified"
+				}))
+			}
+			return
+		}
+		if (!verified) {
+			client.close()
+		}
 		switch (data.req) {
 			case 'message':
 				console.log(`Received message: ${data.body}`)
@@ -64,15 +91,11 @@ socketServer.on('connection', client => {
 					body: "Message received"
 				}))
 				break;
-			case 'identification':
-				global.clients[data.body] = client
+			default:
 				client.send(JSON.stringify({
 					req: "message",
-					body: "Client connection received"
+					body: "Invalid request"
 				}))
-				break;
-			default:
-				client.send("Invalid request")
 		}
 		// console.log(`Received ${data}`)
 		// socketServer.clients.forEach(client => {
