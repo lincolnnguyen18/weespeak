@@ -6,8 +6,11 @@ const FriendRelationship = require('../models/friend-relationship-model')
 // Utility functions
 
 function checkSignedIn(req, res, next) {
-    if (!req.user) res.redirect('/auth/google')
-    else next()
+    if (req.user === undefined || req.user.username === "") {
+		res.redirect("/login")
+	} else {
+		next()
+	}
 }
 
 // API endpoints for "user" resource
