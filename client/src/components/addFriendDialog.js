@@ -15,18 +15,9 @@ import Avatar from '@material-ui/core/Avatar';
 import { StylesProvider } from "@material-ui/core/styles";
 import "./addFriendDialogOverride.css";
 import TextField from '@material-ui/core/TextField';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
-
-function Alert(props) {
-  return <MuiAlert elevation={6} {...props} />;
-}
 
 export default function ScrollDialog() {
 	const [openDialog, setOpenDialog] = useState(false);
-	const [openToast, setOpenToast] = React.useState(false);
-	const [toastMessage, setToastMessage] = React.useState("A toast test.");
-	const [toastSeverity, setToastSeverity] = React.useState("success");
 	const [scroll, setScroll] = useState("paper");
 
 	let timeout;
@@ -38,13 +29,6 @@ export default function ScrollDialog() {
 	let text = React.useRef();
 	let [findFriends, setFindFriends] = useState([]);
 	let [dialogTitle, setDialogTitle] = useState("Add a friend")
-
-	const handleToastClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpenToast(false);
-  };
 
 	const handleClickOpen = (scrollType) => () => {
 		setOpenDialog(true);
@@ -205,18 +189,8 @@ export default function ScrollDialog() {
 	const handleItemClick = (person) => {
 		fetch(`/user/friends?fid=${person._id}`, {
 			method: 'POST'
-		}).then((res) => {
-			return res.text()
-		}).then((result => {
-			if (result.includes('Error')) {
-				setToastSeverity("error")
-			} else {
-				setToastSeverity("success")
-			}
-			setToastMessage(result)
-			setOpenToast(true)
-			setOpenDialog(false);
-		}))
+		})
+		setOpenDialog(false)
 	}
 
 	return (
@@ -291,11 +265,6 @@ export default function ScrollDialog() {
 				</Dialog>
 				</form>
 			</StylesProvider>
-			<Snackbar open={openToast} autoHideDuration={6000} onClose={handleToastClose}>
-        <Alert onClose={handleToastClose} severity={toastSeverity}>
-					{toastMessage}
-        </Alert>
-      </Snackbar>
 		</div>
 	);
 }

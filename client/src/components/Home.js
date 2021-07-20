@@ -25,8 +25,14 @@ import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
 import AddFriendDialog from './addFriendDialog';
 import Avatar from '@material-ui/core/Avatar';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 import { StylesProvider } from "@material-ui/core/styles";
 import "./homeOverride.css";
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const drawerWidth = 280;
 
@@ -122,6 +128,9 @@ export default function PersistentDrawerLeft() {
 	const classes = useStyles();
 	const theme = useTheme();
 	const [open, setOpen] = React.useState(true);
+	const [openToast, setOpenToast] = React.useState(false);
+	const [toastMessage, setToastMessage] = React.useState("A toast test.");
+	const [toastSeverity, setToastSeverity] = React.useState("success");
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	let ws = null
 	let [userInfo, setUserInfo] = React.useState({_id: "", name: "", username: "", email: "", picture: ""});
@@ -129,6 +138,13 @@ export default function PersistentDrawerLeft() {
 	let [sentFriendRequests, setSentFriendRequests] = React.useState([])
 	let [friends, setFriends] = React.useState([])
 	const openProfile = Boolean(anchorEl);
+
+	const handleToastClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenToast(false);
+  };
 
 	const handleDrawerOpen = () => {
 		setOpen(true);
@@ -193,18 +209,29 @@ export default function PersistentDrawerLeft() {
 					case 'message':
 						console.log(`Received message: ${data.body}`)
 						break;
-					case 'updateFriendRequests':
-						console.log('YUP!')
-						// fetch(`${process.env.REACT_APP_MAIN_URL}/user/friends`)
-						// 	.then(res => res.json())
-						// 	.then(
-						// 		(result) => {
-						// 			setFriendRequests(result.friendRequests)
-						// 		},
-						// 		(error) => {
-						// 			console.error(error)
-						// 		}
-						// 	)
+					case 'toast':
+						console.log('Received toast.')
+						setToastSeverity(data.severity)
+						setToastMessage(data.body)
+						setOpenToast(true)
+					case 'updateRequests':
+						fetch(`${process.env.REACT_APP_MAIN_URL}/user/friends`)
+							.then(res => res.json())
+							.then(
+								(result) => {
+									switch (data.body) {
+										case 'receivedFriendRequests':
+											setReceivedFriendRequests(result.requestsReceived)
+											break
+										case 'sentFriendRequests':
+											setSentFriendRequests(result.requestsSent)
+											break
+									}
+								},
+								(error) => {
+									console.error(error)
+								}
+							)
 						break;
 				}
 			}
@@ -412,6 +439,11 @@ export default function PersistentDrawerLeft() {
 					</Typography>
 				</div>
 			</main>
+			<Snackbar open={openToast} autoHideDuration={6000} onClose={handleToastClose}>
+        <Alert onClose={handleToastClose} severity={toastSeverity}>
+					{toastMessage}
+        </Alert>
+      </Snackbar>
 		</div>
 	);
 }

@@ -155,16 +155,32 @@ router.post('/friends', checkSignedIn, (req, res, next) => {
 
                 // Update drawers of both users
                 await global.clients[req.user._id].send(JSON.stringify({
-                    req: 'updateFriends'
+                    req: 'updateRequests',
+                    body: 'sentFriendRequests',
                 }))
                 await global.clients[fid].send(JSON.stringify({
-                    req: 'updateFriends'
+                    req: 'updateRequests',
+                    body: 'receivedFriendRequests',
                 }))
-
-                res.send('Friend request sent')
+                // res.send('Friend request sent')
+                global.clients[req.user._id].send(JSON.stringify({
+                    req: 'toast',
+                    severity: 'success',
+                    body: 'Friend sent',
+                }))
+                global.clients[fid].send(JSON.stringify({
+                    req: 'toast',
+                    severity: 'info',
+                    body: 'Friend received',
+                }))
             })
         } else {
-            res.send('Error: Friend request already sent or accepted')
+            // res.send('Error: Friend request already sent or accepted')
+            global.clients[req.user._id].send(JSON.stringify({
+                req: 'toast',
+                severity: 'error',
+                body: 'Friend request already sent or accepted',
+            }))
         }
     })
     .catch((error) => {
