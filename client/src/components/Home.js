@@ -167,7 +167,8 @@ export default function PersistentDrawerLeft() {
 	React.useEffect(() => {
 		if (userInfo.username !== "") {
 			// Initialize ws client
-			ws = new WebSocket('wss://ws.weespeak.xyz')
+			// ws = new WebSocket('wss://ws.weespeak.xyz')
+			ws = new WebSocket(process.env.REACT_APP_WS_URL)
 			
 			ws.onopen = () => {
 				console.log("wss connection opened")
