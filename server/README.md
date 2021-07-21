@@ -11,8 +11,9 @@ brew install letsencrypt
 nginx -s stop
 # run certbot; remember to add subdomains and add all domains to hosts file for computers on same LAN
 sudo certbot certonly --standalone
-# add additional domains
-certbot -d original, extra, extra --expand
+# add additional domains; NO SPACES
+certbot --expand -d original,extra,extra
+sudo certbot certonly --expand -d lincolnnguyen18.com,demo1.lincolnnguyen18.com,demo2.lincolnnguyen18.com,dev1.lincolnnguyen18.com,dev2.lincolnnguyen18.com
 # 
 ```
 
