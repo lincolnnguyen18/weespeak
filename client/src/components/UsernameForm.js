@@ -88,8 +88,8 @@ export default function UsernameForm() {
 			setReady(false);
 			setErrorMessage('Only have alphanumeric or underscore characters allowed.');
 		} else {
-			// fetch(`http://localhost:5000/user/isUsernameAvailable?username=${escape(username)}`)
-			fetch(`${process.env.REACT_APP_MAIN_URL}/user/isUsernameAvailable?username=${escape(username)}`)
+			// fetch(`${process.env.REACT_APP_MAIN_URL}/user/isUsernameAvailable?username=${escape(username)}`)
+			fetch(`/user/isUsernameAvailable?username=${escape(username)}`)
 			.then(res => res.json())
 			.then(result => {
 				// check length
@@ -137,8 +137,8 @@ export default function UsernameForm() {
 
 	function sendUsername() {
 		console.log(`posting ${textfieldRef.current.value}`)
-		// postData('http://localhost:5000/user/username', { username: textfieldRef.current.value })
-		postData(`${process.env.REACT_APP_MAIN_URL}/user/username`, { username: textfieldRef.current.value })
+		// postData(`${process.env.REACT_APP_MAIN_URL}/user/username`, { username: textfieldRef.current.value })
+		postData(`/user/username`, { username: textfieldRef.current.value })
 		.then(data => {
 			if (data["status"] === "success") {
 				window.location.href = '/'

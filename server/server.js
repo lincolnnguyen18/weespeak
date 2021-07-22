@@ -2,6 +2,7 @@ const express = require('express');
 const userRoutes = require('./routes/user-routes');
 const authRoutes = require('./routes/auth-routes');
 const path = require('path');
+const http = require("http");
 const passportSetup = require('./config/passport-setup');
 const mongoose = require('mongoose');
 const keys = require('./config/keys');
@@ -15,6 +16,8 @@ require('dotenv').config()
 
 // Instantiate express
 const app = express();
+
+const server = http.createServer(app);
 
 // For development only; remove for production!!!
 app.use(cors())
@@ -47,12 +50,50 @@ app.use('/user', userRoutes);
 app.use(express.static(path.join(__dirname, '/../client/build'), { index : false }));
 app.use('/favicon.ico', express.static('/../client/build/favicon.ico'));
 
+// ------------------------ App Routing --------------------------------
+
+// Dashboard
+app.get('/', (req, res) => {
+	if (req.user === undefined || req.user.username === "") {
+		res.redirect("/login")
+	} else {
+		res.sendFile(path.join(__dirname+'/../client/build/index.html'));
+	}
+})
+
+// Login/future landing page
+app.get('/login', (req, res) => {
+	if (req.user !== undefined && req.user.username !== "") {
+		res.redirect("/")
+	} else {
+		res.sendFile(path.join(__dirname+'/../client/build/index.html'));
+	}
+	res.sendFile(path.join(__dirname+'/../client/build/index.html'));
+})
+
+// Registration page; only username for now, maybe more things like profile picture, profile description in the future
+app.get('/register', (req, res) => {
+	if (req.user !== undefined && req.user.username === "") {
+		res.sendFile(path.join(__dirname+'/../client/build/index.html'));
+	} else {
+		res.redirect("/")
+	}
+})
+
+// Handles any requests that don't match the ones above; 404 page
+app.get('*', (req,res) =>{
+	res.sendFile(path.join(__dirname+'/../client/build/index.html'));
+});
+
+// Start server
+// const port = 5000;
+// app.listen(port);
+// console.log('App is listening on port ' + port);
+
 // ------------------------ Websocket server --------------------------------
 
-const socketServer = new ws.Server({ port: 5001 });
+const socketServer = new ws.Server({ server });
 global.clients = {};
-
-console.log('Websocket server is listening on port ' + 5001);
 
 socketServer.on('connection', client => {
 	// client must be verified within 5 seconds
@@ -106,42 +147,5 @@ socketServer.on('connection', client => {
   });
 });
 
-// ------------------------ App Routing --------------------------------
-
-// Dashboard
-app.get('/', (req, res) => {
-	if (req.user === undefined || req.user.username === "") {
-		res.redirect("/login")
-	} else {
-		res.sendFile(path.join(__dirname+'/../client/build/index.html'));
-	}
-})
-
-// Login/future landing page
-app.get('/login', (req, res) => {
-	if (req.user !== undefined && req.user.username !== "") {
-		res.redirect("/")
-	} else {
-		res.sendFile(path.join(__dirname+'/../client/build/index.html'));
-	}
-	res.sendFile(path.join(__dirname+'/../client/build/index.html'));
-})
-
-// Registration page; only username for now, maybe more things like profile picture, profile description in the future
-app.get('/register', (req, res) => {
-	if (req.user !== undefined && req.user.username === "") {
-		res.sendFile(path.join(__dirname+'/../client/build/index.html'));
-	} else {
-		res.redirect("/")
-	}
-})
-
-// Handles any requests that don't match the ones above; 404 page
-app.get('*', (req,res) =>{
-	res.sendFile(path.join(__dirname+'/../client/build/index.html'));
-});
-
-// Start server
-const port = 5000;
-app.listen(port);
-console.log('App is listening on port ' + port);
+const port = 7000
+server.listen(port, () => console.log(`Listening on port ${port}`));

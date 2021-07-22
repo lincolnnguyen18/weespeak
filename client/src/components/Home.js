@@ -209,67 +209,68 @@ export default function PersistentDrawerLeft() {
 		if (userInfo.username !== "") {
 			// Initialize ws client
 			// ws = new WebSocket('wss://ws.weespeak.xyz')
-			ws = new WebSocket(process.env.REACT_APP_WS_URL)
+			// ws = new WebSocket(process.env.REACT_APP_WS_URL)
 			
-			ws.onopen = () => {
-				console.log("wss connection opened")
-				ws.send(JSON.stringify({
-					req: "identification",
-					body: userInfo._id,
-				}))
-			}
-			ws.onclose = () => {
-				console.log("wss connection closed")
-			}
-			ws.onmessage = (event) => {
-				let data = JSON.parse(event.data)
-				switch (data.req) {
-					case 'verified':
-						ws.send(JSON.stringify({
-							req: "message",
-							body: `client ${userInfo.username} has connected`,
-						}))
-						console.log(`Successfully verified and sent greet message to server`)
-						break;
-					case 'message':
-						console.log(`Received message: ${data.body}`)
-						break;
-					case 'toast':
-						console.log('Received toast.')
-						setOpenToast(false)
-						setToastSeverity(data.severity)
-						setToastMessage(data.body)
-						setOpenToast(true)
-					case 'updateRequests':
-						fetch(`${process.env.REACT_APP_MAIN_URL}/user/friends`)
-							.then(res => res.json())
-							.then(
-								(result) => {
-									switch (data.body) {
-										case 'receivedFriendRequests':
-											setReceivedFriendRequests(result.requestsReceived)
-											break
-										case 'sentFriendRequests':
-											setSentFriendRequests(result.requestsSent)
-											break
-									}
-								},
-								(error) => {
-									console.error(error)
-								}
-							)
-						break;
-				}
-			}
-			ws.onerror = (err) => {
-				console.log(err)
-			}
+			// ws.onopen = () => {
+			// 	console.log("wss connection opened")
+			// 	ws.send(JSON.stringify({
+			// 		req: "identification",
+			// 		body: userInfo._id,
+			// 	}))
+			// }
+			// ws.onclose = () => {
+			// 	console.log("wss connection closed")
+			// }
+			// ws.onmessage = (event) => {
+			// 	let data = JSON.parse(event.data)
+			// 	switch (data.req) {
+			// 		case 'verified':
+			// 			ws.send(JSON.stringify({
+			// 				req: "message",
+			// 				body: `client ${userInfo.username} has connected`,
+			// 			}))
+			// 			console.log(`Successfully verified and sent greet message to server`)
+			// 			break;
+			// 		case 'message':
+			// 			console.log(`Received message: ${data.body}`)
+			// 			break;
+			// 		case 'toast':
+			// 			console.log('Received toast.')
+			// 			setOpenToast(false)
+			// 			setToastSeverity(data.severity)
+			// 			setToastMessage(data.body)
+			// 			setOpenToast(true)
+			// 		case 'updateRequests':
+			// 			// fetch(`${process.env.REACT_APP_MAIN_URL}/user/friends`)
+			// 			fetch(`/user/friends`)
+			// 				.then(res => res.json())
+			// 				.then(
+			// 					(result) => {
+			// 						switch (data.body) {
+			// 							case 'receivedFriendRequests':
+			// 								setReceivedFriendRequests(result.requestsReceived)
+			// 								break
+			// 							case 'sentFriendRequests':
+			// 								setSentFriendRequests(result.requestsSent)
+			// 								break
+			// 						}
+			// 					},
+			// 					(error) => {
+			// 						console.error(error)
+			// 					}
+			// 				)
+			// 			break;
+			// 	}
+			// }
+			// ws.onerror = (err) => {
+			// 	console.log(err)
+			// }
 		}
 	}, [userInfo]);
 
 	useEffect(() => {
-		// console.log(`fetching from ${process.env.REACT_APP_MAIN_URL}/user/info`)
-		fetch(`${process.env.REACT_APP_MAIN_URL}/user/info`)
+		// fetch(`${process.env.REACT_APP_MAIN_URL}/user/info`)
+		fetch(`/user/info`)
 			.then(res => res.json())
 			.then(
 				(result) => {
@@ -280,8 +281,8 @@ export default function PersistentDrawerLeft() {
 				}
 			)
 		
-		// console.log(`fetching from ${process.env.REACT_APP_MAIN_URL}/user/friends`)
-		fetch(`${process.env.REACT_APP_MAIN_URL}/user/friends`)
+		// fetch(`${process.env.REACT_APP_MAIN_URL}/user/friends`)
+		fetch(`/user/friends`)
 			.then(res => res.json())
 			.then(
 				(result) => {

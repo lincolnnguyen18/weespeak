@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node server.js"
+    "pub": "PORT=7000 node server.js",
+    "dev": "PORT=7001 node server.js"
   },
   "keywords": [],
   "author": "",

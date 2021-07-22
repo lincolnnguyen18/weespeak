@@ -76,7 +76,8 @@ export default function ScrollDialog() {
 		let mongoEscapedSearch = escape(currentSearch.current.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
 		
 		// Fetch next page for users matching search
-		await fetch(`${process.env.REACT_APP_MAIN_URL}/user/search?page=${page.current}&search=${mongoEscapedSearch}&limit=${limit}`)
+		// await fetch(`${process.env.REACT_APP_MAIN_URL}/user/search?page=${page.current}&search=${mongoEscapedSearch}&limit=${limit}`)
+		await fetch(`/user/search?page=${page.current}&search=${mongoEscapedSearch}&limit=${limit}`)
 		.then(res => res.json())
 		.then(result => {
 			if (result['results'].length < Math.ceil(window.innerHeight / 76)) {
@@ -109,7 +110,8 @@ export default function ScrollDialog() {
 		let mongoEscapedSearch = escape(currentSearch.current.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
 		let actualSearch = currentSearch.current
 
-		await fetch(`${process.env.REACT_APP_MAIN_URL}/user/search?page=1&search=${mongoEscapedSearch}&limit=${limit}`)
+		// await fetch(`${process.env.REACT_APP_MAIN_URL}/user/search?page=1&search=${mongoEscapedSearch}&limit=${limit}`)
+		await fetch(`/user/search?page=1&search=${mongoEscapedSearch}&limit=${limit}`)
 		.then(res => res.json())
 		.then(result => {
 			result = result['results']
@@ -218,7 +220,7 @@ export default function ScrollDialog() {
 							<br />
 								<TextField
 									label=""
-									placeholder="Enter your friend's name or @username"
+									placeholder="Search"
 									autoFocus
 									fullWidth
 									id="dialogInput"
