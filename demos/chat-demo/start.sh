@@ -12,7 +12,6 @@
 # screen -dmS l18-weespeak
 # screen -S l18-weespeak -X stuff "node index2.js\n"
 
-
 if screen -list | grep -q 'd2'; then
   echo 'd2 already started'
   exit 1
